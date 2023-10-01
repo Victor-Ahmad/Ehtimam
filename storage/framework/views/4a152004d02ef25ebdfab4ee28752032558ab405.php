@@ -1,0 +1,2 @@
+$(function(){window.<?php echo e(config('datatables-html.namespace', 'LaravelDataTables')); ?>=window.<?php echo e(config('datatables-html.namespace', 'LaravelDataTables')); ?>||{};window.<?php echo e(config('datatables-html.namespace', 'LaravelDataTables')); ?>["%1$s"]=$("#%1$s").DataTable(%2$s);});
+<?php /**PATH /home/974206.cloudwaysapps.com/xzgdmzdxcn/public_html/vendor/yajra/laravel-datatables-html/src/resources/views/script.blade.php ENDPATH**/ ?>
