@@ -120,7 +120,13 @@
                 order: [[0, 'desc']],
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('dashboard.core.service.index') }}',
+               // ajax: '{{ route('dashboard.core.service.index') }}',
+               ajax: {
+            url: '{{ route('dashboard.core.service.index') }}',
+            error: function (jqxhr, status, exception) {
+                alert('Exception: ' + exception);
+            },
+        },
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
