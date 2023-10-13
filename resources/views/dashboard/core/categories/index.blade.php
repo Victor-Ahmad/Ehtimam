@@ -69,6 +69,7 @@
                         <tr>
                             <th>#</th>
                             <th>{{__('dash.category name')}}</th>
+                            <th>{{__('dash.gender')}}</th>
                             <th>{{__('dash.status')}}</th>
                             <th class="no-content">{{__('dash.actions')}}</th>
                         </tr>
@@ -115,6 +116,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
+                    {data: 'gender', name: 'gender'},
                     {data: 'status', name: 'status'},
                     {data: 'controll', name: 'controll', orderable: false, searchable: false},
 

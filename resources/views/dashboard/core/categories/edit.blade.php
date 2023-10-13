@@ -65,7 +65,21 @@
 
 
                         <div class="form-row mb-2">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
+
+                                <label for="gender">{{__('dash.gender')}}</label>
+                                <select id="gender"  class="select2 form-control pt-1"
+                                        name="gender" required>
+                                    <option disabled>{{__('dash.choose')}}</option>
+                                    <option value="male">{{__('dash.males')}}</option>
+                                    <option value="female">{{__('dash.females')}}</option>
+                                </select>
+                                @error('gender')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group col-md-6">
 
                                 <label for="group_ids">المجموعات</label>
                                 <select id="group_ids" multiple class="group_ids select2 form-control pt-1"

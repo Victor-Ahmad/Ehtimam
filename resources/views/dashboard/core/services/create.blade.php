@@ -54,8 +54,8 @@
                               enctype="multipart/form-data" id="demo-form" data-parsley-validate="">
                             @csrf
                             <div class="box-body">
-                                <div class="form-row mb-3">
-                                    <div class="form-group col-md-4">
+                                <div class="form-row mb-2">
+                                    <div class="form-group col-md-6">
                                         <label for="inputEmail4">{{__('dash.title_ar')}}</label>
                                         <input type="text" name="title_ar" class="form-control"
                                                id="inputEmail4"
@@ -66,7 +66,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="inputEmail4">{{__('dash.title_en')}}</label>
                                         <input type="text" name="title_en" class="form-control"
                                                id="inputEmail4"
@@ -75,23 +75,6 @@
                                         @error('title_en')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-
-                                        <label for="inputEmail4">{{__('dash.category')}}</label>
-                                        <select id="inputState" class="select2 form-control pt-1"
-                                                name="category_id">
-                                            <option disabled>{{__('dash.choose')}}</option>
-                                            @foreach($categories as $key => $category)
-                                                <option value="{{$key}}">{{$category}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-
                                     </div>
 
 {{--                                    <div class="form-group col-md-3">--}}
@@ -106,7 +89,38 @@
 {{--                                    </div>--}}
 
                                 </div>
+                                <div class="form-row mb-2">
 
+                                    <div class="form-group col-md-6">
+
+                                        <label for="gender">{{__('dash.gender')}}</label>
+                                        <select id="gender"  class="select2 form-control pt-1"
+                                                name="gender" required>
+                                            <option disabled>{{__('dash.choose')}}</option>
+                                            <option value="male">{{__('dash.males')}}</option>
+                                            <option value="female">{{__('dash.females')}}</option>
+                                        </select>
+                                        @error('gender')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+        
+                                    </div>
+                                <div class="form-group col-md-6">
+
+                                    <label for="inputEmail4">{{__('dash.category')}}</label>
+                                    <select id="category_id" class="select2 form-control pt-1"
+                                            name="category_id">
+                                        <option disabled>{{__('dash.choose')}}</option>
+                                        @foreach($categories as $key => $category)
+                                            <option value="{{$key}}">{{$category->title_ar}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+
+                                </div>
+                            </div>
                                 <div class="form-row mb-2">
 
 
@@ -540,3 +554,36 @@
         })
     </script>
 @endpush
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Get the initial group options
+        var initialGroupOptions = $('#category_id option').clone();
+
+        // Handle the change event of the gender select
+        $(document).on('change', '#gender', function() {
+            var selectedGender = $(this).val();
+
+            // Clear the second select options
+            $('#category_id').empty();
+
+            // Filter the groups based on the selected gender
+            var filteredGroups = {!! $categories !!}.filter(function(group) {
+    
+          
+                return group.gender === selectedGender;
+            });
+      
+            // Add the filtered group options to the second select
+            $.each(filteredGroups, function(index, group) {
+                console.log(group);
+                $('#category_id').append($('<option>', {
+                    value: group.id,
+                    text: group.title_ar
+                }));
+            });
+        });
+
+    });
+</script>

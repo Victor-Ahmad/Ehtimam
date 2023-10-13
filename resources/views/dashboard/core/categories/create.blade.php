@@ -61,7 +61,21 @@
 
                             <input type="hidden" name="parent_id" value="">
                         <div class="form-row mb-2">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
+
+                                <label for="gender">{{__('dash.gender')}}</label>
+                                <select id="gender"  class="select2 form-control pt-1"
+                                        name="gender" required>
+                                    <option disabled>{{__('dash.choose')}}</option>
+                                    <option value="male">{{__('dash.males')}}</option>
+                                    <option value="female">{{__('dash.females')}}</option>
+                                </select>
+                                @error('gender')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group col-md-6">
 
                                 <label for="group_ids">المجموعات</label>
                                 <select id="group_ids" multiple class="select2 form-control pt-1"
@@ -74,32 +88,23 @@
                                 @error('group_ids')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
-
                             </div>
-
                         </div>
 
                         <div class="form-row mb-3">
-
-
-                                <div class="form-group col-md-6">
-
-                                    <label for="inputEmail4">{{__('dash.description_ar')}}</label>
-                                    <textarea name="description_ar" class="ckeditor" cols="30" rows="10"></textarea>
-                                    @error('description_ar')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
-
-                                </div>
-
                             <div class="form-group col-md-6">
-
+                                <label for="inputEmail4">{{__('dash.description_ar')}}</label>
+                                <textarea name="description_ar" class="ckeditor" cols="30" rows="10"></textarea>
+                                @error('description_ar')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label for="inputEmail4">{{__('dash.description_en')}}</label>
                                 <textarea name="description_en" class="ckeditor" cols="30" rows="10"></textarea>
                                 @error('description_en')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
-
                             </div>
 
 
@@ -122,4 +127,37 @@
     <script>
         let secondUpload = new FileUploadWithPreview('mySecondImage')
     </script>
-    @endpush
+@endpush
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Get the initial group options
+        var initialGroupOptions = $('#group_ids option').clone();
+
+        // Handle the change event of the gender select
+        $(document).on('change', '#gender', function() {
+            var selectedGender = $(this).val();
+
+            // Clear the second select options
+            $('#group_ids').empty();
+
+            // Filter the groups based on the selected gender
+            var filteredGroups = {!! $groups !!}.filter(function(group) {
+    
+          
+                return group.gender === selectedGender;
+            });
+      
+            // Add the filtered group options to the second select
+            $.each(filteredGroups, function(index, group) {
+                console.log(group);
+                $('#group_ids').append($('<option>', {
+                    value: group.id,
+                    text: group.name_ar
+                }));
+            });
+        });
+
+    });
+</script>

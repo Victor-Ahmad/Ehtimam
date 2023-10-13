@@ -19,12 +19,12 @@ class CategoryController extends Controller
 
         if (request()->ajax()) {
 
-//            if (request('id') == null){
-//                $category = Category::whereNull('parent_id')->get();
-//
-//            }else{
-//                $category = Category::where('parent_id',request('id'))->get();
-//            }
+            //            if (request('id') == null){
+            //                $category = Category::whereNull('parent_id')->get();
+            //
+            //            }else{
+            //                $category = Category::where('parent_id',request('id'))->get();
+            //            }
 
             $category = Category::whereNull('parent_id')->get();
 
@@ -32,9 +32,16 @@ class CategoryController extends Controller
                 ->addColumn('title', function ($category) {
                     return $category->title;
                 })
+                ->addColumn('gender', function ($category) {
+                    if ($category->gender == 'male') {
+                        return __('dash.males');
+                    } else {
+                        return __('dash.females');
+                    }
+                })
                 ->addColumn('status', function ($category) {
                     $checked = '';
-                    if ($category->active == 1){
+                    if ($category->active == 1) {
                         $checked = 'checked';
                     }
                     return '<label class="switch s-outline s-outline-info  mb-4 mr-2">
@@ -43,16 +50,22 @@ class CategoryController extends Controller
                         </label>';
                 })
                 ->addColumn('controll', function ($category) {
-
                     $html = '
 
-                                <button type="button" id="add-work-exp" class="btn btn-sm btn-primary card-tools edit" data-id="'.$category->id.'"  data-title_ar="'.$category->title_ar.'"
-                                 data-title_en="'.$category->title_en.'" data-des_ar="'.$category->description_ar.'" data-des_en="'.$category->description_en.'"
-                                  data-parent_id="'.$category->parent_id.'" data-image="'.$category->image.'" data-group_id="'.$category->groups()->pluck('group_id').'" data-toggle="modal" data-target="#editModel">
+                                <button type="button" id="add-work-exp" class="btn btn-sm btn-primary card-tools edit" data-id="' . $category->id . '"
+                                    data-title_ar="' . $category->title_ar . '"
+                                    data-title_en="' . $category->title_en . '"
+                                    data-des_ar="' . $category->description_ar . '"
+                                    data-des_en="' . $category->description_en . '"
+                                    data-parent_id="' . $category->parent_id . '"
+                                    data-image="' . $category->image . '"
+                                    data-group_id="' . $category->groups()->pluck('group_id') . '"
+                                    data-gender="'.$category->gender. '"
+                                    data-toggle="modal" data-target="#editModel">
                             <i class="far fa-edit fa-2x"></i>
                        </button>
 
-                                <a data-href="'.route('dashboard.core.category.destroy', $category->id).'" data-id="'.$category->id.'" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
+                                <a data-href="' . route('dashboard.core.category.destroy', $category->id) . '" data-id="' . $category->id . '" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
                             <i class="far fa-trash-alt fa-2x"></i>
                     </a>
                                 ';
@@ -62,6 +75,7 @@ class CategoryController extends Controller
 
                 ->rawColumns([
                     'title',
+                    'gender',
                     'status',
                     'controll',
                 ])
@@ -69,9 +83,9 @@ class CategoryController extends Controller
         }
 
         $categories = Category::whereNull('parent_id')->get();
-        $groups = Group::where('active',1)->get();
+        $groups = Group::where('active', 1)->get();
 
-        return view('dashboard.core.categories.index',compact('categories','groups'));
+        return view('dashboard.core.categories.index', compact('categories', 'groups'));
     }
 
     public function create()
@@ -88,15 +102,16 @@ class CategoryController extends Controller
             'description_ar' => 'required',
             'description_en' => 'required',
             'parent_id' => 'nullable|exists:categories,id',
+            'gender'=> 'required',
             'group_ids' => 'required|array',
             'group_ids.*' => 'required|exists:groups,id',
         ]);
 
-        $data=$request->except('_token','avatar','group_ids');
+        $data = $request->except('_token', 'avatar', 'group_ids');
 
-        if ($request->has('avatar')){
-            $image=$this->storeImages($request->avatar,'category');
-                $data['slug']= 'storage/images/category'.'/'.$image;
+        if ($request->has('avatar')) {
+            $image = $this->storeImages($request->avatar, 'category');
+            $data['slug'] = 'storage/images/category' . '/' . $image;
         }
 
         $category = Category::updateOrCreate($data);
@@ -107,8 +122,8 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = Category::where('id',$id)->first();
-        return view('dashboard.categories.edit', compact( 'category'));
+        $category = Category::where('id', $id)->first();
+        return view('dashboard.categories.edit', compact('category'));
     }
 
     public function update(Request $request, $id)
@@ -124,16 +139,16 @@ class CategoryController extends Controller
             'group_ids' => 'required|array',
             'group_ids.*' => 'required|exists:groups,id',
         ]);
-        $data=$request->except('_token','avatar','group_ids');
+        $data = $request->except('_token', 'avatar', 'group_ids');
 
 
         $category = Category::find($id);
-        if ($request->has('avatar')){
+        if ($request->has('avatar')) {
             if (File::exists(public_path($category->slug))) {
                 File::delete(public_path($category->slug));
             }
-            $image=$this->storeImages($request->avatar,'category');
-            $data['slug']= 'storage/images/category'.'/'.$image;
+            $image = $this->storeImages($request->avatar, 'category');
+            $data['slug'] = 'storage/images/category' . '/' . $image;
         }
         $category->update($data);
         $category->groups()->sync($request->group_ids);
@@ -156,16 +171,17 @@ class CategoryController extends Controller
         ];
     }
 
-    public function change_status(Request $request){
-        $admin = Category::where('id',$request->id)->first();
-        if ($request->active == 'true'){
+    public function change_status(Request $request)
+    {
+        $admin = Category::where('id', $request->id)->first();
+        if ($request->active == 'true') {
             $active = 1;
-        }else{
+        } else {
             $active = 0;
         }
 
         $admin->active = $active;
         $admin->save();
-        return response()->json(['sucess'=>true]);
+        return response()->json(['sucess' => true]);
     }
 }

@@ -42,7 +42,7 @@ class AuthController extends Controller
 
         if (!$user) {
             $validated = $request->validate([
-                'phone' => 'required|numeric|unique:users,phone'
+                'phone' => 'required|numeric|unique:users,phone',
             ], $request->all());
             $user = User::query()->create([
                 'phone' => $validated['phone'],

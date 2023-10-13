@@ -46,6 +46,21 @@
                         <div class="form-row mb-3">
                             <div class="form-group col-md-6">
 
+                                <label for="gender">{{__('dash.gender')}}</label>
+                                <select id="gender"  class="select2 form-control pt-1"
+                                        name="gender" required>
+                                    <option disabled>{{__('dash.choose')}}</option>
+                                    <option value="male">{{__('dash.males')}}</option>
+                                    <option value="female">{{__('dash.females')}}</option>
+                                </select>
+                                @error('gender')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+
                                 <label for="tech">مشرف المجموعة</label>
                                 <select  id="tech" class="select2 form-control pt-1"
                                          name="technician_id">
@@ -59,7 +74,8 @@
                                 @enderror
 
                             </div>
-
+                        </div>
+                        <div class="form-row mb-3">
                             <div class="form-group col-md-6">
 
                                 <label for="tech">الفنيين</label>
@@ -75,7 +91,7 @@
                                 @enderror
 
                             </div>
-                        </div>
+                         </div>
                         <div class="form-row mb-3">
                             <div class="form-group col-md-4">
 

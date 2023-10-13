@@ -33,13 +33,21 @@ class ServiceController extends Controller
                 ->addColumn('title', function ($service) {
                     return $service->title;
                 })
+                ->addColumn('gender', function ($service) {
+                    if ($service->gender == 'male') {
+                        return __('dash.males');
+                    } else {
+                        return __('dash.females');
+                    }
+                })
                 ->addColumn('status', function ($service) {
                     $checked = '';
                     if ($service->active == 1) {
                         $checked = 'checked';
                     }
                     return '<label class="switch s-outline s-outline-info  mb-4 mr-2">
-                        <input type="checkbox" id="customSwitch4" data-id="' . $service->id . '" ' . $checked . '>
+                        <input type="checkbox" id="customSwitch4" data-id="' . $service->id . '"
+                        data-gender="'.$service->gender. '" ' . $checked . '>
                         <span class="slider round"></span>
                         </label>';
                 })
@@ -66,6 +74,7 @@ class ServiceController extends Controller
                 })
                 ->rawColumns([
                     'title',
+                    'gender',
                     'status',
                     'controll',
                 ])
@@ -77,7 +86,7 @@ class ServiceController extends Controller
 
     public function create()
     {
-        $categories = category::whereNull('parent_id')->where('active', 1)->get()->pluck('title', 'id');
+        $categories = category::whereNull('parent_id')->where('active', 1)->get();
         $groups = Group::query()->where('active',1)->get();
         $icons = Icon::query()->get();
         $measurements = Measurement::query()->get();
@@ -97,6 +106,7 @@ class ServiceController extends Controller
             'measurement_id' => 'required|exists:measurements,id',
             'price' => 'required|Numeric',
             'type' => 'required|in:evaluative,fixed',
+            'gender'=> 'required',
 //            'group_ids' => 'required|array',
 //            'group_ids.*' => 'required|exists:groups,id',
             'icon_ids' => 'required|array',
@@ -153,7 +163,7 @@ class ServiceController extends Controller
     public function edit($id)
     {
         $service = Service::where('id', $id)->first();
-        $categories = category::whereNull('parent_id')->where('active', 1)->get()->pluck('title', 'id');
+        $categories = category::whereNull('parent_id')->where('active', 1)->get();
         $groups = Group::query()->where('active',1)
             ->whereNotIn('id', ServiceGroup::query()->pluck('group_id')->toArray())
             ->orWhereIn('id', ServiceGroup::query()->where('service_id', $service->id)->pluck('group_id')->toArray())

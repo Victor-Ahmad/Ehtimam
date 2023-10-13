@@ -57,6 +57,7 @@
                         <tr>
                             <th>#</th>
                             <th>{{__('dash.name')}}</th>
+                            <th>{{__('dash.gender')}}</th>
                             <th>مشرف المجموعة</th>
                             <th>الحاله</th>
                             <th class="no-content">{{__('dash.actions')}}</th>
@@ -151,6 +152,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'g_name', name: 'g_name'},
+                    {data: 'gender', name: 'gender'},
                     {data: 'technician', name: 'technician'},
                     {data: 'status', name: 'status'},
                     {data: 'control', name: 'control', orderable: false, searchable: false},

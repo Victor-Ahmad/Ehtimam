@@ -34,11 +34,13 @@ class PersonalInfoController extends Controller
             'name' => 'nullable|min:3|max:100',
             'phone' => 'required|numeric|unique:users,phone,'.$user->id,
             'email' => 'nullable|email|unique:users,email,'.$user->id,
+            'gender'=>'required',
         ]);
         $user->update([
            'first_name' => $request->name,
            'phone' => $request->phone,
-           'email' => $request->email
+           'email' => $request->email,
+           'gender'=>$request->gender,
         ]);
         $this->body['user'] = $user;
         return self::apiResponse(200, null, $this->body);

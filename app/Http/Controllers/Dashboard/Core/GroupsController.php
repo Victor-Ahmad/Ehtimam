@@ -35,6 +35,13 @@ class GroupsController extends Controller
                 ->addColumn('g_name', function ($row){
                     return $row->name;
                 })
+                ->addColumn('gender', function ($category) {
+                    if ($category->gender == 'male') {
+                        return __('dash.males');
+                    } else {
+                        return __('dash.females');
+                    }
+                })
                 ->addColumn('status', function ($row) {
                     $checked = '';
                     if ($row->active == 1) {
@@ -49,7 +56,8 @@ class GroupsController extends Controller
 
                     $html = '
                                 <button type="button" id="edit-techGroup" class="btn btn-primary btn-sm card-tools edit" data-id="'.$row->id.'"  data-name_ar="'.$row->name_ar.'" data-name_en="'.$row->name_en.'"
-                                 data-technician_id="'.$row->technician_id.'" data-technician_group_id="'.$row->technician_groups->pluck('technician_id').'" data-region_id="'.$row->regions->pluck('region_id').'" data-country_id="'.$row->country_id.'" data-city_id="'.$row->city_id.'"
+                                 data-technician_id="'.$row->technician_id.'" data-technician_group_id="'.$row->technician_groups->pluck('technician_id') . '"
+                                 data-gender="'.$row->gender. '" data-region_id="'.$row->regions->pluck('region_id').'" data-country_id="'.$row->country_id.'" data-city_id="'.$row->city_id.'"
                                   data-toggle="modal" data-target="#editGroupTechModel">
                             <i class="far fa-edit fa-2x"></i>
                        </button>
@@ -63,6 +71,7 @@ class GroupsController extends Controller
                 ->rawColumns([
                     'technician',
                     'g_name',
+                    'gender',
                     'status',
                     'control',
                 ])
@@ -87,6 +96,7 @@ class GroupsController extends Controller
             'technician_id' => 'nullable|exists:technicians,id',
             'technician_group_id' => 'required|array|exists:technicians,id',
             'technician_group_id.*' => 'required',
+            'gender'=> 'required',
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',
             'region_id' => 'required|array|exists:regions,id',

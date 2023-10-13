@@ -15,6 +15,7 @@ use App\Http\Resources\Store\StoreResource;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\User;
 use App\Models\Contract;
 use App\Models\ContractPackage;
 use App\Models\Order;
@@ -38,10 +39,13 @@ class HomeController extends Controller
 
     protected function index(Request $request)
     {
+        $userGender=null;
         if (!auth()->check()){
             $addresses = [];
+            $userGender=$request->gender;
         }else{
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
+            $userGender=User::where('id',auth()->user('sanctum')->id)->first()->gender;
         }
         $this->body['addresses'] = UserAddressResource::collection($addresses);
         $images = [];
@@ -61,10 +65,11 @@ class HomeController extends Controller
 //            ->get();
 
         $mostSellingServices = Service::query()->where('best_seller',1)
-            ->where('active',1)->take(9)
+            ->where('active',1)->where('gender',$userGender)->take(9)
             ->get()->shuffle();
+        
         $this->body['services_most_wanted'] = ServiceResource::collection($mostSellingServices);
-        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->take(9)->get()->shuffle());
+        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('gender',$userGender)->take(9)->get()->shuffle());
         $this->body['contracts'] = ContractResource::collection(ContractPackage::query()->where('active', 1)->take(9)->get()->shuffle());
         $this->body['total_items_in_cart'] = auth()->check() ? auth()->user()->carts->count() : 0;
         $servicesCategories = Category::query()->where('active', 1)->get();
