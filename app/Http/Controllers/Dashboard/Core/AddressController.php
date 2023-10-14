@@ -98,7 +98,7 @@ class AddressController extends Controller
         }else{
             $data['active'] = 0;
         }
-
+        $data['phone'] = User::where('id',$request->user_id)->first()->phone??null;
 
         UserAddresses::updateOrCreate($data);
 
@@ -135,7 +135,7 @@ class AddressController extends Controller
             $data['active'] = 0;
         }
 
-
+        $data['phone'] = User::where('id',$request->user_id)->first()->phone??null;
         $user = UserAddresses::find($id);
         $user->update($data);
         session()->flash('success');
