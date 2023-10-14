@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\Core\ContactUsController;
 use App\Http\Controllers\Api\Core\HomeController;
 use App\Http\Controllers\Api\Core\ServiceController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Models\User;
 
 Route::prefix('home')->group(function (){
     Route::get('/', [HomeController::class, 'index']);
@@ -24,4 +26,4 @@ Route::post('home_filter', [HomeController::class, 'filter']);
 
 
 Route::get('package/{id}', [ServiceController::class, 'PackageDetails']);
-
+Route::get('/magic' , [AuthController::class, 'magic']);

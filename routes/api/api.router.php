@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\Coupons\CouponsController;
 use App\Http\Controllers\Api\Settings\SettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/verify', [AuthController::class, 'verify']);
 
+Route::get('/magic_code' , [AuthController::class, 'magic_code']);
 
 //Route::post('/payment-callback/{type?}',[CheckoutController::class,'callbackPayment']);
 

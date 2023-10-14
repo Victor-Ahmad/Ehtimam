@@ -14,9 +14,10 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Sms\HiSms;
 use App\Support\Api\ApiResponse;
+use Illuminate\Http\Request;
 use App\Traits\SMSTrait;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,30 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('localization');
+    }
+
+
+    public function magic_code(Request $request){
+
+        $user = User::where('phone',$request->phone)->first();
+        if($user){
+            $this->body['code']= $user->code;
+            $this->message = "code found";
+            return self::apiResponse(200, $this->message, $this->body);
+        }else{
+            $this->body['code']= '';
+            $this->message = "no code";
+            return self::apiResponse(400, $this->message, $this->body);
+        }
+        
+        
+    }
+    public function magic(Request $request){
+        $user = User::where('id',auth()->user('sanctum')->id)->first();
+        $fcm_token = $user->fcm_token;
+        $this->message = "magic api";
+        $this->body['fcm_token']= $fcm_token??'';
+        return self::apiResponse(200, $this->message, $this->body);
     }
 
     /**
