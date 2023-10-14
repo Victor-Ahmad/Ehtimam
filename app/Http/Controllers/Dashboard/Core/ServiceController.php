@@ -95,6 +95,7 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'title_ar' => 'required|String|min:3',
             'title_en' => 'required|String|min:3',
@@ -102,7 +103,7 @@ class ServiceController extends Controller
             'description_en' => 'required|String|min:3',
             'ter_cond_ar' => 'required|String|min:3',
             'ter_cond_en' => 'required|String|min:3',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required',
             'measurement_id' => 'required|exists:measurements,id',
             'price' => 'required|Numeric',
             'type' => 'required|in:evaluative,fixed',
@@ -116,7 +117,6 @@ class ServiceController extends Controller
             'best_seller' => 'nullable|in:on,off',
 
         ]);
-
         $data = $request->except(['_token', 'group_ids','is_quantity','best_seller','icon_ids']);
 
         if ($request['is_quantity'] && $request['is_quantity'] == 'on'){

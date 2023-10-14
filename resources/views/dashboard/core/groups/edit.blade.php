@@ -161,4 +161,43 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Get the initial group options
+        var initialGroupOptions = $('#edit_technician_id option').clone();
+        var initialGroupOptions2 = $('#technician_group_id option').clone();
+        // Handle the change event of the gender select
+        $(document).on('change', '#gender', function() {
+            var selectedGender = $(this).val();
+
+            // Clear the second select options
+            $('#edit_technician_id').empty();
+            $('#technician_group_id').empty();
+
+            // Filter the groups based on the selected gender
+            var filteredGroups = {!! $technicians !!}.filter(function(group) {
+    
+          
+                return group.gender === selectedGender;
+            });
+            
+      
+            // Add the filtered group options to the second select
+            $.each(filteredGroups, function(index, group) {
+                console.log(group);
+                $('#edit_technician_id').append($('<option>', {
+                    value: group.id,
+                    text: group.name
+                }));
+                $('#technician_group_id').append($('<option>', {
+                    value: group.id,
+                    text: group.name
+                }));
+            });
+        });
+
+    });
+</script>
+
 

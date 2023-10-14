@@ -61,7 +61,7 @@
 
                             <div class="form-group col-md-6">
 
-                                <label for="tech">مشرف المجموعة</label>
+                                <label for="technician_id">مشرف المجموعة</label>
                                 <select  id="technician_id" class="select2 form-control pt-1"
                                          name="technician_id">
                                     <option selected value="">{{__('dash.choose')}}</option>
@@ -78,7 +78,7 @@
                         <div class="form-row mb-3">
                             <div class="form-group col-md-6">
 
-                                <label for="tech">الفنيين</label>
+                                <label for="technician_group_id">الفنيين</label>
                                 <select  id="technician_group_id" multiple class="select2 form-control pt-1"
                                          name="technician_group_id[]">
                                     <option disabled value="">{{__('dash.choose')}}</option>

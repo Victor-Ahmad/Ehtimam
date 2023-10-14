@@ -169,7 +169,7 @@
                                 <textarea required type="text" name="address" class="form-control"
                                           id="address"
                                           rows="3"
-                                          placeholder="{{__('dash.identity_number')}}"
+                                          placeholder="{{__('dash.address')}}"
                                 ></textarea>
                             </div>
                         </div>

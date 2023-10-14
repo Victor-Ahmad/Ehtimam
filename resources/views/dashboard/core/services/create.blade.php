@@ -107,7 +107,7 @@
                                     </div>
                                 <div class="form-group col-md-6">
 
-                                    <label for="inputEmail4">{{__('dash.category')}}</label>
+                                    <label for="category_id">{{__('dash.category')}}</label>
                                     <select id="category_id" class="select2 form-control pt-1"
                                             name="category_id">
                                         <option disabled>{{__('dash.choose')}}</option>
@@ -162,7 +162,7 @@
                                                 value="{{\App\Enums\Core\ServiceType::evaluative()->value}}">{{\App\Enums\Core\ServiceType::evaluative()->value}}</option>
 
                                         </select>
-                                        @error('category_id')
+                                        @error('inputState')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
