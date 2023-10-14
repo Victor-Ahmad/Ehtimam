@@ -35,6 +35,13 @@ class TechnicianController extends Controller
                 ->addColumn('spec', function ($row) {
                     return $row->specialization?->name;
                 })
+                ->addColumn('gender', function ($category) {
+                    if ($category->gender == 'male') {
+                        return __('dash.males');
+                    } else {
+                        return __('dash.females');
+                    }
+                })
                 ->addColumn('t_image', function ($row) {
                     return '<img class="img-fluid" style="width: 85px;" src="'.asset($row->image).'"/>';
                 })
@@ -63,6 +70,7 @@ class TechnicianController extends Controller
                 ->rawColumns([
                     'group',
                     'spec',
+                    'gender',
                     't_image',
                     'status',
                     'control'
@@ -92,6 +100,7 @@ class TechnicianController extends Controller
             'wallet_id' => 'required',
             'address' => 'required|String',
             'group_id' => 'nullable',
+            'gender'=> 'required',
             'image' => 'required|image|mimes:jpeg,jpg,png,gif',
             'active' => 'nullable|in:on,off',
         ];
@@ -129,6 +138,7 @@ class TechnicianController extends Controller
             'wallet_id' => 'required',
             'address' => 'required|String',
             'group_id' => 'nullable',
+            'gender'=> 'required',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
             'active' => 'nullable|in:on,off',
             'password' => ['nullable', 'confirmed', Password::min(4)],

@@ -59,6 +59,7 @@
                             <th>{{__('dash.name')}}</th>
                             <th>{{__('dash.image')}}</th>
                             <th>التخصص</th>
+                            <th>{{__('dash.gender')}}</th>
                             <th>{{__('dash.phone')}}</th>
                             <th>{{__('dash.group')}}</th>
                             <th>{{__('dash.status')}}</th>
@@ -105,6 +106,7 @@
                     {data: 'name', name: 'name'},
                     {data: 't_image', name: 't_image'},
                     {data: 'spec', name: 'spec'},
+                    {data: 'gender', name: 'gender'},
                     {data: 'phone', name: 'phone'},
                     {data: 'group', name: 'group'},
                     {data: 'status', name: 'status'},
@@ -119,6 +121,7 @@
             let name = $(this).data('name');
             let user_name = $(this).data('user_name');
             let email = $(this).data('email');
+            let gender = $(this).data('gender');
             let phone = $(this).data('phone');
             let specialization = $(this).data('specialization');
             let active = $(this).data('active');
@@ -133,6 +136,7 @@
             $('#edit_name').val(name)
             $('#edit_user_name').val(user_name)
             $('#edit_email').val(email)
+            $('#edit_gender').val(gender)
             $('#edit_phone').val(phone)
             $('#edit_spec').val(specialization).trigger('change')
             $('#edit_group').val(group_id).trigger('change')
