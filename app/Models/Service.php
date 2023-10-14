@@ -58,7 +58,9 @@ class Service extends Model
     }
 
     public function getCountGroupAttribute(){
+        if($this->category)
         return $this->category->groups->count();
+        else return 0;
     }
 
     public function icons(){

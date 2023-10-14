@@ -26,59 +26,63 @@ class ServiceController extends Controller
     {
 
         if (request()->ajax()) {
+                        try{
+            $service = Service::get();
+            $var =DataTables::of($service)
+            ->addColumn('title', function ($service) {
+                return $service->title;
+            })
+            ->addColumn('gender', function ($service) {
+                if ($service->gender == 'male') {
+                    return __('dash.males');
+                } else {
+                    return __('dash.females');
+                }
+            })
+            ->addColumn('status', function ($service) {
+                $checked = '';
+                if ($service->active == 1) {
+                    $checked = 'checked';
+                }
+                return '<label class="switch s-outline s-outline-info  mb-4 mr-2">
+                    <input type="checkbox" id="customSwitch4" data-id="' . $service->id . '"' . $checked . '>
+                    <span class="slider round"></span>
+                    </label>';
+            })
+            ->addColumn('controll', function ($service) {
 
-            $service = Service::all();
+                $html = '
 
-            return DataTables::of($service)
-                ->addColumn('title', function ($service) {
-                    return $service->title;
-                })
-                ->addColumn('gender', function ($service) {
-                    if ($service->gender == 'male') {
-                        return __('dash.males');
-                    } else {
-                        return __('dash.females');
-                    }
-                })
-                ->addColumn('status', function ($service) {
-                    $checked = '';
-                    if ($service->active == 1) {
-                        $checked = 'checked';
-                    }
-                    return '<label class="switch s-outline s-outline-info  mb-4 mr-2">
-                        <input type="checkbox" id="customSwitch4" data-id="' . $service->id . '"
-                        data-gender="'.$service->gender. '" ' . $checked . '>
-                        <span class="slider round"></span>
-                        </label>';
-                })
-                ->addColumn('controll', function ($service) {
-
-                    $html = '
-
-                    <button type="button" id="add-work-exp" class="btn btn-sm btn-primary card-tools image" data-id="' . $service->id . '" data-toggle="modal" data-target="#imageModel">
-                            <i class="far fa-image fa-2x"></i>
-                       </button>
+                <button type="button" id="add-work-exp" class="btn btn-sm btn-primary card-tools image" data-id="' . $service->id . '" data-toggle="modal" data-target="#imageModel">
+                        <i class="far fa-image fa-2x"></i>
+                   </button>
 
 <a href="' . route('dashboard.core.service.edit', $service->id) . '"  id="edit-booking" class="btn btn-primary btn-sm card-tools edit" data-id="' . $service->id . '"
-                         data-type="' . $service->type . '" >
-                            <i class="far fa-edit fa-2x"></i>
-                       </a>
+                     data-type="' . $service->type . '"
+                     data-gender="'.$service->gender. '" >
+                        <i class="far fa-edit fa-2x"></i>
+                   </a>
 
 
-                                <a data-href="' . route('dashboard.core.service.destroy', $service->id) . '" data-id="' . $service->id . '" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
-                            <i class="far fa-trash-alt fa-2x"></i>
-                    </a>
-                                ';
+                            <a data-href="' . route('dashboard.core.service.destroy', $service->id) . '" data-id="' . $service->id . '" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
+                        <i class="far fa-trash-alt fa-2x"></i>
+                </a>
+                            ';
 
-                    return $html;
-                })
-                ->rawColumns([
-                    'title',
-                    'gender',
-                    'status',
-                    'controll',
-                ])
-                ->make(true);
+                return $html;
+            })
+            ->rawColumns([
+                'title',
+               'gender',
+                'status',
+                'controll',
+            ])
+            ->make(true);
+
+        } catch (\Exception $e) {
+              error_log('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+            }
+            return $var;
         }
 
         return view('dashboard.core.services.index');
@@ -86,6 +90,7 @@ class ServiceController extends Controller
 
     public function create()
     {
+  
         $categories = category::whereNull('parent_id')->where('active', 1)->get();
         $groups = Group::query()->where('active',1)->get();
         $icons = Icon::query()->get();
@@ -117,6 +122,7 @@ class ServiceController extends Controller
             'best_seller' => 'nullable|in:on,off',
 
         ]);
+        try{
         $data = $request->except(['_token', 'group_ids','is_quantity','best_seller','icon_ids']);
 
         if ($request['is_quantity'] && $request['is_quantity'] == 'on'){
@@ -156,7 +162,9 @@ class ServiceController extends Controller
 //            ]);
 //        }
 
-        session()->flash('success');
+        session()->flash('success');} catch (\Exception $e) {
+            error_log('File:'.$e->getFile().'Line:'.$e->getLine().'Message:'.$e->getMessage());
+          }
         return redirect()->route('dashboard.core.service.index');
     }
 
