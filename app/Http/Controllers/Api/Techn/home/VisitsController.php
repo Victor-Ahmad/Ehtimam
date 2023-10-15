@@ -138,7 +138,7 @@ class VisitsController extends Controller
             }
 
             // if ($request->status_id == 3){
-            //     $data['start_date'] = Carbon::now('Asia/Riyadh');
+            //     $data['start_date'] = Carbon::now();
             //     if($model->booking->type =='service') {
             //         $order = $model->booking->order;
             //     }else{
@@ -157,7 +157,7 @@ class VisitsController extends Controller
 
 
             if ($request->status_id == 3){
-                $data['start_date'] = Carbon::now('Asia/Riyadh');
+                $data['start_date'] = Carbon::now();
                 $order = $model->booking->order;
                 $visits_ids = [];
                 foreach ($order->bookings as $booking){
@@ -170,7 +170,7 @@ class VisitsController extends Controller
             }
 
             // if ($request->status_id == 5){
-            //     $data['end_date'] = Carbon::now('Asia/Riyadh');
+            //     $data['end_date'] = Carbon::now();
             //     $techWallet = TechnicianWallet::query()->first();
 
             //     if($model->booking->type =='contract'){
@@ -195,7 +195,7 @@ class VisitsController extends Controller
 
             
             if ($request->status_id == 5){
-                $data['end_date'] = Carbon::now('Asia/Riyadh');
+                $data['end_date'] = Carbon::now();
                 $techWallet = TechnicianWallet::query()->first();
                 $serviceCost = $model->booking->order->services->where('category_id', $model->booking->category_id)->sum('price');
                 if ($techWallet->point_type == 'rate'){

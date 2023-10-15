@@ -51,7 +51,7 @@ class PasswordResetLinkController extends Controller
         DB::table('password_resets')->insert([
             'email' => $request->email,
             'token' => $token,
-            'created_at' => Carbon::now('Asia/Riyadh')
+            'created_at' => Carbon::now()
         ]);
 
         Mail::send('dashboard.core.email.forgetPassword', ['token' => $token], function ($message) use ($request) {
