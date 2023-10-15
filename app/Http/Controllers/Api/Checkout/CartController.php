@@ -323,8 +323,8 @@ class CartController extends Controller
                     if ($get_time == true) {
                         $times[$service_id][$day] = CarbonInterval::minutes($bookSetting->service_duration + $bookSetting->buffering_time)
                             ->toPeriod(
-                                \Carbon\Carbon::now()->setTimeFrom($bookSetting->service_start_time ?? Carbon::now()->startOfDay()),
-                                Carbon::now()->setTimeFrom($bookSetting->service_end_time ?? Carbon::now()->endOfDay())
+                                \Carbon\Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_start_time ?? Carbon::now('Asia/Riyadh')->startOfDay()),
+                                Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_end_time ?? Carbon::now('Asia/Riyadh')->endOfDay())
                             );
                     }
                 }
@@ -369,9 +369,9 @@ class CartController extends Controller
                 $subTimes['dayName'] = Carbon::parse($day)->locale(app()->getLocale())->dayName;
                 $subTimes['times'] = collect($times)->map(function ($time) use ($category_id,   $countGroup, $bookSetting, $bookingTimes, $bookingDates, $day, $request) {
 
-                    $now = Carbon::now()->format('H:i:s');
+                    $now = Carbon::now('Asia/Riyadh')->format('H:i:s');
                     $convertNowTimestamp = Carbon::parse($now)->timestamp;
-                    $dayNow = Carbon::now()->format('Y-m-d');
+                    $dayNow = Carbon::now('Asia/Riyadh')->format('Y-m-d');
                    // dump($now);                    dd($dayNow);
                     
                     //realtime

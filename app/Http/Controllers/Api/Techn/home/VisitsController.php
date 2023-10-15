@@ -72,7 +72,7 @@ class VisitsController extends Controller
         $groups=Group::where('technician_id',auth('sanctum')->user()->id)->first();
         $orders = Visit::whereHas('booking', function ($q) {
 
-            $q->where('date',Carbon::now()->format('Y-m-d'))->whereHas('customer')->whereHas('address');
+            $q->where('date',Carbon::now('Asia/Riyadh')->format('Y-m-d'))->whereHas('customer')->whereHas('address');
 
         })->with('booking', function ($q) {
             $q->with(['service' => function ($q) {
@@ -138,7 +138,7 @@ class VisitsController extends Controller
             }
 
             // if ($request->status_id == 3){
-            //     $data['start_date'] = Carbon::now();
+            //     $data['start_date'] = Carbon::now('Asia/Riyadh');
             //     if($model->booking->type =='service') {
             //         $order = $model->booking->order;
             //     }else{
@@ -157,7 +157,7 @@ class VisitsController extends Controller
 
 
             if ($request->status_id == 3){
-                $data['start_date'] = Carbon::now();
+                $data['start_date'] = Carbon::now('Asia/Riyadh');
                 $order = $model->booking->order;
                 $visits_ids = [];
                 foreach ($order->bookings as $booking){
@@ -170,7 +170,7 @@ class VisitsController extends Controller
             }
 
             // if ($request->status_id == 5){
-            //     $data['end_date'] = Carbon::now();
+            //     $data['end_date'] = Carbon::now('Asia/Riyadh');
             //     $techWallet = TechnicianWallet::query()->first();
 
             //     if($model->booking->type =='contract'){
@@ -195,7 +195,7 @@ class VisitsController extends Controller
 
             
             if ($request->status_id == 5){
-                $data['end_date'] = Carbon::now();
+                $data['end_date'] = Carbon::now('Asia/Riyadh');
                 $techWallet = TechnicianWallet::query()->first();
                 $serviceCost = $model->booking->order->services->where('category_id', $model->booking->category_id)->sum('price');
                 if ($techWallet->point_type == 'rate'){
