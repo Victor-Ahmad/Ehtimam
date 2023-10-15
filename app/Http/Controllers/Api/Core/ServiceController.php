@@ -38,6 +38,7 @@ class ServiceController extends Controller
     }
     protected function getServiceFromCategory($id){
         $servicesCategory = Category::query()->where('id', $id)->first();
+
         if ($servicesCategory){
             $services = $servicesCategory->services;
             $this->body['category_services'] = ServiceResource::collection($services);
