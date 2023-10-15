@@ -52,7 +52,7 @@ class CheckoutController extends Controller
         // ];
         $rules = [
             'user_address_id' => 'required|exists:user_addresses,id',
-            'car_user_id' => 'required|exists:car_clients,id',
+         //   'car_user_id' => 'required|exists:car_clients,id',
             'payment_method' => 'required|in:cache,visa,wallet',
 
             'coupon' => 'nullable|numeric',
@@ -127,7 +127,7 @@ class CheckoutController extends Controller
             'file' => $uploadFile,
             'image' => $uploadImage,
             'notes' => $request->notes,
-            'car_user_id' => $request->car_user_id,
+       //     'car_user_id' => $request->car_user_id,
         ]);
         // $order = Order::create([
         //     'user_id' => $user->id,
@@ -366,7 +366,7 @@ class CheckoutController extends Controller
             'total' => ($total - $request->coupon),
             'status_id' => 2,
             'notes' => $request->notes,
-            'car_user_id' => $request->car_user_id,
+      //      'car_user_id' => $request->car_user_id,
         ]);
 
         ///////////////////////////////////
