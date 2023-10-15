@@ -340,7 +340,7 @@ class CheckoutController extends Controller
    
         Cart::query()->whereIn('id', $carts->pluck('id'))->delete();
         $this->body['order_id'] = $order->id;
-        dd(Order::where('id', $order->id)->get());
+        //dd(Order::where('id', $order->id)->get());
         return self::apiResponse(200, __('api.order created successfully'), $this->body);
     }
 
@@ -550,7 +550,7 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
             ]);
             Order::where('id', $order->id)->update(array('partial_amount' => 0));
-            dd(Order::where('id', $order->id)->first());
+            //dd(Order::where('id', $order->id)->first());
         } elseif ($request->payment_method == 'cache') {
             $transaction = Transaction::create([
                 'order_id' => $order->id,
