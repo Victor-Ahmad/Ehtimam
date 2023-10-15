@@ -372,7 +372,8 @@ class CartController extends Controller
                     $now = Carbon::now('Asia/Riyadh')->format('H:i:s');
                     $convertNowTimestamp = Carbon::parse($now)->timestamp;
                     $dayNow = Carbon::now('Asia/Riyadh')->format('Y-m-d');
-
+                    dump($now);                    dd($dayNow);
+                    
                     //realtime
                     $realTime = $time->format('H:i:s');
                     $converTimestamp = Carbon::parse($realTime)->timestamp;
