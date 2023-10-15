@@ -17,7 +17,6 @@ Route::prefix('home')->group(function (){
 Route::prefix('services')->group(function (){
     Route::get('/all', [ServiceController::class, 'allServices']);
     Route::get('/most_ordered', [ServiceController::class, 'orderedServices']);
-    Route::get('/services_from_category/{id}', [ServiceController::class, 'getServiceFromCategory']);
 });
 
 Route::post('contactus',[ContactUsController::class,'store']);

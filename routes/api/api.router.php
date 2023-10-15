@@ -26,6 +26,8 @@ Route::post('/verify', [AuthController::class, 'verify']);
 
 Route::get('/magic_code' , [AuthController::class, 'magic_code']);
 
+Route::get('/services_from_category/{id}', [ServiceController::class, 'getServiceFromCategory']);
+
 //Route::post('/payment-callback/{type?}',[CheckoutController::class,'callbackPayment']);
 
 Route::prefix('home')->group(function (){
