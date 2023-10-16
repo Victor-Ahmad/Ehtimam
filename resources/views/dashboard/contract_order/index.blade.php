@@ -22,7 +22,7 @@
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
                                         href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">طلب تقاول</li>
+                                <li class="breadcrumb-item active" aria-current="page">{{__('dash.package_request')}}</li>
                             </ol>
                         </nav>
 

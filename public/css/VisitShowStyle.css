@@ -78,8 +78,8 @@
 }
 
 #done .step-bar-left {
-    /*background-color:#1b4269;*/
-    border: 2px dashed #1b4269;
+    /*background-color:#bacd96;*/
+    border: 2px dashed #bacd96;
     z-index: 3;
     width: calc(100% - 2.5rem);
 }
@@ -87,11 +87,11 @@
 
 #await .step-circle {
 
-    border: 2px solid #1b4269;
+    border: 2px solid #bacd96;
 }
 
 #await .step-circle::before{
-    background-color:#1b4269;
+    background-color:#bacd96;
 }
 
 #done .step-circle {

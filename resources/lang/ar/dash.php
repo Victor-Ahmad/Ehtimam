@@ -47,6 +47,21 @@ return [
     'logged_in_successfully' => 'تسجيل الدخول بنجاح',
     'logged_out_successfully' => 'خرجت بنجاح',
     'logout' => 'خروج',
+    'tech_orders'=>'طلبات الأخصائيين',
+    'orders_status'=>'حالات الطلبات',
+    'packages_management'=>'إدارة الباقات',
+    'packages'=>'الباقات',
+    'packages_orders'=>'طلبات الباقات',
+    'package_request'=>'طلب باقة',
+    // 'package_name_ar'=>'اسم الباقة بالعربي',
+    // 'package_name_en'=>'اسم الباقة بالانكليزي',
+    // 'package_number'=>'اسم الباقة',
+    // 'package_name'=>'رقم الباقة',
+    // 'package'=>'الباقة',
+    // 'package_order'=>'طلب الباقة',
+    // 'edit_package'=>'تعديل الباقة',
+    // 'package_sales_report'=>'تقرير مبيعات الباقة',
+
 
 
     'login_firstly' => 'يجب عليك الدخول أولا',

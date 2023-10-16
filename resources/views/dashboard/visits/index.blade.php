@@ -22,7 +22,7 @@
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
                                         href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">الزيارات</li>
+                                <li class="breadcrumb-item active" aria-current="page"> {{__('dash.tech_orders')}}</li>
                             </ol>
                         </nav>
 
@@ -51,7 +51,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>رقم الزياره</th>
+                            <th>رقم الطلب</th>
                             <th>موعد الحجز</th>
                             <th>الفريق</th>
                             <th>وقت البدء</th>

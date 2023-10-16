@@ -199,13 +199,13 @@ code {
 */
 .header-container {
   z-index: 1030;
-  border-bottom: 1px solid #1b4269; }
+  border-bottom: 1px solid #bacd96; }
   .header-container .navbar {
     padding: 4px 0; }
 
 .navbar {
   padding: 0;
-  background: #1b4269; }
+  background: #bacd96; }
   .navbar .theme-brand {
     padding: 0.9px 0 0.9px 27px !important;
     border-radius: 6px 6px 0 0;

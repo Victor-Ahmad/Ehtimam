@@ -60,7 +60,7 @@
                                 <div class="form-row mb-3">
                                     <div class="form-group col-md-4">
 
-                                        <label for="birth">اسم التقاول بالعربي</label>
+                                        <label for="birth">{{__('dash.package_name_ar')}}</label>
                                         <input required name="name_ar" value="{{$contract->name_ar}}" type="text" class="form-control">
                                         @error('name_ar')
                                         <div class="alert alert-danger">{{ $message }}</div>
@@ -70,7 +70,7 @@
 
                                     <div class="form-group col-md-4">
 
-                                        <label for="birth">اسم التقاول بالانجليزي</label>
+                                        <label for="birth">{{__('dash.package_name_en')}}</label>
                                         <input required name="name_en" value="{{$contract->name_en}}" type="text" class="form-control">
                                         @error('name_en')
                                         <div class="alert alert-danger">{{ $message }}</div>
