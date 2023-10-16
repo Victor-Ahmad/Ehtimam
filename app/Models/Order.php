@@ -35,7 +35,7 @@ class Order extends Model
     }
 
     public function transaction(){
-        return $this->hasOne(Transaction::class, 'id', 'order_id');
+        return $this->hasOne(Transaction::class, 'order_id', 'id');
     }
 
     public function userCar(){

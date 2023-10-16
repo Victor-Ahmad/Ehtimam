@@ -41,7 +41,9 @@ class ReportsController extends Controller
                 $order = $order->where('created_at','=', $formattedDate);
             }
             if($payment_method) {
-                $order = $order->where('payment_method',$payment_method);
+                $order = $order->whereHas('transaction',function($q)use($payment_method){
+                    $q->where('payment_method',$payment_method);
+                });
             }
 
             $order = $order->get();
