@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
 
-                                        <label>الفريق الفني</label>
+                                        <label>الفريق الأخصائي</label>
                                         <select required class="select2 form-control pt-1"
                                                 name="group_id">
                                             <option selected disabled>{{__('dash.choose')}}</option>

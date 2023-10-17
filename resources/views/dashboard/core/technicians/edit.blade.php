@@ -33,10 +33,10 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="edit_user_name">اسم الفني</label>
+                                <label for="edit_user_name">اسم الأخصائي</label>
                                 <input required type="text"  name="user_name" class="form-control"
                                        id="edit_user_name"
-                                       placeholder="اسم الفني المستخدم"
+                                       placeholder="اسم الأخصائي المستخدم"
                                 >
                                 @error('user_name')
                                 <div class="alert alert-danger">{{ $message }}</div>

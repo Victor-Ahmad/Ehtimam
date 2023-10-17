@@ -69,7 +69,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>                                    </div>
                                     <div class="">
                                         <p class="w-value">{{$technicians}}</p>
-                                        <h5 class="">الفنيين</h5>
+                                        <h5 class="">الأخصائيين</h5>
                                     </div>
                                 </div>
                             </div>
@@ -99,17 +99,19 @@
                     <div class="col-md-12 text-left mb-3">
 
 
-                            <h5 class="">الطلبات</h5>
+                        <h5 class="">{{__('dash.client_orders')}}</h5>
 
 
                     </div>
                     <table id="html5-extension-order" class="table table-hover non-hover" >
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>{{__('dash.customer_name')}}</th>
-                            <th>{{__('dash.quantity')}}</th>
-                            <th>{{__('dash.price_value')}}</th>
+                            {{-- <th>#</th> --}}
+                            <th>رقم الطلب</th>
+                            <th>اسم العميل</th>
+                            <th>التاريخ</th>
+                            <th>المبلغ</th>
+                            <th>الحالة</th>
                         </tr>
                         </thead>
                     </table>
@@ -122,18 +124,20 @@
                 <div class="widget-content widget-content-area br-6">
                     <div class="col-md-12 text-left mb-3">
 
-                            <h5 class="">الحجوزات</h5>
+                        <h5 class="">{{__('dash.tech_orders')}}</h5>
 
 
                     </div>
                     <table id="html5-extension" class="table table-hover non-hover" >
                         <thead>
                         <tr>
-                            <th>#</th>
+                            {{-- <th>#</th> --}}
                             <th>رقم الطلب</th>
-                            <th>اسم العميل</th>
-                            <th>الخدمة المطلوبة</th>
-                            <th>حالة الحجز</th>
+                            <th>الفريق</th>
+                            <th>موعد الحجز</th>
+                            <th>وقت البدء</th>
+                            {{-- <th>وقت الانتهاء</th> --}}
+                            <th>الحاله</th>
                         </tr>
                         </thead>
                     </table>
@@ -151,74 +155,90 @@
 
 @push('script')
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#html5-extension').DataTable({
-                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                    "<'table-responsive'tr>" +
-                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-                order: [[0, 'desc']],
-                "language": {
-                    "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'copy', className: 'btn btn-sm'},
-                        {extend: 'csv', className: 'btn btn-sm'},
-                        {extend: 'excel', className: 'btn btn-sm'},
-                        {extend: 'print', className: 'btn btn-sm'}
-                    ]
-                },
-                processing: true,
-                responsive: true,
-                serverSide: true,
-                ajax: '{{ route('dashboard.bookings.index') }}',
-                columns: [
-                    {data: 'booking_no', name: 'booking_no'},
-                    {data: 'order', name: 'order'},
-                    {data: 'customer', name: 'customer'},
-                    {data: 'service', name: 'service'},
-                    {data: 'status', name: 'status'},
 
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table;
+        table= $('#html5-extension').DataTable({
+            dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
+                "<'table-responsive'tr>" +
+                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            order: [[0, 'desc']],
+            "language": {
+                "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
+            },
+            buttons: {
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-sm',text:'نسخ'},
+                    {extend: 'csv', className: 'btn btn-sm',text:'تصدير إلى CSV'},
+                    {extend: 'excel', className: 'btn btn-sm',text:'تصدير إلى Excel'},
+                    {extend: 'print', className: 'btn btn-sm',text:'طباعة'}
                 ]
-            });
+            },
+            processing: true,
+            responsive: true,
+            serverSide: true,
+            ajax: '{{ route('dashboard.visits.index') }}',
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'group_name', name: 'group_name'},
+                {data: 'date', name: 'date'},
+                {data: 'start_time', name: 'start_time'},
+                // {data: 'end_time', name: 'end_time'},
+                {data: 'status', name: 'status'},
+            ]
         });
+        $('#html5-extension tbody').on('click', 'tr', function () {
+            var data = table.row(this).data();
+           // alert(data.id);
+            window.location.href = '/admin/visits/' + data.id;
+        });
+    });
 
 
-        $(document).ready(function () {
-            $('#html5-extension-order').DataTable({
-                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                    "<'table-responsive'tr>" +
-                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-                order: [[0, 'desc']],
-                "language": {
-                    "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'copy', className: 'btn btn-sm'},
-                        {extend: 'csv', className: 'btn btn-sm'},
-                        {extend: 'excel', className: 'btn btn-sm'},
-                        {extend: 'print', className: 'btn btn-sm'}
-                    ]
-                },
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('dashboard.orders.index') }}',
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'user', name: 'user'},
-                    {data: 'quantity', name: 'quantity'},
-                    {data: 'total', name: 'total'},
-
+    $(document).ready(function () {
+        var table;
+        table= $('#html5-extension-order').DataTable({
+            dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
+                "<'table-responsive'tr>" +
+                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            order: [[0, 'desc']],
+            "language": {
+                "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
+            },
+            buttons: {
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-sm',text:'نسخ'},
+                    {extend: 'csv', className: 'btn btn-sm',text:'تصدير إلى CSV'},
+                    {extend: 'excel', className: 'btn btn-sm',text:'تصدير إلى Excel'},
+                    {extend: 'print', className: 'btn btn-sm',text:'طباعة'}
                 ]
-            });
+            },
+            processing: true,
+            serverSide: true,
+            responsive:true,
+            ajax: '{{ route('dashboard.orders.index') }}',
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'user', name: 'user'},
+                {data: 'created_at', name: 'created_at'},
+                {data: 'total', name: 'total'},
+                {data: 'status', name: 'status'},
+
+
+
+            ]
         });
+        $('#html5-extension-order tbody').on('click', 'tr', function () {
+            var data = table.row(this).data();
+           // alert(data.id);
+            window.location.href = '/admin/order/orderDetail?id=' + data.id;
+        });
+    });
 
 
 
 
-    </script>
+</script>
 
 @endpush

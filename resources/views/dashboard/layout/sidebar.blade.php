@@ -105,7 +105,7 @@
                     <a href="#orders" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <div class="">
                             <div class="icon-container">
-                                <i data-feather="shopping-cart"></i><span class="icon-name"> الطلبات </span>
+                                <i data-feather="shopping-cart"></i><span class="icon-name"> {{__('dash.client_orders')}} </span>
                             </div>
                         </div>
                         <div>
@@ -120,12 +120,12 @@
                     <ul class="collapse submenu list-unstyled" id="orders" data-parent="#accordionExample">
                         @can('view_orders')
                             <li>
-                                <a href="{{route('dashboard.orders.index')}}"> الطلبات </a>
+                                <a href="{{route('dashboard.orders.index')}}"> {{__('dash.client_orders')}} </a>
                             </li>
                         @endcan
                         @can('update_orders')
                             <li>
-                                <a href="{{route('dashboard.order_statuses.index')}}"> حالات الطلب </a>
+                                <a href="{{route('dashboard.order_statuses.index')}}">  {{__('dash.orders_status')}} </a>
                             </li>
                         @endcan
 
@@ -269,7 +269,7 @@
                 </li>
             @endcan
 
-            <li class="menu">
+            {{-- <li class="menu">
                 <a href="#car" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <div class="">
                         <div class="icon-container">
@@ -294,7 +294,7 @@
                     </li>
 
                 </ul>
-            </li>
+            </li> --}}
 
 
         @can('view_technicians')
@@ -323,7 +323,7 @@
                             <a href="{{route('dashboard.core.group.index')}}"> {{__('dash.technicians_groups')}} </a>
                         </li>
                         <li>
-                            <a href="{{route('dashboard.core.tech_specializations.index')}}"> تخصصات الفنيين </a>
+                            <a href="{{route('dashboard.core.tech_specializations.index')}}"> تخصصات الأخصائيين </a>
                         </li>
                     </ul>
                 </li>
@@ -420,7 +420,7 @@
                     </a>
                     <ul class="collapse submenu list-unstyled" id="rates" data-parent="#accordionExample">
                         <li>
-                            <a href="{{route('dashboard.rates.RateTechnician')}}"> تقييمات فنيين </a>
+                            <a href="{{route('dashboard.rates.RateTechnician')}}"> تقييمات أخصائيين </a>
                         </li>
 
                         <li>
@@ -563,7 +563,7 @@
                     </li>
 
                     <li>
-                        <a href="{{route('dashboard.report.technicians')}}"> تقرير الفنيين </a>
+                        <a href="{{route('dashboard.report.technicians')}}"> تقرير الأخصائيين </a>
                     </li>
 
                     <li>

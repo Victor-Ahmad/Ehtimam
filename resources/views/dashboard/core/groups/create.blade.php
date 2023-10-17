@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">إنشاء مجموعة فنيين</h5>
+                <h5 class="modal-title" id="exampleModalLabel">إنشاء مجموعة أخصائيين</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -78,7 +78,7 @@
                         <div class="form-row mb-3">
                             <div class="form-group col-md-6">
 
-                                <label for="technician_group_id">الفنيين</label>
+                                <label for="technician_group_id">الأخصائيين</label>
                                 <select  id="technician_group_id" multiple class="select2 form-control pt-1"
                                          name="technician_group_id[]">
                                     <option disabled value="">{{__('dash.choose')}}</option>

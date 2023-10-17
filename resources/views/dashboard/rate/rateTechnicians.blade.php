@@ -22,7 +22,7 @@
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
                                         href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">تقييمات الفنيين</li>
+                                <li class="breadcrumb-item active" aria-current="page">تقييمات الأخصائيين</li>
                             </ol>
                         </nav>
 
@@ -52,7 +52,7 @@
                         <tr>
                             <th>#</th>
                             <th>رقم جوال العميل</th>
-                            <th>اسم الفني</th>
+                            <th>اسم الأخصائي</th>
                             <th>رقم الطلب</th>
                             <th>التقييم (عدد النجوم)</th>
                             <th>ملاحظات</th>
@@ -84,10 +84,10 @@
                 },
                 buttons: {
                     buttons: [
-                        {extend: 'copy', className: 'btn btn-sm'},
-                        {extend: 'csv', className: 'btn btn-sm'},
-                        {extend: 'excel', className: 'btn btn-sm'},
-                        {extend: 'print', className: 'btn btn-sm'}
+                        {extend: 'copy', className: 'btn btn-sm',text:'نسخ'},
+                        {extend: 'csv', className: 'btn btn-sm',text:'تصدير إلى CSV'},
+                        {extend: 'excel', className: 'btn btn-sm',text:'تصدير إلى Excel'},
+                        {extend: 'print', className: 'btn btn-sm',text:'طباعة'}
                     ]
                 },
                 processing: true,

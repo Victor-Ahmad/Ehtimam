@@ -97,7 +97,7 @@ class AddressController extends Controller
                 $data['is_default'] = 1;
             }
             $data['user_id'] = auth('sanctum')->user()->id;
-            $data['phone'] = User::where('id',$request->user_id)->first()->phone??null;
+            $data['phone'] = User::where('id',auth('sanctum')->user()->id)->first()->phone??null;
             $address->update($data);
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
             $this->body['addresses'] = UserAddressResource::collection($addresses);

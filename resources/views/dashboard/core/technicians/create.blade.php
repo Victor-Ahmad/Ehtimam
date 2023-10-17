@@ -28,10 +28,10 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="inputEmail4">اسم الفني</label>
+                                <label for="inputEmail4">اسم الأخصائي</label>
                                 <input required type="text" name="user_name" class="form-control"
                                        id="inputEmail4"
-                                       placeholder="اسم الفني المستخدم"
+                                       placeholder="اسم الأخصائي المستخدم"
                                 >
                             </div>
 

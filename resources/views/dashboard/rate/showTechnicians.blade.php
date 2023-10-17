@@ -22,7 +22,7 @@
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
                                         href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">عرض تقييم الفنيين</li>
+                                <li class="breadcrumb-item active" aria-current="page">عرض تقييم الأخصائيين</li>
                             </ol>
                         </nav>
 
@@ -48,7 +48,7 @@
 
                             <div class="row">
                                 <div class="col-md-5">
-                                    <h3 class="card-title">تفاصيل تقييم الفني</h3>
+                                    <h3 class="card-title">تفاصيل تقييم الأخصائي</h3>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                 </tr>
 
                                 <tr>
-                                    <th>اسم الفني</th>
+                                    <th>اسم الأخصائي</th>
                                     <td>{{$tech->technician?->name}}</td>
                                 </tr>
                                 <tr>

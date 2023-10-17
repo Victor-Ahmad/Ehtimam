@@ -183,7 +183,7 @@ class VisitsController extends Controller
             if (count($allTechn) > 0){
 
                 $title = 'تغيير الفريق';
-                $message = 'سيتم تغيير الفريق بسبب الغاء الطلب لاسباب فنيه';
+                $message = 'سيتم تغيير الفريق بسبب الغاء الطلب لاسباب فنية';
 
                 foreach ($allTechn as $tech){
                     Notification::send(

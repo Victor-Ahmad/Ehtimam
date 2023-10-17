@@ -100,7 +100,7 @@ class TechSpecializationController extends Controller{
         $spec = Specialization::find($id);
         if (in_array($id, Technician::query()->pluck('spec_id')->toArray())){
             return response()->json(['success' => false,
-                'msg' => 'حذف التخصص غير متاح لارتباطه بفني'
+                'msg' => 'حذف التخصص غير متاح لارتباطه بأخصائي'
             ]);
         }
         $spec->delete();

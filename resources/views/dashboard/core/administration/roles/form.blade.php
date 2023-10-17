@@ -745,7 +745,7 @@
                                                             class="new-control-input check-all-techs"
                                                         >
                                                         <span class="new-control-indicator"></span><span
-                                                            class="new-chk-content text-primary"><b>الفنيين</b></span>
+                                                            class="new-chk-content text-primary"><b>الأخصائيين</b></span>
                                                     </label>
                                                 </div>
                                                 <div class="card-body">

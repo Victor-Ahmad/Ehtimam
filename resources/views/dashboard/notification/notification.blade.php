@@ -76,7 +76,7 @@
                                         <div class="n-chk">
                                             <label class="new-control new-radio radio-classic-primary">
                                                 <input type="radio" class="new-control-input type" value="technician" name="type">
-                                                <span class="new-control-indicator"></span>الفنيين
+                                                <span class="new-control-indicator"></span>الأخصائيين
                                             </label>
                                         </div>
                                         @error('type')
@@ -102,7 +102,7 @@
                                     </div>
 
                                     <div class="form-group col-md-6 div-technician" style="display:none;">
-                                        <label for="customer">الفنيين</label>
+                                        <label for="customer">الأخصائيين</label>
                                         <select  class="form-control technician_id" disabled style="width: 100%; padding: 8px"
                                                 name="technician_id">
                                             <option value="all" selected>الكل</option>
