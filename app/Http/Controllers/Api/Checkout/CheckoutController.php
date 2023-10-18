@@ -121,7 +121,7 @@ class CheckoutController extends Controller
             'total' => $totalAfterDiscount,
 
             'partial_amount' => ($totalAfterDiscount - $request->amount),
-            'status_id' => 2,
+            'status_id' => 1,
             //  'is_advance' => $request->is_advance,
             //  'is_return' => $request->is_return,
             'file' => $uploadFile,
@@ -353,7 +353,7 @@ class CheckoutController extends Controller
             'sub_total' => $total,
             'total' => ($total - $request->coupon),
             'payment_method' => $request->payment_method,
-            'status_id' => 2,
+            'status_id' => 1,
             'package_id' => $carts->first()->contract_package_id,
             'price' => ($total - $request->coupon),
             'quantity' => $carts->count(),
@@ -364,7 +364,7 @@ class CheckoutController extends Controller
             'user_address_id' => $request->user_address_id,
             'sub_total' => $total,
             'total' => ($total - $request->coupon),
-            'status_id' => 2,
+            'status_id' => 1,
             'notes' => $request->notes,
       //      'car_user_id' => $request->car_user_id,
         ]);
