@@ -6,7 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-curl": "*",
         "barryvdh/laravel-debugbar": "^3.7",
+        "consoletvs/charts": "6.*",
         "doctrine/dbal": "^3.6",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -18,8 +20,7 @@
         "realrashid/sweet-alert": "^6.0",
         "spatie/laravel-enum": "^3.0",
         "spatie/laravel-permission": "^5.9",
-        "yajra/laravel-datatables": "^1.5",
-      "ext-curl": "*"
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

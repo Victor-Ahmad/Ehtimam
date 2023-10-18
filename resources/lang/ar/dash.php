@@ -54,6 +54,7 @@ return [
     'packages'=>'الباقات',
     'packages_orders'=>'طلبات الباقات',
     'package_request'=>'طلب باقة',
+    'sells_last_7_days'=>'المبيعات خلال اخر اسبوع',
     // 'package_name_ar'=>'اسم الباقة بالعربي',
     // 'package_name_en'=>'اسم الباقة بالانكليزي',
     // 'package_number'=>'اسم الباقة',
