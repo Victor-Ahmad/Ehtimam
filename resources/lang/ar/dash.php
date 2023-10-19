@@ -48,6 +48,8 @@ return [
     'logged_out_successfully' => 'خرجت بنجاح',
     'logout' => 'خروج',
     'tech_orders'=>'طلبات الأخصائيين',
+    'tech_orders_today'=>'طلبات الأخصائيين اليوم',
+    'client_orders_today'=>'طلبات العملاء اليوم',
     'orders_status'=>'حالات طلبات العملاء',
     'client_orders'=>'طلبات العملاء',
     'packages_management'=>'إدارة الباقات',

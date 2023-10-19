@@ -71,6 +71,10 @@ class IndexController extends Controller
         $technicians = Technician::count();
         $booking = Booking::count();
 
+        $now=Carbon::now('Asia/Riyadh')->toDateString();
+
+        $orders_today = Order::whereDate('created_at','=',$now)->count();
+        $booking_today = Booking::whereDate('created_at','=',$now)->count();
         $fy = $this->getCurrentFinancialYear();
         $least_7_days = Carbon::parse($fy['start'])->subDays(7)->format('Y-m-d');
      
@@ -88,7 +92,7 @@ class IndexController extends Controller
     
         $dates = [];
         for ($i = 6; $i >= 0; $i--) {
-             $date = Carbon::now()->subDays($i)->format('Y-m-d');
+             $date = Carbon::now('Asia/Riyadh')->subDays($i)->format('Y-m-d');
              $dates[] = $date;
  
              $labels[] = date('j M Y', strtotime($date));
@@ -104,7 +108,7 @@ class IndexController extends Controller
             )));
         $sells_chart_1->dataset(__('dash.orders'), 'line', $all_sell_values);
       
-        return view('dashboard.home',compact('sells_chart_1','customers','orders','technicians','booking'));
+        return view('dashboard.home',compact('booking_today','orders_today','sells_chart_1','customers','orders','technicians','booking'));
     }
     private function __chartOptions($title)
     {

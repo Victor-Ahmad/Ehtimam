@@ -33,7 +33,13 @@ class OrderController extends Controller
     {
 
         if (request()->ajax()) {
-            $orders = Order::all();
+            $orders=null;
+            if(request()->page){
+                $now=Carbon::now('Asia/Riyadh')->toDateString();
+                $orders = Order::whereDate('created_at','=',$now)->get();
+            }else{
+               $orders = Order::all(); 
+            }
             return DataTables::of($orders)
                 ->addColumn('user', function ($row) {
                     return $row->user?->first_name .' ' . $row->user?->last_name;
