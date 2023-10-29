@@ -53,7 +53,7 @@ class CheckoutController extends Controller
         $rules = [
             'user_address_id' => 'required|exists:user_addresses,id',
          //   'car_user_id' => 'required|exists:car_clients,id',
-            'payment_method' => 'required|in:cache,visa,wallet',
+            'payment_method' => 'required|in:visa,wallet',
 
             'coupon' => 'nullable|numeric',
             'transaction_id' => 'nullable',
@@ -184,9 +184,11 @@ class CheckoutController extends Controller
             })->whereHas('category', function ($qu) use ($category_id) {
                 $qu->where('category_id', $category_id);
             })->where('date', $cart->date)->pluck('id')->toArray();
+            $activeGroups = Group::where('active', 1)->pluck('id')->toArray();
             $visit = DB::table('visits')
                 ->select('*', DB::raw('COUNT(assign_to_id) as group_id'))
                 ->whereIn('booking_id', $booking_id)
+                ->whereIn('assign_to_id',$activeGroups)
                 ->groupBy('assign_to_id')
                 ->orderBy('group_id', 'ASC');
 
@@ -312,16 +314,18 @@ class CheckoutController extends Controller
             ]);
             Order::where('id', $order->id)->update(array('partial_amount' => 0));
         
-        } elseif ($request->payment_method == 'cache') {
-            $transaction = Transaction::create([
-                'order_id' => $order->id,
-                'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
-                'payment_result' => 'success',
-                'payment_method' => $request->payment_method,
-            ]);
-            Order::where('id', $order->id)->update(array('partial_amount' => $total));
+        } 
+        // elseif ($request->payment_method == 'cache') {
+        //     $transaction = Transaction::create([
+        //         'order_id' => $order->id,
+        //         'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
+        //         'payment_result' => 'success',
+        //         'payment_method' => $request->payment_method,
+        //     ]);
+        //     Order::where('id', $order->id)->update(array('partial_amount' => $total));
           
-        } else {
+        // }
+         else {
             Transaction::create([
                 'order_id' => $order->id,
                 'transaction_number' => $request->transaction_id,
@@ -551,15 +555,17 @@ class CheckoutController extends Controller
             ]);
             Order::where('id', $order->id)->update(array('partial_amount' => 0));
             //dd(Order::where('id', $order->id)->first());
-        } elseif ($request->payment_method == 'cache') {
-            $transaction = Transaction::create([
-                'order_id' => $order->id,
-                'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
-                'payment_result' => 'success',
-                'payment_method' => $request->payment_method,
-            ]);
-            Order::where('id', $order->id)->update(array('partial_amount' => $total));
-        } else {
+        } 
+        // elseif ($request->payment_method == 'cache') {
+        //     $transaction = Transaction::create([
+        //         'order_id' => $order->id,
+        //         'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
+        //         'payment_result' => 'success',
+        //         'payment_method' => $request->payment_method,
+        //     ]);
+        //     Order::where('id', $order->id)->update(array('partial_amount' => $total));
+        // }
+        else {
             Transaction::create([
                 'order_id' => $order->id,
                 'contract_order_id' => $contract_order->id,
@@ -602,7 +608,7 @@ class CheckoutController extends Controller
     {
         $rules = [
             'order_id' => 'required|exists:orders,id',
-            'payment_method' => 'required|in:cache,visa,wallet',
+            'payment_method' => 'required|in:visa,wallet',
             //   'amount' => 'required|numeric',
             'transaction_id' => 'nullable',
             'wallet_discounts' => 'nullable|numeric',

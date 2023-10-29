@@ -60,8 +60,7 @@
                             </div>
                         </div>
                         <br>
-                            <div class="row">
-
+                        <div class="row">
 
                             <div class="col-md-1">
                                 <label for="inputEmail4">طريقه الدفع</label>
@@ -74,6 +73,20 @@
                                     <option value="visa">مدي</option>
                                 </select>
                             </div>
+                            <div class="col-md-1">
+                               
+                            </div>
+                            <div class="col-md-1">
+                                <label for="inputEmail4">الخدمة</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="select2 service_filter form-control" name="service_filter">
+                                    <option value="all" selected>الكل</option>
+                                    @foreach($services as $id => $title)
+                                        <option value="{{ $id }}">{{ $title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                         </div>
 
@@ -84,7 +97,7 @@
                             <th>رقم الطلب</th>
                             <th>اسم العميل</th>
                             <th>التاريخ</th>
-                            <th>القسم</th>
+                            <th>الخدمة</th>
                             <th>عدد الخدمات</th>
                             <th>المبلغ</th>
                             <th>طريقة الدفع</th>
@@ -98,21 +111,20 @@
                 <table class="table table-bordered nowrap">
 
                     <thead>
-
-                    <tr>
-                        <th width="50%">إجمالي المبيعات بدون ضريبة</th>
-                        <td id="sub_total" >0</td>
-                    </tr>
-
-                    <tr>
-                        <th>إجمالي الضريبة %15</th>
-                        <td id="tax">0</td>
-                    </tr>
-
-                    <tr>
-                        <th>إجمالي المبيعات</th>
-                        <td id="tax_sub_total">0</td>
-                    </tr>
+                        <tr>
+                            <th width="50%">إجمالي المبيعات بدون ضريبة</th>
+                            <td id="total" >0</td>
+                        </tr>
+    
+                        <tr>
+                            <th>إجمالي الضريبة %15</th>
+                            <td id="tax">0</td>
+                        </tr>
+    
+                        <tr>
+                            <th>إجمالي المبيعات</th>
+                            <td id="tax_total">0</td>
+                        </tr>
 
                     </thead>
 
@@ -126,90 +138,96 @@
 
 @push('script')
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var table = $('#html5-extension').DataTable({
-            dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                "<'table-responsive'tr>" +
-                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-            order: [[0, 'desc']],
-            "language": {
-                "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
-            },
-            buttons: {
-                buttons: [
-                    {extend: 'copy', className: 'btn btn-sm',text:'نسخ'},
-                    {extend: 'csv', className: 'btn btn-sm',text:'تصدير إلى CSV'},
-                    {extend: 'excel', className: 'btn btn-sm',text:'تصدير إلى Excel'},
-                    {extend: 'print', className: 'btn btn-sm',text:'طباعة'}
-                ]
-            },
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route('dashboard.report.sales') }}',
-            columns: [
-                {data: 'order_number', name: 'order_number',orderable: true, searchable: true},
-                {data: 'user_name', name: 'user_name',orderable: true, searchable: true},
-                {data: 'created_at', name: 'created_at',orderable: true, searchable: true},
-                {data: 'category', name: 'category',orderable: true, searchable: true},
-                {data: 'service_number', name: 'service_number',orderable: true, searchable: true},
-                {data: 'price', name: 'price',orderable: true, searchable: true},
-                {data: 'payment_method', name: 'payment_method',orderable: true, searchable: true},
-
-
-            ]
-        });
-
-        function updateTableData() {
-            var date = $('.date').val();
-            var date2 = $('.date2').val();
-            var payment_method = $('.payment_method').val();
-            var url = '{{ route('dashboard.report.sales') }}';
-
-            if (date) {
-                url += '?date=' + date;
-                if (date2) {
-                    url += '&date2=' + date2;
-                }
-            }
-
-            if (payment_method && payment_method !== 'all') {
-                url += (date ? '&' : '?') + 'payment_method=' + payment_method;
-            }
-
-            // Update table data
-            table.ajax.url(url).load();
-
-            // Update summary
-            updateSummary();
-        }
-
-        function updateSummary() {
-            $.ajax({
-                url: '{{ route('dashboard.report.updateSummary') }}',
-                type: 'GET',
-                data: {
-                    date: $('.date').val(),
-                    date2: $('.date2').val(),
-                    payment_method: $('.payment_method').val()
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('#html5-extension').DataTable({
+                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
+                    "<'table-responsive'tr>" +
+                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+                order: [[0, 'desc']],
+                "language": {
+                    "url": "{{app()->getLocale() == 'ar'? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json'}}"
                 },
-                success: function (data) {
-                    $('#sub_total').text(data.sub_total.toFixed(2));
-                    $('#tax').text(data.tax.toFixed(2));
-                    $('#tax_sub_total').text(data.taxSubTotal.toFixed(2));
-                }
-            });
-        }
+                buttons: {
+                    buttons: [
+                        {extend: 'copy', className: 'btn btn-sm',text:'نسخ'},
+                        {extend: 'csv', className: 'btn btn-sm',text:'تصدير إلى CSV'},
+                        {extend: 'excel', className: 'btn btn-sm',text:'تصدير إلى Excel'},
+                        {extend: 'print', className: 'btn btn-sm',text:'طباعة'}
+                    ]
+                },
+                processing: true,
+                serverSide: false,
+                ajax: '{{ route('dashboard.report.sales') }}',
+                columns: [
+                    {data: 'order_number', name: 'order_number',orderable: true, searchable: true},
+                    {data: 'user_name', name: 'user_name',orderable: true, searchable: true},
+                    {data: 'created_at', name: 'created_at',orderable: true, searchable: true},
+                    {data: 'service', name: 'service',orderable: true, searchable: true},
+                    {data: 'service_number', name: 'service_number',orderable: true, searchable: true},
+                    {data: 'price', name: 'price',orderable: true, searchable: true},
+                    {data: 'payment_method', name: 'payment_method',orderable: true, searchable: true},
 
-        // Attach event handlers
-        $('.date, .date2, .payment_method').change(function () {
-            updateTableData();
+
+                ]
+            });
+
+            function updateTableData() {
+                var date = $('.date').val();
+                var date2 = $('.date2').val();
+                var payment_method = $('.payment_method').val();
+                var service_filter = $('.service_filter').val();
+                var url = '{{ route('dashboard.report.sales') }}';
+
+                if (date) {
+                    
+                    if (date2) {
+                        url += '&date2=' + date2;
+                    }
+                }
+
+                if (payment_method && payment_method !== 'all') {
+                    url += (date ? '&' : '?') + 'payment_method=' + payment_method;
+                }
+
+                if (service_filter && service_filter !== 'all') {
+                    url += '?service=' + service_filter;
+                }
+
+                // Update table data
+                table.ajax.url(url).load();
+
+                // Update summary
+                updateSummary();
+            }
+
+            function updateSummary() {
+                $.ajax({
+                    url: '{{ route('dashboard.report.updateSummary') }}',
+                    type: 'GET',
+                    data: {
+                        date: $('.date').val(),
+                        date2: $('.date2').val(),
+                        payment_method: $('.payment_method').val(),
+                        service: $('.service_filter').val(),
+                    },
+                    success: function (data) {
+                        $('#total').text(data.total.toFixed(2));
+                        $('#tax').text(data.tax.toFixed(2));
+                        $('#tax_total').text(data.taxTotal.toFixed(2));
+                    }
+                });
+            }
+
+            // Attach event handlers
+            $('.date, .date2, .payment_method, .service_filter').change(function () {
+                updateTableData();
+            });
+
+            // Call the initial update
+          //  updateTableData();
         });
 
-        // Call the initial update
-        updateTableData();
-    });
-
-</script>
+    </script>
 
 @endpush

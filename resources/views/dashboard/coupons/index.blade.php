@@ -55,6 +55,7 @@
                             <thead>
                             <tr>
                                 <th>رقم الكوبون</th>
+                                <th>الفئة</th>
                                 <th>العنوان</th>
                                 <th>الكود</th>
                                 <th>القيمة</th>
@@ -103,6 +104,7 @@
                 ajax: '{{ route('dashboard.coupons.index') }}',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'gender', name: 'gender'},
                     {data: 'title', name: 'title'},
                     {data: 'code', name: 'code'},
                     {data: 'value', name: 'value'},

@@ -257,6 +257,7 @@ class VisitsController extends Controller
             })->with('status')->where('id', $model->id)->first();
             $visit = VisitsResource::make($order);
             $notify = [
+                'fromFunc'=>'changeStatus',
                 'device_token'=>[$user->fcm_token],
                 'data' =>[
                     'order_details'=>$visit,
@@ -305,6 +306,7 @@ class VisitsController extends Controller
         $user = User::where('id',$model->booking->user_id)->first('fcm_token');
 
         $notify = [
+            'fromFunc'=>'latlong',
             'device_token'=>[$user->fcm_token],
             'data' =>[
                 'visit_id'=>$model->id,

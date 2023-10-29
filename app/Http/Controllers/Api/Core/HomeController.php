@@ -40,16 +40,18 @@ class HomeController extends Controller
     protected function index(Request $request)
     {
         $userGender=null;
+        $addresses = [];
+        $banners = Banner::query()->where('active',1);
         if (!auth()->check()){
-            $addresses = [];
             $userGender=$request->gender;
+            $banners->where('gender',$request->gender)->get();
         }else{
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
+            $banners->where('gender',$request->gender)->get();
             $userGender=User::where('id',auth()->user('sanctum')->id)->first()->gender;
         }
         $this->body['addresses'] = UserAddressResource::collection($addresses);
         $images = [];
-        $banners = Banner::query()->where('active',1)->get();
         if ($banners->count() > 0) {
             foreach ($banners as $banner) {
                 $url = $banner->image ? asset($banner->image) : '';

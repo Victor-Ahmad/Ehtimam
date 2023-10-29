@@ -11,6 +11,7 @@ use App\Models\City;
 use App\Models\Group;
 use App\Models\Order;
 use App\Models\OrderService;
+use App\Models\OrderStatus;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\UserAddresses;
@@ -33,13 +34,18 @@ class OrderController extends Controller
     {
 
         if (request()->ajax()) {
-            $orders=null;
-            if(request()->page){
-                $now=Carbon::now('Asia/Riyadh')->toDateString();
-                $orders = Order::whereDate('created_at','=',$now)->get();
-            }else{
-               $orders = Order::all(); 
+            $orders = Order::query();
+         
+            if (request()->page) {
+                $now = Carbon::now('Asia/Riyadh')->toDateString();
+                $orders->whereDate('created_at', '=', $now);
             }
+            if (request()->status) {
+
+                $orders->where('status_id', request()->status);
+            }
+
+            $orders->get();
             return DataTables::of($orders)
                 ->addColumn('user', function ($row) {
                     return $row->user?->first_name .' ' . $row->user?->last_name;
@@ -101,8 +107,8 @@ class OrderController extends Controller
                 ])
                 ->make(true);
         }
-
-        return view('dashboard.orders.index');
+        $statuses = OrderStatus::all()->pluck('name', 'id');
+        return view('dashboard.orders.index', compact('statuses'));
     }
 
     public function showService()

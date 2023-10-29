@@ -110,8 +110,9 @@ class BookingController extends Controller
                 ->make(true);
         }
         $visitsStatuses = VisitsStatus::query()->get()->pluck('name', 'id');
+        $statuses = BookingStatus::get()->pluck('name', 'id');
 
-        return view('dashboard.bookings.index', compact('visitsStatuses'));
+        return view('dashboard.bookings.index', compact('visitsStatuses','statuses'));
     }
 
     protected function create()

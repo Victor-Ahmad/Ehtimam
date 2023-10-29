@@ -44,6 +44,28 @@
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-6">
+                    <div class="col-md-12  mb-3">
+
+
+                        <div class="row">
+
+
+
+                            <div class="col-md-1">
+                                <label for="inputEmail4">الحالة</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="select2 status_filter form-control" name="status_filter">
+                                    <option value="all" selected>الكل</option>
+                                    @foreach ($statuses as $id => $status)
+                                        <option value="{{ $id }}">{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
                     <div class="col-md-12 text-right mb-3">
 
 {{--                        <button type="button" id="" class="btn btn-primary card-tools" data-toggle="modal"--}}
@@ -59,9 +81,10 @@
                     <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                         <thead>
                         <tr>
-                            <th>#</th>
+                            <th>رقم الطلب</th>
+                            <th>رقم الحجز</th>
                             <th>{{__('dash.customer_name')}}</th>
-                            <th>{{__('dash.category')}}</th>
+                            <th>{{__('dash.service')}}</th>
                             <th>{{__('dash.quantity')}}</th>
                             <th>{{__('dash.price_value')}}</th>
                             <th>{{__('dash.status')}}</th>
@@ -85,7 +108,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#html5-extension').DataTable({
+            var table = $('#html5-extension').DataTable({
                 dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                     "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -106,8 +129,9 @@
                 ajax: '{{ route('dashboard.orders.index') }}',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'booking_id', name: 'booking_id'},
                     {data: 'user', name: 'user'},
-                    {data: 'category', name: 'category'},
+                    {data: 'service', name: 'service'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'total', name: 'total'},
                     {data: 'status', name: 'status'},
@@ -115,6 +139,21 @@
                     {data: 'control', name: 'control', orderable: false, searchable: false},
 
                 ]
+            });
+            function updateTableData() {
+                var status_filter = $('.status_filter').val();
+                var url =  '{{ route('dashboard.orders.index') }}';
+
+                if (status_filter && status_filter !== 'all') {
+                    url += '?status=' + status_filter;
+                } 
+
+                // Update table data
+                table.ajax.url(url).load();
+
+            }
+            $('.status_filter').change(function() {
+                updateTableData();
             });
         });
 

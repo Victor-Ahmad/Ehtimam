@@ -19,6 +19,13 @@ class BannersController extends Controller
         if (request()->ajax()) {
             $banners = Banner::all();
             return DataTables::of($banners)
+            ->addColumn('gender', function ($row) {
+                if ($row->gender == 'male') {
+                    return __('dash.males');
+                } else {
+                    return __('dash.females');
+                }
+            })
                 ->addColumn('title', function ($row) {
                     return $row->title;
                 })
@@ -51,6 +58,7 @@ class BannersController extends Controller
                     return $html;
                 })
                 ->rawColumns([
+                    'gender',
                     'title',
                     'status',
                     'control',
@@ -64,6 +72,7 @@ class BannersController extends Controller
             'title_ar' => 'required|String|min:3|max:100',
             'title_en' => 'required|String|min:3|max:100',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
+            'gender'=> 'required',
         ];
         $validated = Validator::make($request->all(), $rules);
         if ($validated->fails()) {

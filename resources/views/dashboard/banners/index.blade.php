@@ -59,6 +59,7 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>الفئة</th>
                             <th>عنوان البنر</th>
                             <th>{{__('dash.status')}}</th>
                             <th class="no-content">{{__('dash.actions')}}</th>
@@ -119,6 +120,7 @@
                 ajax: '{{ route('dashboard.banners.index') }}',
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'gender', name: 'gender'},
                     {data: 'title', name: 'title'},
                     {data: 'status', name: 'status'},
                     {data: 'control', name: 'control', orderable: false, searchable: false},

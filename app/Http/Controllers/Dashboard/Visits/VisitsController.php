@@ -29,14 +29,20 @@ class VisitsController extends Controller
     protected function index()
     {
         if (request()->ajax()) {
-            $visit=null;
-            if(request()->page){
-                $now=Carbon::now('Asia/Riyadh')->toDateString();
-                $visit = Visit::whereDate('created_at','=',$now)->get();
-            }else{
-               $visit = Visit::all(); 
+            $visit = Visit::query();
+         
+            if (request()->page) {
+                $now = Carbon::now('Asia/Riyadh')->toDateString();
+                $visit->whereDate('created_at', '=', $now);
             }
-           
+            if (request()->status) {
+
+                $visit->where('visits_status_id', request()->status);
+            }
+
+            $visit->get();
+
+
             return DataTables::of($visit)
                 ->addColumn('visite_id', function ($row) {
                     return $row->visite_id;
@@ -85,7 +91,9 @@ class VisitsController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.visits.index');
+        $statuses = VisitsStatus::all()->pluck('name', 'id');
+
+        return view('dashboard.visits.index',compact('statuses'));
     }
 
     protected function store(Request $request)

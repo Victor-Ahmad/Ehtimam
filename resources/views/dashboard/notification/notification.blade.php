@@ -56,10 +56,10 @@
                             @csrf
                             <div class="box-body">
 
-                                <div class="form-row mb-2">
+                                <div class="form-row mb-3">
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <div class="n-chk">
                                             <label class="new-control new-radio radio-classic-primary">
                                                 <input type="radio" class="new-control-input type" value="customer" checked name="type">
@@ -71,12 +71,24 @@
                                         @enderror
 
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
+                                        <div class="n-chk">
+                                            <label class="new-control new-radio radio-classic-primary">
+                                                <input type="radio" class="new-control-input type" value="customersWithNoOrders"  name="type">
+                                                <span class="new-control-indicator"></span>العملاء الجدد
+                                            </label>
+                                        </div>
+                                        @error('type')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+                                    <div class="form-group col-md-4">
 
                                         <div class="n-chk">
                                             <label class="new-control new-radio radio-classic-primary">
                                                 <input type="radio" class="new-control-input type" value="technician" name="type">
-                                                <span class="new-control-indicator"></span>الأخصائيين
+                                                <span class="new-control-indicator"></span>الفنيين
                                             </label>
                                         </div>
                                         @error('type')
@@ -102,7 +114,7 @@
                                     </div>
 
                                     <div class="form-group col-md-6 div-technician" style="display:none;">
-                                        <label for="customer">الأخصائيين</label>
+                                        <label for="customer">الفنيين</label>
                                         <select  class="form-control technician_id" disabled style="width: 100%; padding: 8px"
                                                 name="technician_id">
                                             <option value="all" selected>الكل</option>
@@ -180,12 +192,16 @@
                 $('.div-technician').show();
 
 
+            } else if$(this).val() (=='customersWithNoOrders'){
+                $('.div-technician').hide();
+                $('.customer_id').attr('disabled',false);
+                $('.technician_id').attr('disabled',true);
+                $('.div-customer').show();
             } else {
                 $('.div-technician').hide();
                 $('.customer_id').attr('disabled',false);
                 $('.technician_id').attr('disabled',true);
                 $('.div-customer').show();
-
             }
 
         })
