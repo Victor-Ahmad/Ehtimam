@@ -27,7 +27,7 @@
                                        id="edit_reason_ar"
                                        placeholder="أدخل السبب"
                                 >
-                                @error('reason_ar')
+                                @error('edit_reason_ar')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -38,14 +38,28 @@
                                        id="edit_reason_en"
                                        placeholder="أدخل السبب"
                                 >
-                                @error('reason_en')
+                                @error('edit_reason_en')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
 
                         </div>
+                        <div class="form-group type-col col-md-12">
 
+                            <label for="edit_is_for_tech">النوع</label>
+                            <select id="edit_is_for_tech" class="select2 type form-control" name="is_for_tech">
+
+                                @foreach ($reasons as  $reason)
+                                    <option value="{{ $reason->id }}">{{ $reason->id==1?'فني':'عميل' }}</option>
+                                @endforeach
+
+                            </select>
+                            @error('edit_is_for_tech')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">{{__('dash.save')}}</button>

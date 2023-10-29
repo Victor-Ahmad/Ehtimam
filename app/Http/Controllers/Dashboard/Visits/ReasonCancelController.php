@@ -18,6 +18,14 @@ class ReasonCancelController extends Controller
                 ->addColumn('reason', function ($row) {
                     return $row->reason;
                 })
+                ->addColumn('is_for_tech', function ($row) {
+                    if ($row->is_for_tech == 0) {
+                        $type = "عميل";
+                    } elseif ($row->is_for_tech == 1) {
+                        $type = "أخصائي";
+                    }
+                    return $type ?? '';
+                })
                 ->addColumn('status', function ($row) {
                     $checked = '';
                     if ($row->active == 1) {
@@ -46,17 +54,20 @@ class ReasonCancelController extends Controller
                 })
                 ->rawColumns([
                     'title',
+                    'is_for_tech',
                     'status',
                     'control',
                 ])
                 ->make(true);
         }
-        return view('dashboard.reason_cancel.index');
+        $reasons=ReasonCancel::all();
+        return view('dashboard.reason_cancel.index',compact('reasons'));
     }
     protected function store(Request $request){
         $rules = [
             'reason_ar' => 'required|String|min:3|max:100',
-            'reason_en' => 'required|String|min:3|max:100'
+            'reason_en' => 'required|String|min:3|max:100',
+            'is_for_tech' => 'required',
         ];
         $validated = Validator::make($request->all(), $rules);
         if ($validated->fails()) {
@@ -71,7 +82,8 @@ class ReasonCancelController extends Controller
         $banner = ReasonCancel::query()->where('id', $id)->first();
         $rules = [
             'reason_ar' => 'required|String|min:3|max:100',
-            'reason_en' => 'required|String|min:3|max:100'
+            'reason_en' => 'required|String|min:3|max:100',
+            'is_for_tech' => 'required',
         ];
         $validated = Validator::make($request->all(), $rules);
         if ($validated->fails()) {

@@ -44,7 +44,21 @@
 
 
                         </div>
+                        <div class="form-group type-col col-md-12">
 
+                            <label for="is_for_tech">النوع</label>
+                            <select id="is_for_tech" class="select2 type form-control" name="is_for_tech">
+
+                                @foreach ($reasons as  $reason)
+                                    <option value="{{ $reason->id }}">{{ $reason->id==1?'أخصائي':'عميل' }}</option>
+                                @endforeach
+
+                            </select>
+                            @error('is_for_tech')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+
+                        </div>
 
 
                     </div>
