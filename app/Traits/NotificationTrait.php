@@ -51,7 +51,6 @@ trait NotificationTrait
         } else {
             $fields = [
                 'registration_ids' => $device_token,
-
                 "content_available" => true,
                 "android" => [
                     "priority" => "HIGH"
