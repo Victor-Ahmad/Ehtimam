@@ -192,7 +192,7 @@ class ServiceController extends Controller
             'description_en' => 'required|String|min:3',
             'ter_cond_ar' => 'required|String|min:3',
             'ter_cond_en' => 'required|String|min:3',
-            'category_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
             'measurement_id' => 'required|exists:measurements,id',
             'price' => 'required|Numeric',
             'type' => 'required|in:evaluative,fixed',
