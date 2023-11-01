@@ -51,7 +51,7 @@ class NotificationController extends Controller
 
         $request->validate([
             'subject_id' => 'nullable',
-            'subject_id' => 'nullable',
+
             'title' => 'required',
             'message' => 'required',
             'type' => 'required',
@@ -77,7 +77,7 @@ class NotificationController extends Controller
             $type = 'customer';
         } else {
             if ($request->subject_id == 'all') {
-                $FcmTokenArray = Technician::whereNotNull('fcm_token')();
+                $FcmTokenArray = Technician::whereNotNull('fcm_token');
 
                 // $FcmTokenArray = $allTechn->pluck('fcm_token');
 
@@ -101,8 +101,10 @@ class NotificationController extends Controller
 
             $type = 'technician';
         }
-
-
+        if ($request->gender && $request->gender != 'all' && isset($FcmTokenArray)) {
+            $FcmTokenArray->where('gender', $request->gender);
+        }
+        $FcmTokenArray->pluck('fcm_token');
         if (isset($FcmToken) && $FcmToken == null) {
 
             return redirect()->back()->withErrors(['fcm_token' => 'لا يمكن ارسال الاشعارت لعدم توفر رمز الجهاز']);
@@ -110,9 +112,7 @@ class NotificationController extends Controller
             return redirect()->back()->withErrors(['fcm_token' => 'لا يمكن ارسال الاشعارت لعدم توفر رمز الجهاز']);
         }
 
-        if (isset($FcmTokenArray) && count($FcmTokenArray) != 0 && $request->gender && $request->gender != 'all') {
-            $FcmTokenArray->where('gender', $request->gender);
-        }
+
 
         $message = str_replace('&nbsp;', ' ', strip_tags($request->message));
         $notification = [
