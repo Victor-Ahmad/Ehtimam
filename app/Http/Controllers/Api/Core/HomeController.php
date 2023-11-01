@@ -47,8 +47,9 @@ class HomeController extends Controller
             $banners->where('gender',$request->gender)->get();
         }else{
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
-            $banners->where('gender',$request->gender)->get();
+        
             $userGender=User::where('id',auth()->user('sanctum')->id)->first()->gender;
+            $banners->where('gender',  $userGender)->get();
         }
         $this->body['addresses'] = UserAddressResource::collection($addresses);
         $images = [];
