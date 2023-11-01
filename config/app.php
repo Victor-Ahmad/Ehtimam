@@ -56,7 +56,7 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'firebase_credentials' => 'AAAAzP_ECEE:APA91bHhUSzXzwC-f64_WNGRmSyu26V0evulWLjyNwxd29Q9sFIAWSPZN_QkIGkN_Wx9XqKt3B1OZF_QCcfa75pR7vAL12stPUtOSv8VulKvyNgcU08CuNa2fapQKdbkZ3OfiddmCGYX',
+    'firebase_credentials' => 'AAAAHtWPiKU:APA91bE58ZV6KtSvlXuHtuNPKtGgWlMyvjF_SL5tw7KbaxFLYE_ECrSYnRMewuRbJvS1RukU_is2neJPlh5DLOri6Pq2dh1khf5tooSrW_hVDtrG0x4MSadB7D35jvIxyfuDqkcQ4HCx',
 
     'GOOGLE_MAP_KEY'=>'AIzaSyDR0MGyuJhRhzPTe65zy-WymhBirnmVTd4',
 
