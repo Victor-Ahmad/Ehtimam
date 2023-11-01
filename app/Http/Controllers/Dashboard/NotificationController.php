@@ -104,7 +104,7 @@ class NotificationController extends Controller
         if ($request->gender && $request->gender != 'all' && isset($FcmTokenArray)) {
             $FcmTokenArray->where('gender', $request->gender);
         }
-        $FcmTokenArray->pluck('fcm_token');
+        $FcmTokenArray = $FcmTokenArray->pluck('fcm_token');
         if (isset($FcmToken) && $FcmToken == null) {
 
             return redirect()->back()->withErrors(['fcm_token' => 'لا يمكن ارسال الاشعارت لعدم توفر رمز الجهاز']);
