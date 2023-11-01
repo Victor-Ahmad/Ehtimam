@@ -43,7 +43,7 @@ class HomeController extends Controller
         $addresses = [];
         $banners = Banner::query()->where('active',1);
         if (!auth()->check()){
-            $userGender=request()->gender;
+            $userGender=request()->query('gender');
             $banners->where('gender',$userGender)->get();
         }else{
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
