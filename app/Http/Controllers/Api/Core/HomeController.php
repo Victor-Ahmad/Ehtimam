@@ -37,14 +37,14 @@ class HomeController extends Controller
         $this->middleware('localization');
     }
 
-    protected function index(Request $request)
+    protected function index()
     {
         $userGender=null;
         $addresses = [];
         $banners = Banner::query()->where('active',1);
         if (!auth()->check()){
-            $userGender=$request->gender;
-            $banners->where('gender',$request->gender)->get();
+            $userGender=request()->gender;
+            $banners->where('gender',$userGender)->get();
         }else{
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
         
