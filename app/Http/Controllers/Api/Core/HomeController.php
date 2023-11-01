@@ -39,18 +39,20 @@ class HomeController extends Controller
 
     protected function index()
     {
-        $userGender=null;
+        $userGender = null;
         $addresses = [];
-        $banners = Banner::query()->where('active',1);
-        if (!auth()->check()){
-            $userGender=request()->query('gender');
-            $banners->where('gender',$userGender)->get();
-        }else{
+        $banners = Banner::query()->where('active', 1);
+
+        if (!auth()->check()) {
+            $userGender = request()->query('gender');
+            $banners = $banners->where('gender', $userGender)->get();
+        } else {
             $addresses = UserAddresses::query()->where('user_id', auth()->user('sanctum')->id)->get();
-        
-            $userGender=User::where('id',auth()->user('sanctum')->id)->first()->gender;
-            $banners->where('gender',  $userGender)->get();
+
+            $userGender = User::where('id', auth()->user('sanctum')->id)->first()->gender;
+            $banners = $banners->where('gender',  $userGender)->get();
         }
+
         $this->body['addresses'] = UserAddressResource::collection($addresses);
         $images = [];
         if ($banners->count() > 0) {
@@ -62,20 +64,20 @@ class HomeController extends Controller
             }
         }
         $this->body['banners'] = $images;
-//        $buyServiceLists = Order::query()->select('service_id',DB::raw('count(*) as total'))
-//            ->groupBy('service_id')
-//            ->orderBy('total', 'DESC')
-//            ->get();
+        //        $buyServiceLists = Order::query()->select('service_id',DB::raw('count(*) as total'))
+        //            ->groupBy('service_id')
+        //            ->orderBy('total', 'DESC')
+        //            ->get();
 
-        $mostSellingServices = Service::query()->where('best_seller',1)
-            ->where('active',1)->where('gender',$userGender)->take(9)
+        $mostSellingServices = Service::query()->where('best_seller', 1)
+            ->where('active', 1)->where('gender', $userGender)->take(9)
             ->get()->shuffle();
-        
+
         $this->body['services_most_wanted'] = ServiceResource::collection($mostSellingServices);
-        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('gender',$userGender)->take(9)->get()->shuffle());
+        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('gender', $userGender)->take(9)->get()->shuffle());
         $this->body['contracts'] = ContractResource::collection(ContractPackage::query()->where('active', 1)->take(9)->get()->shuffle());
         $this->body['total_items_in_cart'] = auth()->check() ? auth()->user()->carts->count() : 0;
-        $servicesCategories = Category::query()->where('active', 1)->where('gender',$userGender)->get();
+        $servicesCategories = Category::query()->where('active', 1)->where('gender', $userGender)->get();
         $this->body['services_categories'] = ServiceCategoryResource::collection($servicesCategories);
 
 
@@ -98,8 +100,8 @@ class HomeController extends Controller
     protected function search(Request $request): JsonResponse
     {
         if ($request->title) {
-            $services = Service::query()->where('title_ar', 'like', '%'.$request->title.'%')
-                ->orWhere('title_en', 'like', '%'.$request->title.'%')->where('active', 1)->get();
+            $services = Service::query()->where('title_ar', 'like', '%' . $request->title . '%')
+                ->orWhere('title_en', 'like', '%' . $request->title . '%')->where('active', 1)->get();
             $this->body['services'] = ServiceResource::collection($services);
             return self::apiResponse(200, '', $this->body);
         } else {
@@ -181,7 +183,7 @@ class HomeController extends Controller
 
     protected function getCity()
     {
-        $cities = City::where('active',1)->get();
+        $cities = City::where('active', 1)->get();
         $this->body['cities'] = CityResource::collection($cities);
         return self::apiResponse(200, t_('successfully'), $this->body);
     }
@@ -189,14 +191,14 @@ class HomeController extends Controller
 
     protected function getRegions($id)
     {
-        $regions = Region::where('active',1)->where('city_id',$id)->get();
+        $regions = Region::where('active', 1)->where('city_id', $id)->get();
         $this->body['regions'] = RegionResource::collection($regions);
         return self::apiResponse(200, t_('successfully'), $this->body);
     }
 
     protected function getAllRegions()
     {
-        $regions = Region::where('active',1)->get();
+        $regions = Region::where('active', 1)->get();
         $this->body['regions'] = RegionResource::collection($regions);
         return self::apiResponse(200, __('api.successfully'), $this->body);
     }
@@ -220,7 +222,4 @@ class HomeController extends Controller
         $this->body['stores'] = StoreResource::collection($stores);
         return self::apiResponse(200, t_(''), $this->body);
     }
-
-
-
 }
