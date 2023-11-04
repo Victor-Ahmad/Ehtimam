@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\Contract;
 use App\Models\ContractPackage;
 use App\Models\Order;
+use App\Models\OrderContract;
 use App\Models\Region;
 use App\Models\Service;
 use App\Models\UserAddresses;
@@ -221,5 +222,28 @@ class HomeController extends Controller
         }
         $this->body['stores'] = StoreResource::collection($stores);
         return self::apiResponse(200, t_(''), $this->body);
+    }
+
+    protected function contract_contact(Request $request): JsonResponse
+    {
+        $request->validate([
+            'contract_id' => 'required|exists:contactings,id',
+            'company_name' => 'required|String|min:3',
+            'notes' => 'required|String',
+        ]);
+
+
+        OrderContract::create([
+            'contract_id' => $request->contract_id,
+            'company_name' => $request->company_name,
+            'notes' => $request->notes,
+            'user_id' => auth()->user()->id,
+            'phone' => auth()->user()->phone,
+        ]);
+
+
+
+        return self::apiResponse(200, __('api.added successfully'), $this->body);
+
     }
 }

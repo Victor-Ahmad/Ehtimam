@@ -22,7 +22,7 @@ Route::prefix('services')->group(function (){
 Route::post('contactus',[ContactUsController::class,'store']);
 Route::post('home_search', [HomeController::class, 'search']);
 Route::post('home_filter', [HomeController::class, 'filter']);
-
+Route::post('contract_contact', [HomeController::class, 'contract_contact']);
 
 Route::get('package/{id}', [ServiceController::class, 'PackageDetails']);
 Route::get('/magic' , [AuthController::class, 'magic']);
