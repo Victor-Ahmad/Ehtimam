@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\Core;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Contract\ContractResource;
+use App\Http\Resources\Core\ContactResource;
 use App\Http\Resources\Service\ServiceDetailsResource;
 use App\Http\Resources\Service\ServiceResource;
 use App\Models\Category;
+use App\Models\Contacting;
 use App\Models\ContractPackage;
 use App\Models\Order;
 use App\Models\Service;
@@ -71,6 +73,13 @@ class ServiceController extends Controller
             return self::apiResponse(200, null, $this->body);
         }
         return self::apiResponse(400, __('api.package not found'), $this->body);
+    }
+
+    protected function getContact()
+    {
+        $contacts = Contacting::query()->get();
+        $this->body['contact'] = ContactResource::collection($contacts);
+        return self::apiResponse(200, null, $this->body);
     }
 
 }

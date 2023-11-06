@@ -37,6 +37,7 @@ Route::prefix('home')->group(function (){
 });
 Route::get('services/{id}', [ServiceController::class, 'serviceDetails']);
 Route::get('/coupons', [CouponsController::class, 'allCoupons']);
+Route::get('contact', [ServiceController::class, 'getContact']);
 require __DIR__ . '/settings.router.php';
 
 Route::middleware(['auth:sanctum','abilities:user'])->group(function () {
