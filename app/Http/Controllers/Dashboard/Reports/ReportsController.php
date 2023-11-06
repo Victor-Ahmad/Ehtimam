@@ -44,16 +44,16 @@ class ReportsController extends Controller
 
             if($date) {
               
-                $carbonDate = \Carbon\Carbon::parse($date)->timezone('Asia/Riyadh');
+                $carbonDate = \Carbon\Carbon::parse($date)->timezone('Asia/Riyadh')->timezone('Asia/Riyadh');
                 $formattedDate = $carbonDate->format('Y-m-d H:i:s');
                 $order = $order->where('created_at','>=', $formattedDate);
             }
             if($date2){
          
-                $carbonDate2 = \Carbon\Carbon::parse($date2)->timezone('Asia/Riyadh');
+                $carbonDate2 = \Carbon\Carbon::parse($date2)->timezone('Asia/Riyadh')->timezone('Asia/Riyadh');
                 $formattedDate2 = $carbonDate2->format('Y-m-d H:i:s');
 
-                $carbonDate = \Carbon\Carbon::parse($date)->timezone('Asia/Riyadh');
+                $carbonDate = \Carbon\Carbon::parse($date)->timezone('Asia/Riyadh')->timezone('Asia/Riyadh');
                 $formattedDate = $carbonDate->format('Y-m-d H:i:s');
                 $order = $order->where([['created_at','>=', $formattedDate],['created_at','<=', $formattedDate2]]);
             }
@@ -198,7 +198,7 @@ class ReportsController extends Controller
             $order = Contract::query();
             $date = $request->date;
             if($date) {
-                $carbonDate = \Carbon\Carbon::parse($date);
+                $carbonDate = \Carbon\Carbon::parse($date)->timezone('Asia/Riyadh');
                 $formattedDate = $carbonDate->format('Y-m-d H:i:s');
                 $order = $order->where('created_at','=', $formattedDate);
             }
@@ -313,9 +313,9 @@ class ReportsController extends Controller
                         $SumServiceDuration = array_sum($service);
                         $duration = 0;
                         foreach ($visits as $visit){
-                            $start_time = Carbon::parse($visit->start_time)->format('H:i:s');
-                            $end_time = Carbon::parse($visit->end_time)->format('H:i:s');
-                            $duration += Carbon::parse($end_time)->diffInMinutes(Carbon::parse($start_time));
+                            $start_time = Carbon::parse($visit->start_time)->timezone('Asia/Riyadh')->format('H:i:s');
+                            $end_time = Carbon::parse($visit->end_time)->timezone('Asia/Riyadh')->format('H:i:s');
+                            $duration += Carbon::parse($end_time)->timezone('Asia/Riyadh')->diffInMinutes(Carbon::parse($start_time)->timezone('Asia/Riyadh'));
                         }
                         $sum = $SumServiceDuration - $duration;
                         $total = $sum/count($service_ids);

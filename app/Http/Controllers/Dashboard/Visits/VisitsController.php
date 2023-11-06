@@ -40,7 +40,7 @@ class VisitsController extends Controller
                 $visit->where('visits_status_id', request()->status);
             }
 
-            $visit->get();
+            $visit->where('is_active', 1)->get();
 
 
             return DataTables::of($visit)
@@ -54,10 +54,10 @@ class VisitsController extends Controller
                     return $row->group?->name;
                 })
                 ->addColumn('start_time', function ($row) {
-                    return \Carbon\Carbon::parse($row->start_time)->format('g:i A');
+                    return \Carbon\Carbon::parse($row->start_time)->timezone('Asia/Riyadh')->format('g:i A');
                 })
                 ->addColumn('end_time', function ($row) {
-                    return \Carbon\Carbon::parse($row->end_time)->format('g:i A');
+                    return \Carbon\Carbon::parse($row->end_time)->timezone('Asia/Riyadh')->format('g:i A');
                 })
                 ->addColumn('duration', function ($row) {
                     return $row->duration;
@@ -121,8 +121,8 @@ class VisitsController extends Controller
             $bookingSettings = BookingSetting::query()->whereIn('service_id', $service_ids)->get();
         }
 
-        $start_time = Carbon::parse($booking->time);
-        $end_time = Carbon::parse($booking->end_time);
+        $start_time = Carbon::parse($booking->time)->timezone('Asia/Riyadh');
+        $end_time = Carbon::parse($booking->end_time)->timezone('Asia/Riyadh');
         $validated['start_time'] = $start_time;
         $validated['end_time'] = $end_time;
         $validated['duration'] = $end_time->diffInMinutes($start_time);

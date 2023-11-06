@@ -45,7 +45,7 @@ class OrderController extends Controller
                 $orders->where('status_id', request()->status);
             }
 
-            $orders->get();
+            $orders->where('is_active', 1)->get();
             return DataTables::of($orders)
                 ->addColumn('user', function ($row) {
                     return $row->user?->first_name .' ' . $row->user?->last_name;
@@ -70,7 +70,7 @@ class OrderController extends Controller
                     return $row->status?->name;
                 })
                 ->addColumn('created_at', function ($row) {
-                    $date = Carbon::parse($row->created_at);
+                    $date = Carbon::parse($row->created_at)->timezone('Asia/Riyadh');
 
                     return $date->format("Y-m-d H:i:s");
                 })
@@ -354,7 +354,7 @@ class OrderController extends Controller
         $request->validate($rules, $request->all());
         $itr = $request->itr;
 
-        $day = Carbon::parse($request->date)->locale('en')->dayName;
+        $day = Carbon::parse($request->date)->timezone('Asia/Riyadh')->locale('en')->dayName;
 
         $times = [];
         foreach ($request->service_ids as $service_id) {
