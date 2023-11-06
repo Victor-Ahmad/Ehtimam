@@ -74,7 +74,7 @@ class IndexController extends Controller
         $client_orders_today = Order::whereDate('created_at','=',$now)->count();
         $tech_visits_today = Visit::whereDate('created_at','=',$now)->count();
         $fy = $this->getCurrentFinancialYear();
-        $least_7_days = Carbon::parse($fy['start'])->timezone('Asia/Riyadh')->subDays(7)->format('Y-m-d');
+        $least_7_days = Carbon::parse($fy['start'])->timezone('Asia/Riyadh')->timezone('Asia/Riyadh')->subDays(7)->format('Y-m-d');
      
 
         // $all_sell_values = Transaction::select(\DB::raw("COUNT(*) as count"))

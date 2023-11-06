@@ -27,9 +27,9 @@ class BookingResource extends JsonResource
             'services' => $services ? ServiceResource::collection($services) : [ServiceResource::make($this->package->service)],
             //  'services' => ServiceResource::collection($services),
             'image' => $this->category->slug ? asset($this->category->slug) : '',
-            'date' => Carbon::parse($this->date)->format('d M'),
-            'time_start' => Carbon::parse($this->time)->format('g:i A'),
-            'time_end' => Carbon::parse($this->end_time)->format('g:i A')
+            'date' => Carbon::parse($this->date)->timezone('Asia/Riyadh')->format('d M'),
+            'time_start' => Carbon::parse($this->time)->timezone('Asia/Riyadh')->format('g:i A'),
+            'time_end' => Carbon::parse($this->end_time)->timezone('Asia/Riyadh')->format('g:i A')
         ];
     }
 }

@@ -20,21 +20,21 @@ class OrderCategoryResource extends JsonResource
         return [
             'id'  => $this['id'],
             'title'  => $this['title'],
-            'image' => $this['slug']? asset($this['slug']) : '',
-            'date' => Carbon::parse($order->bookings->first()->date)->format('d M'),
-            'time_start' => Carbon::parse($order->bookings->first()->time)->format('g:i A'),
-            'time_end' => Carbon::parse($order->bookings->first()->time)
+            'image' => $this['slug'] ? asset($this['slug']) : '',
+            'date' => Carbon::parse($order->bookings->first()->date)->timezone('Asia/Riyadh')->format('d M'),
+            'time_start' => Carbon::parse($order->bookings->first()->time)->timezone('Asia/Riyadh')->format('g:i A'),
+            'time_end' => Carbon::parse($order->bookings->first()->time)->timezone('Asia/Riyadh')
                 ->addMinutes(
                     array_sum($bookingSettings->pluck('service_duration')->toArray())
-                    +
-                    array_sum($bookingSettings->pluck('buffering_time')->toArray())
+                        +
+                        array_sum($bookingSettings->pluck('buffering_time')->toArray())
                 )->format('g:i A'),
-            'total_duration' => Carbon::parse($order->bookings->first()->time)
+            'total_duration' => Carbon::parse($order->bookings->first()->time)->timezone('Asia/Riyadh')
                 ->addMinutes(
                     array_sum($bookingSettings->pluck('service_duration')->toArray())
-                    +
-                    array_sum($bookingSettings->pluck('buffering_time')->toArray())
-                )->diffInMinutes(Carbon::parse($order->bookings->first()->time))
+                        +
+                        array_sum($bookingSettings->pluck('buffering_time')->toArray())
+                )->diffInMinutes(Carbon::parse($order->bookings->first()->time)->timezone('Asia/Riyadh'))
         ];
     }
 }
