@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -47,14 +48,14 @@ class CouponsController extends Controller
                 ->addColumn('control', function ($row) {
 
                     $html = '
-                    <a href="' . route('dashboard.coupons.edit', $row->id) . '"  id="edit-coupon" class="btn btn-primary btn-sm card-tools edit" data-id="' . $row->id . '"
-                          >
-                            <i class="far fa-edit fa-1x"></i>
-                       </a>
+                    <a href="' . route('dashboard.coupons.viewSingleCoupon', ['id' => $row->id]) . '" class="mr-2 btn btn-outline-primary btn-sm"><i class="far fa-eye fa-2x"></i> </a>
+                    <a href="' . route('dashboard.coupons.edit', $row->id) . '"  id="edit-coupon" class="mr-2 btn btn-outline-warning btn-sm"><i class="far fa-edit fa-2x"></i> </a>
 
-                                <a data-table_id="html5-extension" data-href="' . route('dashboard.coupons.destroy', $row->id) . '" data-id="' . $row->id . '" class="mr-2 btn btn-outline-danger btn-sm btn-delete btn-sm delete_tech">
-                            <i class="far fa-trash-alt fa-1x"></i>
-                    </a>';
+                                <a data-href="' . route('dashboard.coupons.destroy', $row->id) . '" data-id="' . $row->id . '" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
+                            <i class="far fa-trash-alt fa-2x"></i>
+                    </a>
+                                ';
+
                     return $html;
                 })
                 ->rawColumns([
@@ -201,5 +202,60 @@ class CouponsController extends Controller
         }
         $coupon->save();
         return response('success');
+    }
+    protected function viewSingle()
+    {
+        $id = request()->query('id');
+
+        $usage_filter = request()->query('usage');
+        $gender = Coupon::where('id', $id)->first()->gender;
+
+        if (request()->ajax()) {
+            $users = User::where('gender', $gender)->with(['couponUsers', 'couponUsers.coupon'])->select(['id', 'first_name', 'last_name', 'phone'])->withCount('couponUsers as usage')->orderBy('usage', 'desc');
+            if ($usage_filter) {
+                if ($usage_filter == 'notused') {
+                    $users = $users->having('usage', '=', 0);
+                } else {
+                    $users = $users->having('usage', '>', 0);
+                }
+            }
+
+            return DataTables::of($users)
+                ->addColumn('name', function ($user) {
+                    $name = $user->first_name . ' ' . $user->last_name;
+                    return $name;
+                })
+                ->addColumn('phone', function ($user) {
+                    return $user->phone;
+                })
+                ->addColumn('usage', function ($user) {
+
+
+                    return $user->usage;
+                })
+                ->addColumn('control', function ($user) {
+
+                    $html = '
+                    <a href="' . route('dashboard.core.address.index', 'id=' . $user->id) . '" class="mr-2 btn btn-outline-primary btn-sm"><i class="far fa-address-book fa-2x"></i> </a>
+                    <a href="' . route('dashboard.core.customer.edit', $user->id) . '" class="mr-2 btn btn-outline-warning btn-sm"><i class="far fa-edit fa-2x"></i> </a>
+
+                                <a data-href="' . route('dashboard.core.customer.destroy', $user->id) . '" data-id="' . $user->id . '" class="mr-2 btn btn-outline-danger btn-delete btn-sm">
+                            <i class="far fa-trash-alt fa-2x"></i>
+                    </a>
+                                ';
+
+                    return $html;
+                })
+                ->rawColumns([
+
+                    'name',
+                    'phone',
+                    'usage',
+                    'control',
+                ])
+                ->make(true);
+        }
+        $coupon = Coupon::where('id', $id)->first();
+        return view('dashboard.coupons.show', compact('id', 'coupon'));
     }
 }
