@@ -22,7 +22,7 @@
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
                                         href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">أسباب الإلغاء</li>
+                                <li class="breadcrumb-item active" aria-current="page"> {{__('dash.tech_orders_today')}}</li>
                             </ol>
                         </nav>
 
@@ -34,7 +34,6 @@
         </header>
     </div>
 
-    @include('dashboard.reason_cancel.create')
 @endsection
 
 @section('content')
@@ -44,21 +43,43 @@
 
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-6">
+                    <div class="col-md-12  mb-3">
+
+
+                        <div class="row">
+
+
+
+                            <div class="col-md-1">
+                                <label for="inputEmail4">الحالة</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="select2 status_filter form-control" name="status_filter">
+                                    <option value="all" selected>الكل</option>
+                                    @foreach ($statuses as $id => $status)
+                                        <option value="{{ $id }}">{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
                     <div class="col-md-12 text-right mb-3">
 
-                        <button type="button" id="" class="btn btn-primary card-tools" data-toggle="modal"
-                                data-target="#createBookingStatusModel">
-                            {{__('dash.add_new')}}
-                        </button>
 
                     </div>
                     <table id="html5-extension" class="table table-hover non-hover" style="width:100%">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>سبب الالغاء</th>
-                            <th>النوع</th>
-                            <th>حالة النشاط</th>
+                            <th>رقم الطلب</th>
+                            <th>رقم الحجز</th>
+                            <th>موعد الحجز</th>
+                            <th>الفريق</th>
+                            <th>وقت البدء</th>
+                            <th>وقت الانتهاء</th>
+                            <th>المده</th>
+                            <th>الحاله</th>
                             <th class="no-content">{{__('dash.actions')}}</th>
                         </tr>
                         </thead>
@@ -71,14 +92,13 @@
         </div>
 
     </div>
-    @include('dashboard.reason_cancel.edit')
 @endsection
 
 @push('script')
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#html5-extension').DataTable({
+       var  table=     $('#html5-extension').DataTable({
                 dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                     "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -96,51 +116,37 @@
                 },
                 processing: true,
                 serverSide: false,
-                ajax: '{{ route('dashboard.reason_cancel.index') }}',
+                ajax: '{{ route('dashboard.visits.visitsToday') }}',
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'reason', name: 'reason'},
-                    {data: 'is_for_tech', name: 'is_for_tech'},
+                    {data: 'booking_id', name: 'booking_id'},
+                    // {data: 'visite_id', name: 'visite_id'},
+                    {data: 'date', name: 'date'},
+                    {data: 'group_name', name: 'group_name'},
+                    {data: 'start_time', name: 'start_time'},
+                    {data: 'end_time', name: 'end_time'},
+                    {data: 'duration', name: 'duration'},
                     {data: 'status', name: 'status'},
                     {data: 'control', name: 'control', orderable: false, searchable: false},
 
                 ]
             });
-        });
+            function updateTableData() {
+                var status_filter = $('.status_filter').val();
+                var url = '{{ route('dashboard.visits.visitsToday') }}';
 
-        $(document).on('click', '#add-work-exp', function () {
-            let id = $(this).data('id');
-            let reason_ar = $(this).data('reason_ar');
-            let reason_en = $(this).data('reason_en');
-            $('#edit_reason_ar').val(reason_ar)
-            $('#edit_reason_en').val(reason_en)
+                if (status_filter && status_filter !== 'all') {
+                    url += '?status=' + status_filter;
+                } 
 
+                // Update table data
+                table.ajax.url(url).load();
 
-            let action = "{{route('dashboard.reason_cancel.update', 'id')}}";
-            action = action.replace('id', id)
-            $('#edit_booking_status_form').attr('action', action);
-
-        })
-
-        $("body").on('change', '#customSwitchStatus', function () {
-            let active = $(this).is(':checked');
-            let id = $(this).attr('data-id');
-
-            $.ajax({
-                url: '{{route('dashboard.reason_cancel.change_status')}}',
-                type: 'get',
-                data: {id: id, active: active},
-                success: function (data) {
-                    swal({
-                        title: "{{__('dash.successful_operation')}}",
-                        text: "{{__('dash.request_executed_successfully')}}",
-                        type: 'success',
-                        padding: '2em'
-                    })
-                }
+            }
+            $('.status_filter').change(function() {
+                updateTableData();
             });
-        })
-
+        });
 
     </script>
 

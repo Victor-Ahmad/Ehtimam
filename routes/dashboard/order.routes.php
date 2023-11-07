@@ -13,3 +13,7 @@ Route::get('order/showService', 'Orders\OrderController@showService')->name('ord
 Route::get('order/confirmOrder', 'Orders\OrderController@confirmOrder')->name('order.confirmOrder');
 Route::get('order/orderDetail', 'Orders\OrderController@orderDetail')->name('order.orderDetail');
 
+Route::get('ordersToday', 'Orders\OrderController@ordersToday')->name('order.ordersToday');
+Route::get('ordersCanceled', 'Orders\OrderController@canceledOrders')->name('order.canceledOrders');
+Route::get('ordersTodayCanceled', 'Orders\OrderController@canceledOrdersToday')->name('order.canceledOrdersToday');
+

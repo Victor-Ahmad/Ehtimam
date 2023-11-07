@@ -110,7 +110,7 @@
                 charset: 'UTF-8',
                 order: [[0, 'desc']],
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 ajax: '{{ route('dashboard.car_model.index') }}',
                 columns: [
                     {data: 'id', name: 'id'},

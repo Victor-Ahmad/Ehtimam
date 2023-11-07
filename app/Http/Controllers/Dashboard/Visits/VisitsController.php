@@ -30,7 +30,7 @@ class VisitsController extends Controller
     {
         if (request()->ajax()) {
             $visit = Visit::query();
-         
+
             if (request()->page) {
                 $now = Carbon::now('Asia/Riyadh')->toDateString();
                 $visit->whereDate('created_at', '=', $now);
@@ -44,8 +44,8 @@ class VisitsController extends Controller
 
 
             return DataTables::of($visit)
-                ->addColumn('visite_id', function ($row) {
-                    return $row->visite_id;
+                ->addColumn('booking_id', function ($row) {
+                    return $row->booking?->id;
                 })
                 ->addColumn('date', function ($row) {
                     return $row->booking?->date;
@@ -80,7 +80,7 @@ class VisitsController extends Controller
                     return $html;
                 })
                 ->rawColumns([
-                    'visite_id',
+                    'booking_id',
                     'date',
                     'group_name',
                     'start_time',
@@ -93,8 +93,80 @@ class VisitsController extends Controller
         }
         $statuses = VisitsStatus::all()->pluck('name', 'id');
 
-        return view('dashboard.visits.index',compact('statuses'));
+        return view('dashboard.visits.index', compact('statuses'));
     }
+
+    protected function visitsToday()
+    {
+        if (request()->ajax()) {
+            $visit = Visit::query();
+
+
+            $now = Carbon::now('Asia/Riyadh')->toDateString();
+            $visit->whereDate('created_at', '=', $now);
+
+            if (request()->status) {
+
+                $visit->where('visits_status_id', request()->status);
+            }
+
+            $visit->where('is_active', 1)->get();
+
+
+
+            return DataTables::of($visit)
+                ->addColumn('booking_id', function ($row) {
+                    return $row->booking?->id;
+                })
+                ->addColumn('date', function ($row) {
+                    return $row->booking?->date;
+                })
+                ->addColumn('group_name', function ($row) {
+                    return $row->group?->name;
+                })
+                ->addColumn('start_time', function ($row) {
+                    return \Carbon\Carbon::parse($row->start_time)->timezone('Asia/Riyadh')->format('g:i A');
+                })
+                ->addColumn('end_time', function ($row) {
+                    return \Carbon\Carbon::parse($row->end_time)->timezone('Asia/Riyadh')->format('g:i A');
+                })
+                ->addColumn('duration', function ($row) {
+                    return $row->duration;
+                })
+                ->addColumn('status', function ($row) {
+                    return $row->status->name;
+                })
+                ->addColumn('control', function ($row) {
+
+                    $html = '
+                    <a href="#" class="mr-2 btn btn-outline-primary btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-navigation"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+
+                                <a href="' . route('dashboard.visits.show', $row->id) . '" class="mr-2 btn btn-outline-primary btn-sm">
+                            <i class="far fa-eye fa-2x"></i>
+
+                    </a>
+                                ';
+
+                    return $html;
+                })
+                ->rawColumns([
+                    'booking_id',
+                    'date',
+                    'group_name',
+                    'start_time',
+                    'end_time',
+                    'duration',
+                    'status',
+                    'control',
+                ])
+                ->make(true);
+        }
+        $statuses = VisitsStatus::all()->pluck('name', 'id');
+
+        return view('dashboard.visits.visits_today', compact('statuses'));
+    }
+
 
     protected function store(Request $request)
     {
@@ -130,17 +202,17 @@ class VisitsController extends Controller
         $validated['visits_status_id'] = 1;
         Visit::query()->create($validated);
 
-        $allTechn = Technician::where('group_id',$request->assign_to_id)->whereNotNull('fcm_token')->get();
+        $allTechn = Technician::where('group_id', $request->assign_to_id)->whereNotNull('fcm_token')->get();
 
-        if (count($allTechn) > 0){
+        if (count($allTechn) > 0) {
 
             $title = 'موعد زيارة جديد';
             $message = 'لديك موعد زياره جديد';
 
-            foreach ($allTechn as $tech){
+            foreach ($allTechn as $tech) {
                 Notification::send(
                     $tech,
-                    new SendPushNotification($title,$message)
+                    new SendPushNotification($title, $message)
                 );
             }
 
@@ -150,8 +222,8 @@ class VisitsController extends Controller
                 'device_token' => $FcmTokenArray,
                 'title' => $title,
                 'message' => $message,
-                'type'=>'technician',
-                'code'=> 1,
+                'type' => 'technician',
+                'code' => 1,
             ];
 
             $this->pushNotification($notification);
@@ -165,15 +237,40 @@ class VisitsController extends Controller
     public function show($id)
     {
         $visits = Visit::where('id', $id)->first();
-        $service_ids = OrderService::where('order_id',$visits->booking->order_id)->where('category_id',$visits->booking->category_id)->get()->pluck('service_id');
-        $services = Service::whereIn('id',$service_ids)->get()->pluck('title');
+        $service_ids = OrderService::where('order_id', $visits->booking->order_id)->where('category_id', $visits->booking->category_id)->get()->pluck('service_id');
+        $services = Service::whereIn('id', $service_ids)->get()->pluck('title');
 
-        $visit_status = VisitsStatus::where('active',1)->get();
+        $visit_status = VisitsStatus::where('active', 1)->get();
 
-        return view('dashboard.visits.show', compact('visits','services','visit_status'));
+        return view('dashboard.visits.show', compact('visits', 'services', 'visit_status'));
     }
 
-    
+    protected function destroy($id)
+    {
+        $visit = Visit::find($id);
+        $visit->update([
+            'is_active' => 0
+        ]);
+
+        $booking = Booking::where('id', $visit->booking_id)->first();
+        $booking->update([
+            'is_active' => 0
+        ]);
+        $visits = Visit::where('booking_id', $booking->id)->get();
+        foreach ($visits as $visit) {
+            $visit->update([
+                'is_active' => 0
+            ]);
+        }
+
+        return [
+            'success' => true,
+            'msg' => __("dash.deleted_success")
+        ];
+    }
+
+
+
     protected function update(Request $request, $id)
     {
         $visit = Visit::query()->where('id', $id)->first();
@@ -192,18 +289,18 @@ class VisitsController extends Controller
             $visit->update([
                 'assign_to_id' => $request->assign_to_id
             ]);
-        }else if ($visit->visits_status_id == 6){
-            $allTechn = Technician::where('group_id',$visit->assign_to_id)->whereNotNull('fcm_token')->get();
+        } else if ($visit->visits_status_id == 6) {
+            $allTechn = Technician::where('group_id', $visit->assign_to_id)->whereNotNull('fcm_token')->get();
 
-            if (count($allTechn) > 0){
+            if (count($allTechn) > 0) {
 
                 $title = 'تغيير الفريق';
                 $message = 'سيتم تغيير الفريق بسبب الغاء الطلب لاسباب فنية';
 
-                foreach ($allTechn as $tech){
+                foreach ($allTechn as $tech) {
                     Notification::send(
                         $tech,
-                        new SendPushNotification($title,$message)
+                        new SendPushNotification($title, $message)
                     );
                 }
 
@@ -213,15 +310,15 @@ class VisitsController extends Controller
                     'device_token' => $FcmTokenArray,
                     'title' => $title,
                     'message' => $message,
-                    'type'=>'technician',
-                    'code'=> 1,
+                    'type' => 'technician',
+                    'code' => 1,
                 ];
 
                 $this->pushNotification($notification);
             }
             $this->store($request);
-        }else{
-            return redirect()->back()->withErrors(['visits_status_id'=>'يجب عليك تغيير حاله الزياره اولا']);
+        } else {
+            return redirect()->back()->withErrors(['visits_status_id' => 'يجب عليك تغيير حاله الزياره اولا']);
         }
 
         session()->flash('success');
@@ -236,12 +333,12 @@ class VisitsController extends Controller
 
         $latUser = $visits->booking?->address?->lat;
         $longUser = $visits->booking?->address?->long;
-        $latTechn = $visits->lat??0;
-        $longTechn = $visits->long??0;
+        $latTechn = $visits->lat ?? 0;
+        $longTechn = $visits->long ?? 0;
 
         $locations = [
-            ['lat'=>$latUser,'lng'=>$longUser],
-            ['lat'=>$latTechn,'lng'=>$longTechn],
+            ['lat' => $latUser, 'lng' => $longUser],
+            ['lat' => $latTechn, 'lng' => $longTechn],
         ];
 
         return response()->json($locations);
@@ -254,5 +351,4 @@ class VisitsController extends Controller
 
         return response()->json($visits->visits_status_id);
     }
-
 }
