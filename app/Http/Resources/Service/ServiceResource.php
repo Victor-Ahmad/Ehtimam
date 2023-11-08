@@ -39,15 +39,16 @@ class ServiceResource extends JsonResource
                 'able_to_add_quantity_in_cart' => isset($this['is_quantity']) ? $this['is_quantity'] : null,
                 'quantity' => $quantity ?? $this->pivot?->quantity
             ];
+        } else {
+            return [
+                'id' => $this['id'],
+                'title' => $this['title'],
+                'price' => $service['price'],
+                'images' => $images,
+                'icons' => IconResource::collection($this->icons),
+                'able_to_add_quantity_in_cart' => isset($this['is_quantity']) ? $this['is_quantity'] : null,
+                'quantity' => $quantity ?? $this->pivot?->quantity
+            ];
         }
-        return [
-            'id' => $this['id'],
-            'title' => $this['title'],
-            'price' => $service['price'],
-            'images' => $images,
-            'icons' => IconResource::collection($this->icons),
-            'able_to_add_quantity_in_cart' => isset($this['is_quantity']) ? $this['is_quantity'] : null,
-            'quantity' => $quantity ?? $this->pivot?->quantity
-        ];
     }
 }

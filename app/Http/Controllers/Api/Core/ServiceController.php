@@ -25,50 +25,59 @@ class ServiceController extends Controller
         $this->middleware('localization');
     }
 
-    protected function orderedServices(){
-        $mostSellingServices = Service::query()->where('best_seller',1)
-            ->where('active',1)
+    protected function orderedServices()
+    {
+        $mostSellingServices = Service::query()->where('best_seller', 1)
+            ->where('active', 1)
             ->get()->shuffle();
         $this->body['most_ordered_services'] = ServiceResource::collection($mostSellingServices);
         return self::apiResponse(200, null, $this->body);
-
     }
-    protected function allServices(){
+    protected function allServices()
+    {
         $services = Service::with('serviceImages')->get();
         $this->body['all_services'] = ServiceResource::collection($services);
         return self::apiResponse(200, null, $this->body);
     }
-    protected function getServiceFromCategory($id){
+    protected function getServiceFromCategory($id)
+    {
         $servicesCategory = Category::query()->where('id', $id)->first();
 
-        if ($servicesCategory){
-            $services = $servicesCategory->services;
+        if ($servicesCategory) {
+            $allServices = $servicesCategory->services;
+            $services = [];
+            foreach ($allServices as $service) {
+                if ($service->is_package == 0) {
+                    $services[] = $service;
+                }
+            }
             $this->body['category_services'] = ServiceResource::collection($services);
             return self::apiResponse(200, null, $this->body);
         }
         return self::apiResponse(400, __('api.category not found'), $this->body);
     }
-    protected function serviceDetails($id){
-        if($id =="all"){
+    protected function serviceDetails($id)
+    {
+        if ($id == "all") {
             $services = Service::with('serviceImages')->get();
             $this->body['all_services'] = ServiceResource::collection($services);
             return self::apiResponse(200, null, $this->body);
-        }else{
-           $service = Service::query()->where('id', $id)->first();
-    
-        if ($service){
-            $this->body['service'] = ServiceDetailsResource::make($service);
-            return self::apiResponse(200, null, $this->body);
+        } else {
+            $service = Service::query()->where('id', $id)->first();
+
+            if ($service) {
+                $this->body['service'] = ServiceDetailsResource::make($service);
+                return self::apiResponse(200, null, $this->body);
+            }
+            return self::apiResponse(400, __('api.service not found'), $this->body);
         }
-        return self::apiResponse(400, __('api.service not found'), $this->body);  
-        }
-       
     }
 
 
-    protected function PackageDetails($id){
+    protected function PackageDetails($id)
+    {
         $package = ContractPackage::query()->where('id', $id)->first();
-        if ($package){
+        if ($package) {
             $this->body['package'] = ContractResource::make($package);
             return self::apiResponse(200, null, $this->body);
         }
@@ -81,5 +90,4 @@ class ServiceController extends Controller
         $this->body['contact'] = ContactResource::collection($contacts);
         return self::apiResponse(200, null, $this->body);
     }
-
 }

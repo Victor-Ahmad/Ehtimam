@@ -58,7 +58,7 @@ class CheckoutController extends Controller
         $request->validate($rules, $request->all());
         $user = auth()->user('sanctum');
         $carts = Cart::query()->where('user_id', $user->id)->get();
-
+        $parent_payment_method = null;
 
         if (!$carts->first()) {
             return self::apiResponse(400, t_('Cart is empty'), []);
