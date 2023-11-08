@@ -66,7 +66,7 @@ class CarClientController extends Controller
     public function create()
     {
         $types = CarType::all();
-        $users = User::all();
+        $users = User::where('is_deleted',0)->get();
         return view('dashboard.car_client.create',compact('types','users'));
     }
 
@@ -91,7 +91,7 @@ class CarClientController extends Controller
     {
         $types = CarType::all();
         $car_client = CarClient::where('id',$id)->first();
-        $users = User::all();
+        $users = User::where('is_deleted',0)->get();
         $models = CarModel::where('type_id',$car_client->type_id)->get();
 
 

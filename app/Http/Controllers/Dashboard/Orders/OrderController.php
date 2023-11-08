@@ -392,7 +392,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        $users = User::all();
+        $users = User::where('is_deleted',0)->get();
         $categories = Category::all();
         $services = Service::all();
 
@@ -488,7 +488,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::where('id', $id)->first();
-        $users = User::all();
+        $users = User::where('is_deleted',0)->get();
         $categories = Category::all();
         $services = Service::all();
         return view('dashboard.core.services.edit', compact('order', 'users', 'services', 'categories'));

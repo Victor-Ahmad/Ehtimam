@@ -19,9 +19,9 @@ class IndexController extends Controller
 
     protected function index()
     {
-        $customers = User::count();
+        $customers = User::where('is_deleted',0)->count();
         $client_orders = Order::where('is_active', 1)->count();
-        $technicians = Technician::count();
+        $technicians = Technician::where('is_deleted',0)->count();
         $tech_visits = Visit::where('is_active', 1)->count();
 
         $now = Carbon::now('Asia/Riyadh')->toDateString();

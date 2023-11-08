@@ -17,7 +17,7 @@ class CustomerController extends Controller
     {
 
         if (request()->ajax()) {
-            $user = User::all();
+            $user = User::where('is_deleted', 0)->get();
             return DataTables::of($user)
                 ->addColumn('name', function ($user) {
                     $name = $user->first_name . ' ' . $user->last_name;
@@ -121,7 +121,14 @@ class CustomerController extends Controller
     {
         $user = User::find($id);
 
-        $user->delete();
+
+        $user->update([
+            'is_deleted' => 1,
+            'phone' => $user->phone . '-deleted',
+            'email' => $user->email . '-deleted',
+        ]);
+
+
         return [
             'success' => true,
             'msg' => __("dash.deleted_success")

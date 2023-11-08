@@ -117,7 +117,7 @@ class BookingController extends Controller
     protected function create()
     {
         $orders = Order::all();
-        $customers = User::all();
+        $customers = User::where('is_deleted',0)->get();
         $services = Service::all();
         $groups = Group::where('active', 1)->get();
         $statuses = BookingStatus::all();
@@ -155,7 +155,7 @@ class BookingController extends Controller
     {
         $booking = Booking::query()->where('id', $id)->first();
         $orders = Order::all();
-        $customers = User::all();
+        $customers = User::where('is_deleted',0)->get();
         $services = Service::all();
         $groups = Group::where('active', 1)->get();
         $statuses = BookingStatus::all();

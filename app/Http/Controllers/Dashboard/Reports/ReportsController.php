@@ -237,7 +237,7 @@ class ReportsController extends Controller
     protected function customers()
     {
         if (request()->ajax()) {
-            $order = User::all();
+            $order = User::where('is_deleted',0)->get();
             return DataTables::of($order)
                 ->addColumn('user_name', function ($row) {
                     return $row->first_name .''.$row->last_name;
@@ -279,7 +279,7 @@ class ReportsController extends Controller
     protected function technicians()
     {
         if (request()->ajax()) {
-            $order = Technician::all();
+            $order = Technician::where('is_deleted',0)->get();
             return DataTables::of($order)
                 ->addColumn('user_name', function ($row) {
                     return $row->name;

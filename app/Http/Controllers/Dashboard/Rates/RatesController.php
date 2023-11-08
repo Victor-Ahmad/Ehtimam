@@ -22,7 +22,7 @@ class RatesController extends Controller
     protected function rateTechnicians()
     {
         if (request()->ajax()) {
-            $visit = RateTechnician::all();
+            $visit = RateTechnician::where('is_deleted',0)->get();
             return DataTables::of($visit)
                 ->addColumn('user_phone', function ($row) {
                     return $row->user?->phone;

@@ -25,7 +25,7 @@ class GroupsController extends Controller
 
     public function index()
     {
-        $technicians = Technician::all();
+        $technicians = Technician::where('is_deleted',0)->get();
         if (request()->ajax()) {
             $groups = Group::where('active',1)->get();
             return DataTables::of($groups)

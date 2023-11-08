@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\Techn\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Technician\auth\TechnicianResource;
 use App\Support\Api\ApiResponse;
@@ -37,38 +38,49 @@ class AuthController extends Controller
             $techn->update([
                 'fcm_token' => $request->fcm_token
             ]);
-            if(auth('sanctum')->check()){
+            if (auth('sanctum')->check()) {
                 $techn->tokens()->delete();
             }
             $this->message = __('api.login successfully');
             $this->body['technician'] = TechnicianResource::make($techn);
-            $this->body['accessToken'] = $techn->createToken('technician-token',['technician'])->plainTextToken;
+            $this->body['accessToken'] = $techn->createToken('technician-token', ['technician'])->plainTextToken;
             return self::apiResponse(200, $this->message, $this->body);
-        }else{
+        } else {
             $this->message = __('api.auth failed');
             return self::apiResponse(400, $this->message, $this->body);
         }
-
     }
 
 
-        public function logout(Request $request)
-        {
-            auth()->user()->tokens()->delete();
-            auth()->user()->update([
-                'fcm_token' => null
-            ]);
-            $this->message = __('api.Logged out');  
-            return self::apiResponse(200, $this->message, $this->body);
-        }
-
+    public function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        auth()->user()->update([
+            'fcm_token' => null
+        ]);
+        $this->message = __('api.Logged out');
+        return self::apiResponse(200, $this->message, $this->body);
+    }
     public function deleteAccount(Request $request)
     {
+        auth()->user()->tokens()->delete();
         $user =  auth('sanctum')->user();
-        $user->delete();
-        $this->message = __('api.Delete technician successfully');
+        $user->update([
+            'is_deleted' => 1,
+            'phone' => $user->phone . '-deleted',
+            'email' => $user->email . '-deleted',
+        ]);
+        $this->message = __('api.Delete user successfully');
 
         return self::apiResponse(200, $this->message, $this->body);
+    }
+    // public function deleteAccount(Request $request)
+    // {
+    //     $user =  auth('sanctum')->user();
+    //     $user->delete();
+    //     $this->message = __('api.Delete technician successfully');
 
-    }
-    }
+    //     return self::apiResponse(200, $this->message, $this->body);
+
+    // }
+}
