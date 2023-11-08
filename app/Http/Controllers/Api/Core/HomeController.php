@@ -101,7 +101,8 @@ class HomeController extends Controller
     protected function search(Request $request): JsonResponse
     {
         if ($request->title) {
-            $services = Service::query()->where('title_ar', 'like', '%' . $request->title . '%')
+            $gender =  User::where('id', auth()->user('sanctum')->id)->first()->gender;
+            $services = Service::query()->where('gender', $gender)->where('title_ar', 'like', '%' . $request->title . '%')
                 ->orWhere('title_en', 'like', '%' . $request->title . '%')->where('active', 1)->get();
             $this->body['services'] = ServiceResource::collection($services);
             return self::apiResponse(200, '', $this->body);
