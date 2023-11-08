@@ -155,6 +155,7 @@ class ServiceController extends Controller
                         'service_id' => $serviceId,
                     ]);
                 }
+                $service->update(['is_package' => 1]);
             }
 
             $service->icons()->sync($request->icon_ids);
