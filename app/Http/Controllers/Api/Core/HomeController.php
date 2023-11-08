@@ -75,8 +75,8 @@ class HomeController extends Controller
             ->get()->shuffle();
 
         $this->body['services_most_wanted'] = ServiceResource::collection($mostSellingServices);
-        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('gender', $userGender)->take(9)->get()->shuffle());
-        $this->body['contracts'] = ContractResource::collection(ContractPackage::query()->where('active', 1)->take(9)->get()->shuffle());
+        $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('is_package', 0)->where('gender', $userGender)->take(9)->get()->shuffle());
+        $this->body['contracts'] = ServiceResource::collection(Service::query()->where('active', 1)->where('is_package', 1)->where('gender', $userGender)->take(9)->get()->shuffle());
         $this->body['total_items_in_cart'] = auth()->check() ? auth()->user()->carts->count() : 0;
         $servicesCategories = Category::query()->where('active', 1)->where('gender', $userGender)->get();
         $this->body['services_categories'] = ServiceCategoryResource::collection($servicesCategories);
@@ -244,6 +244,5 @@ class HomeController extends Controller
 
 
         return self::apiResponse(200, __('api.added successfully'), $this->body);
-
     }
 }

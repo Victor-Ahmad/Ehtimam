@@ -6,8 +6,8 @@
 
             <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="feather feather-menu">
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-menu">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -21,10 +21,10 @@
                         <nav class="breadcrumb-one" aria-label="breadcrumb">
                             <ol class="breadcrumb mb-0 py-2">
                                 <li class="breadcrumb-item"><a
-                                        href="{{route('dashboard.home')}}">{{__('dash.home')}}</a></li>
+                                        href="{{ route('dashboard.home') }}">{{ __('dash.home') }}</a></li>
 
                                 <li class="breadcrumb-item"><a
-                                        href="{{route('dashboard.core.service.index')}}">الخدمات</a></li>
+                                        href="{{ route('dashboard.core.service.index') }}">الخدمات</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">إنشاء خدمه</li>
                             </ol>
                         </nav>
@@ -36,7 +36,6 @@
 
         </header>
     </div>
-
 @endsection
 
 @section('content')
@@ -50,96 +49,126 @@
                         <h3>إنشاء خدمه جديد</h3>
                     </div>
                     <div class="col-md-12">
-                        <form action="{{route('dashboard.core.service.store')}}" method="post" class="form-horizontal"
-                              enctype="multipart/form-data" id="demo-form" data-parsley-validate="">
+                        <form action="{{ route('dashboard.core.service.store') }}" method="post" class="form-horizontal"
+                            enctype="multipart/form-data" id="demo-form" data-parsley-validate="">
                             @csrf
                             <div class="box-body">
                                 <div class="form-row mb-2">
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmail4">{{__('dash.title_ar')}}</label>
-                                        <input type="text" name="title_ar" class="form-control"
-                                               id="inputEmail4"
-                                               placeholder="{{__('dash.title_ar')}}"
-                                        >
+                                        <label for="inputEmail4">{{ __('dash.title_ar') }}</label>
+                                        <input type="text" name="title_ar" class="form-control" id="inputEmail4"
+                                            placeholder="{{ __('dash.title_ar') }}">
                                         @error('title_ar')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmail4">{{__('dash.title_en')}}</label>
-                                        <input type="text" name="title_en" class="form-control"
-                                               id="inputEmail4"
-                                               placeholder="{{__('dash.title_en')}}"
-                                        >
+                                        <label for="inputEmail4">{{ __('dash.title_en') }}</label>
+                                        <input type="text" name="title_en" class="form-control" id="inputEmail4"
+                                            placeholder="{{ __('dash.title_en') }}">
                                         @error('title_en')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-{{--                                    <div class="form-group col-md-3">--}}
-{{--                                        <label for="inputEmail4">المدة</label>--}}
-{{--                                        <input type="text" name="duration" class="form-control"--}}
-{{--                                               id="inputEmail4"--}}
-{{--                                               placeholder="المدة"--}}
-{{--                                        >--}}
-{{--                                        @error('duration')--}}
-{{--                                        <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                        @enderror--}}
-{{--                                    </div>--}}
+                                    {{--                                    <div class="form-group col-md-3"> --}}
+                                    {{--                                        <label for="inputEmail4">المدة</label> --}}
+                                    {{--                                        <input type="text" name="duration" class="form-control" --}}
+                                    {{--                                               id="inputEmail4" --}}
+                                    {{--                                               placeholder="المدة" --}}
+                                    {{--                                        > --}}
+                                    {{--                                        @error('duration') --}}
+                                    {{--                                        <div class="alert alert-danger">{{ $message }}</div> --}}
+                                    {{--                                        @enderror --}}
+                                    {{--                                    </div> --}}
 
                                 </div>
-                                <div class="form-row mb-2">
 
-                                    <div class="form-group col-md-6">
+                                <div class="form-row mb-3">
+                                    <div class="form-group col-md-4">
 
-                                        <label for="gender">{{__('dash.gender')}}</label>
-                                        <select id="gender"  class="select2 form-control pt-1"
-                                                name="gender" required>
-                                            <option disabled>{{__('dash.choose')}}</option>
-                                            <option value="male">{{__('dash.males')}}</option>
-                                            <option value="female">{{__('dash.females')}}</option>
+                                        <label for="is_package">نمط الخدمة</label>
+                                        <select id="is_package" class="select2 type form-control" name="is_package"
+                                            required>
+                                            <option selected value="0">خدمة عادية</option>
+                                            <option value="1">باقة</option>
+                                        </select>
+                                        @error('is_package')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+
+                                        <label for="gender">{{ __('dash.gender') }}</label>
+                                        <select id="gender" class="select2 form-control pt-1" name="gender" required>
+                                            <option disabled>{{ __('dash.choose') }}</option>
+                                            <option value="male">{{ __('dash.males') }}</option>
+                                            <option value="female">{{ __('dash.females') }}</option>
                                         </select>
                                         @error('gender')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
-        
+
                                     </div>
-                                <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
 
-                                    <label for="category_id">{{__('dash.category')}}</label>
-                                    <select id="category_id" class="select2 form-control pt-1"
-                                            name="category_id">
-                                        <option disabled>{{__('dash.choose')}}</option>
-                                        @foreach($categories as $key => $category)
-                                            <option value="{{$key}}">{{$category->title_ar}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('category_id')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                        <label for="category_id">{{ __('dash.category') }}</label>
+                                        <select id="category_id" class="select2 form-control pt-1" name="category_id">
+                                            <option disabled>{{ __('dash.choose') }}</option>
+                                            @foreach ($categories as $key => $category)
+                                                <option value="{{ $key }}">{{ $category->title_ar }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('category_id')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
 
+                                    </div>
                                 </div>
-                            </div>
+
+
+                                <div id="service_services" class="form-row mb-2">
+                                    <div class="form-group col-md-4">
+                                        <label for="service_ids">الخدمات</label>
+                                        <select multiple required class="select2 form-control pt-1" name="service_ids[]">
+                                            <option disabled>{{ __('dash.choose') }}</option>
+                                            @foreach ($services as $service)
+                                                <option value="{{ $service->id }}">{{ $service->title_ar }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('service_ids')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+
+
+
                                 <div class="form-row mb-2">
 
 
                                     <div class="form-group col-md-6">
 
-                                        <label for="inputEmail4">{{__('dash.description_ar')}}</label>
+                                        <label for="inputEmail4">{{ __('dash.description_ar') }}</label>
                                         <textarea name="description_ar" class="ckeditor" cols="10" rows="5"></textarea>
                                         @error('description_ar')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
 
                                     <div class="form-group col-md-6">
 
-                                        <label for="inputEmail4">{{__('dash.description_en')}}</label>
+                                        <label for="inputEmail4">{{ __('dash.description_en') }}</label>
                                         <textarea name="description_en" class="ckeditor" cols="10" rows="5"></textarea>
                                         @error('description_en')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -153,17 +182,16 @@
 
                                     <div class="form-group type-col col-md-6">
 
-                                        <label for="inputEmail4">{{__('dash.type')}}</label>
-                                        <select id="inputState" class="select2 type form-control"
-                                                name="type">
-                                            <option
-                                                value="{{\App\Enums\Core\ServiceType::fixed()->value}}">{{\App\Enums\Core\ServiceType::fixed()->value}}</option>
-                                            <option
-                                                value="{{\App\Enums\Core\ServiceType::evaluative()->value}}">{{\App\Enums\Core\ServiceType::evaluative()->value}}</option>
+                                        <label for="inputEmail4">{{ __('dash.type') }}</label>
+                                        <select id="inputState" class="select2 type form-control" name="type">
+                                            <option value="{{ \App\Enums\Core\ServiceType::fixed()->value }}">
+                                                {{ \App\Enums\Core\ServiceType::fixed()->value }}</option>
+                                            <option value="{{ \App\Enums\Core\ServiceType::evaluative()->value }}">
+                                                {{ \App\Enums\Core\ServiceType::evaluative()->value }}</option>
 
                                         </select>
                                         @error('inputState')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -171,26 +199,22 @@
                                     <div class="form-group price-col col-md-6">
 
 
-                                        <label for="inputEmail4">{{__('dash.price')}}</label>
-                                        <input type="text" name="price" class="form-control"
-                                               id="inputEmail4"
-                                               placeholder="{{__('dash.price')}}"
-                                        >
+                                        <label for="inputEmail4">{{ __('dash.price') }}</label>
+                                        <input type="text" name="price" class="form-control" id="inputEmail4"
+                                            placeholder="{{ __('dash.price') }}">
                                         @error('price')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
 
                                     <div class="form-group start_from col-md-4" style="display: none;">
 
-                                        <label for="inputEmail4">{{__('dash.start_from')}}</label>
-                                        <input type="text" name="start_from" class="form-control"
-                                               id="inputEmail4"
-                                               placeholder="{{__('dash.start_from')}}"
-                                        >
+                                        <label for="inputEmail4">{{ __('dash.start_from') }}</label>
+                                        <input type="text" name="start_from" class="form-control" id="inputEmail4"
+                                            placeholder="{{ __('dash.start_from') }}">
                                         @error('start_from')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
@@ -198,34 +222,34 @@
                                 </div>
 
                                 <div class="form-row mb-2">
-                                    {{--                                    <div class="form-group col-md-6">--}}
+                                    {{--                                    <div class="form-group col-md-6"> --}}
 
-                                    {{--                                        <label for="group_ids">المجموعات</label>--}}
-                                    {{--                                        <select id="group_ids" multiple class="select2 form-control pt-1"--}}
-                                    {{--                                                name="group_ids[]" required>--}}
-                                    {{--                                            <option disabled>{{__('dash.choose')}}</option>--}}
-                                    {{--                                            @foreach($groups as $group)--}}
-                                    {{--                                                <option value="{{$group->id}}">{{$group->name}}</option>--}}
-                                    {{--                                            @endforeach--}}
-                                    {{--                                        </select>--}}
-                                    {{--                                        @error('group_ids')--}}
-                                    {{--                                        <div class="alert alert-danger">{{ $message }}</div>--}}
-                                    {{--                                        @enderror--}}
+                                    {{--                                        <label for="group_ids">المجموعات</label> --}}
+                                    {{--                                        <select id="group_ids" multiple class="select2 form-control pt-1" --}}
+                                    {{--                                                name="group_ids[]" required> --}}
+                                    {{--                                            <option disabled>{{__('dash.choose')}}</option> --}}
+                                    {{--                                            @foreach ($groups as $group) --}}
+                                    {{--                                                <option value="{{$group->id}}">{{$group->name}}</option> --}}
+                                    {{--                                            @endforeach --}}
+                                    {{--                                        </select> --}}
+                                    {{--                                        @error('group_ids') --}}
+                                    {{--                                        <div class="alert alert-danger">{{ $message }}</div> --}}
+                                    {{--                                        @enderror --}}
 
-                                    {{--                                    </div>--}}
+                                    {{--                                    </div> --}}
 
                                     <div class="form-group col-md-6">
 
                                         <label for="icon_ids">الايقونات</label>
                                         <select id="icon_ids" multiple class="select2 form-control pt-1"
-                                                name="icon_ids[]" required>
-                                            <option disabled>{{__('dash.choose')}}</option>
-                                            @foreach($icons as $icon)
-                                                <option value="{{$icon->id}}">{{$icon->title}}</option>
+                                            name="icon_ids[]" required>
+                                            <option disabled>{{ __('dash.choose') }}</option>
+                                            @foreach ($icons as $icon)
+                                                <option value="{{ $icon->id }}">{{ $icon->title }}</option>
                                             @endforeach
                                         </select>
                                         @error('icon_ids')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -233,15 +257,15 @@
                                     <div class="form-group col-md-6">
 
                                         <label for="measurement_id">وحدات القياس</label>
-                                        <select id="measurement_id" name="measurement_id" class="select2 form-control pt-1"
-                                                required>
-                                            <option disabled>{{__('dash.choose')}}</option>
-                                            @foreach($measurements as $measurement)
-                                                <option value="{{$measurement->id}}">{{$measurement->name}}</option>
+                                        <select id="measurement_id" name="measurement_id"
+                                            class="select2 form-control pt-1" required>
+                                            <option disabled>{{ __('dash.choose') }}</option>
+                                            @foreach ($measurements as $measurement)
+                                                <option value="{{ $measurement->id }}">{{ $measurement->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('measurement_id')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -255,7 +279,7 @@
                                             <span class="slider round"></span>
                                         </label>
                                         @error('is_quantity')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -269,7 +293,7 @@
                                             <span class="slider round"></span>
                                         </label>
                                         @error('best_seller')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -281,20 +305,20 @@
 
                                     <div class="form-group col-md-6">
 
-                                        <label for="inputEmail4">{{__('dash.term_cond_ar')}}</label>
+                                        <label for="inputEmail4">{{ __('dash.term_cond_ar') }}</label>
                                         <textarea name="ter_cond_ar" class="ckeditor" cols="10" rows="5"></textarea>
                                         @error('ter_cond_ar')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
 
                                     <div class="form-group col-md-6">
 
-                                        <label for="inputEmail4">{{__('dash.term_cond_en')}}</label>
+                                        <label for="inputEmail4">{{ __('dash.term_cond_en') }}</label>
                                         <textarea name="ter_cond_en" class="ckeditor" cols="10" rows="5"></textarea>
                                         @error('ter_cond_en')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
 
                                     </div>
@@ -306,9 +330,9 @@
                             <div class="box-body">
                                 <div class="form-row mb-3">
                                     <div class="col-md-6 text-right">
-                                        <button type="submit" class="btn btn-primary">{{__('dash.save')}}</button>
-                                        <button class="btn" data-dismiss="modal"><i
-                                                class="flaticon-cancel-12"></i> {{__('dash.close')}}
+                                        <button type="submit" class="btn btn-primary">{{ __('dash.save') }}</button>
+                                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i>
+                                            {{ __('dash.close') }}
                                         </button>
                                     </div>
                                 </div>
@@ -327,204 +351,203 @@
 
 
 
-{{--<div class="modal fade animated rotateInDownLeft custo-rotateInDownLeft" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">--}}
-{{--    <div class="modal-dialog modal-xl" role="document">--}}
-{{--        <div class="modal-content">--}}
-{{--            <div class="modal-header">--}}
-{{--                <h5 class="modal-title" id="exampleModalLabel">{{__('dash.Create Service')}}</h5>--}}
-{{--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-{{--                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>--}}
-{{--                </button>--}}
-{{--            </div>--}}
-{{--            <div class="modal-body">--}}
-{{--                <form action="{{route('dashboard.core.service.store')}}" method="post" class="form-horizontal"--}}
-{{--                      enctype="multipart/form-data" id="demo-form" data-parsley-validate="">--}}
-{{--                    @csrf--}}
-{{--                    <div class="box-body">--}}
-{{--                        <div class="form-row mb-3">--}}
-{{--                            <div class="form-group col-md-4">--}}
-{{--                                <label for="inputEmail4">{{__('dash.title_ar')}}</label>--}}
-{{--                                <input type="text" name="title_ar" class="form-control"--}}
-{{--                                       id="inputEmail4"--}}
-{{--                                       placeholder="{{__('dash.title_ar')}}"--}}
-{{--                                       >--}}
-{{--                                @error('title_ar')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-{{--                            </div>--}}
+{{-- <div class="modal fade animated rotateInDownLeft custo-rotateInDownLeft" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> --}}
+{{--    <div class="modal-dialog modal-xl" role="document"> --}}
+{{--        <div class="modal-content"> --}}
+{{--            <div class="modal-header"> --}}
+{{--                <h5 class="modal-title" id="exampleModalLabel">{{__('dash.Create Service')}}</h5> --}}
+{{--                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> --}}
+{{--                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> --}}
+{{--                </button> --}}
+{{--            </div> --}}
+{{--            <div class="modal-body"> --}}
+{{--                <form action="{{route('dashboard.core.service.store')}}" method="post" class="form-horizontal" --}}
+{{--                      enctype="multipart/form-data" id="demo-form" data-parsley-validate=""> --}}
+{{--                    @csrf --}}
+{{--                    <div class="box-body"> --}}
+{{--                        <div class="form-row mb-3"> --}}
+{{--                            <div class="form-group col-md-4"> --}}
+{{--                                <label for="inputEmail4">{{__('dash.title_ar')}}</label> --}}
+{{--                                <input type="text" name="title_ar" class="form-control" --}}
+{{--                                       id="inputEmail4" --}}
+{{--                                       placeholder="{{__('dash.title_ar')}}" --}}
+{{--                                       > --}}
+{{--                                @error('title_ar') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+{{--                            </div> --}}
 
-{{--                            <div class="form-group col-md-4">--}}
-{{--                                <label for="inputEmail4">{{__('dash.title_en')}}</label>--}}
-{{--                                <input type="text" name="title_en" class="form-control"--}}
-{{--                                       id="inputEmail4"--}}
-{{--                                       placeholder="{{__('dash.title_en')}}"--}}
-{{--                                >--}}
-{{--                                @error('title_en')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-{{--                            </div>--}}
-
-
-{{--                            <div class="form-group col-md-4">--}}
-
-{{--                                <label for="inputEmail4">{{__('dash.category')}}</label>--}}
-{{--                                <select id="inputState" class="select2 form-control pt-1"--}}
-{{--                                        name="category_id">--}}
-{{--                                    <option disabled>{{__('dash.choose')}}</option>--}}
-{{--                                    @foreach($categories as $key => $category)--}}
-{{--                                        <option value="{{$key}}">{{$category}}</option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                                @error('category_id')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-
-{{--                            </div>--}}
-
-{{--                        </div>--}}
+{{--                            <div class="form-group col-md-4"> --}}
+{{--                                <label for="inputEmail4">{{__('dash.title_en')}}</label> --}}
+{{--                                <input type="text" name="title_en" class="form-control" --}}
+{{--                                       id="inputEmail4" --}}
+{{--                                       placeholder="{{__('dash.title_en')}}" --}}
+{{--                                > --}}
+{{--                                @error('title_en') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+{{--                            </div> --}}
 
 
-{{--                        --}}{{--<div class="form-row mb-3">--}}
+{{--                            <div class="form-group col-md-4"> --}}
+
+{{--                                <label for="inputEmail4">{{__('dash.category')}}</label> --}}
+{{--                                <select id="inputState" class="select2 form-control pt-1" --}}
+{{--                                        name="category_id"> --}}
+{{--                                    <option disabled>{{__('dash.choose')}}</option> --}}
+{{--                                    @foreach ($categories as $key => $category) --}}
+{{--                                        <option value="{{$key}}">{{$category}}</option> --}}
+{{--                                    @endforeach --}}
+{{--                                </select> --}}
+{{--                                @error('category_id') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+
+{{--                            </div> --}}
+
+{{--                        </div> --}}
 
 
-{{--                            --}}{{--<div class="col-md-6 custom-file-container form-group"--}}
-{{--                                 --}}{{--data-upload-id="mySecondImage">--}}
-{{--                                --}}{{--<label>{{__('dash.upload')}}<a href="javascript:void(0)"--}}
-{{--                                                               --}}{{--class="custom-file-container__image-clear"--}}
-{{--                                                               --}}{{--title="Clear Image">x</a></label>--}}
-{{--                                --}}{{--<div style="display: flex">--}}
-{{--                                    --}}{{--<label class="custom-file-container__custom-file">--}}
-{{--                                        --}}{{--<input type="file"--}}
-{{--                                               --}}{{--class="custom-file-container__custom-file__custom-file-input"--}}
-{{--                                               --}}{{--name="avatar"--}}
-{{--                                        --}}{{-->--}}
-{{--                                        --}}{{--<input type="hidden" name="MAX_FILE_SIZE" value="10485760"/>--}}
-{{--                                        --}}{{--<span--}}
-{{--                                            --}}{{--class="custom-file-container__custom-file__custom-file-control"></span>--}}
-{{--                                    --}}{{--</label>--}}
-
-{{--                                    --}}{{--<div class=" col-md-2 custom-file-container__image-preview"></div>--}}
-{{--                                --}}{{--</div>--}}
-{{--                            --}}{{--</div>--}}
-
-{{--                        --}}{{--</div>--}}
-{{--                        <div class="form-row mb-2">--}}
+{{--                        --}}{{-- <div class="form-row mb-3"> --}}
 
 
-{{--                                <div class="form-group col-md-6">--}}
+{{--                            --}}{{-- <div class="col-md-6 custom-file-container form-group" --}}
+{{--                                 --}}{{-- data-upload-id="mySecondImage"> --}}
+{{--                                --}}{{-- <label>{{__('dash.upload')}}<a href="javascript:void(0)" --}}
+{{--                                                               --}}{{-- class="custom-file-container__image-clear" --}}
+{{--                                                               --}}{{-- title="Clear Image">x</a></label> --}}
+{{--                                --}}{{-- <div style="display: flex"> --}}
+{{--                                    --}}{{-- <label class="custom-file-container__custom-file"> --}}
+{{--                                        --}}{{-- <input type="file" --}}
+{{--                                               --}}{{-- class="custom-file-container__custom-file__custom-file-input" --}}
+{{--                                               --}}{{-- name="avatar" --}}
+{{--                                        --}}{{-- > --}}
+{{--                                        --}}{{-- <input type="hidden" name="MAX_FILE_SIZE" value="10485760"/> --}}
+{{--                                        --}}{{-- <span --}}
+{{--                                            --}}{{-- class="custom-file-container__custom-file__custom-file-control"></span> --}}
+{{--                                    --}}{{-- </label> --}}
 
-{{--                                    <label for="inputEmail4">{{__('dash.description_ar')}}</label>--}}
-{{--                                    <textarea name="description_ar" class="ckeditor" cols="10" rows="5"></textarea>--}}
-{{--                                    @error('description_ar')--}}
-{{--                                    <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                    @enderror--}}
+{{--                                    --}}{{-- <div class=" col-md-2 custom-file-container__image-preview"></div> --}}
+{{--                                --}}{{-- </div> --}}
+{{--                            --}}{{-- </div> --}}
 
-{{--                                </div>--}}
-
-{{--                            <div class="form-group col-md-6">--}}
-
-{{--                                <label for="inputEmail4">{{__('dash.description_en')}}</label>--}}
-{{--                                <textarea name="description_en" class="ckeditor" cols="10" rows="5"></textarea>--}}
-{{--                                @error('description_en')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-
-{{--                            </div>--}}
-
-
-{{--                        </div>--}}
-
-
-{{--                        <div class="form-row mb-2">--}}
+{{--                        --}}{{-- </div> --}}
+{{--                        <div class="form-row mb-2"> --}}
 
 
-{{--                            <div class="form-group type-col col-md-6">--}}
+{{--                                <div class="form-group col-md-6"> --}}
 
-{{--                                <label for="inputEmail4">{{__('dash.type')}}</label>--}}
-{{--                                <select id="inputState" class="select2 type form-control"--}}
-{{--                                        name="type">--}}
-{{--                                    <option value="{{\App\Enums\Core\ServiceType::fixed()->value}}">{{\App\Enums\Core\ServiceType::fixed()->value}}</option>--}}
-{{--                                    <option value="{{\App\Enums\Core\ServiceType::evaluative()->value}}">{{\App\Enums\Core\ServiceType::evaluative()->value}}</option>--}}
+{{--                                    <label for="inputEmail4">{{__('dash.description_ar')}}</label> --}}
+{{--                                    <textarea name="description_ar" class="ckeditor" cols="10" rows="5"></textarea> --}}
+{{--                                    @error('description_ar') --}}
+{{--                                    <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                    @enderror --}}
 
-{{--                                </select>--}}
-{{--                                @error('category_id')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
+{{--                                </div> --}}
 
-{{--                            </div>--}}
+{{--                            <div class="form-group col-md-6"> --}}
 
-{{--                                <div class="form-group price-col col-md-6">--}}
+{{--                                <label for="inputEmail4">{{__('dash.description_en')}}</label> --}}
+{{--                                <textarea name="description_en" class="ckeditor" cols="10" rows="5"></textarea> --}}
+{{--                                @error('description_en') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
 
-
-{{--                                    <label for="inputEmail4">{{__('dash.price')}}</label>--}}
-{{--                                    <input type="text" name="price" class="form-control"--}}
-{{--                                           id="inputEmail4"--}}
-{{--                                           placeholder="{{__('dash.price')}}"--}}
-{{--                                    >--}}
-{{--                                    @error('price')--}}
-{{--                                    <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                    @enderror--}}
-
-{{--                                </div>--}}
-
-{{--                                <div class="form-group start_from col-md-4" style="display: none;">--}}
-
-{{--                                    <label for="inputEmail4">{{__('dash.start_from')}}</label>--}}
-{{--                                    <input type="text" name="start_from" class="form-control"--}}
-{{--                                           id="inputEmail4"--}}
-{{--                                           placeholder="{{__('dash.start_from')}}"--}}
-{{--                                    >--}}
-{{--                                    @error('start_from')--}}
-{{--                                    <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                    @enderror--}}
-{{--                                </div>--}}
+{{--                            </div> --}}
 
 
-{{--                        </div>--}}
-
-{{--                        <div class="form-row mb-2">--}}
+{{--                        </div> --}}
 
 
-{{--                            <div class="form-group col-md-6">--}}
-
-{{--                                <label for="inputEmail4">{{__('dash.term_cond_ar')}}</label>--}}
-{{--                                <textarea name="ter_cond_ar" class="ckeditor" cols="10" rows="5"></textarea>--}}
-{{--                                @error('ter_cond_ar')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-
-{{--                            </div>--}}
-
-{{--                            <div class="form-group col-md-6">--}}
-
-{{--                                <label for="inputEmail4">{{__('dash.term_cond_en')}}</label>--}}
-{{--                                <textarea name="ter_cond_en" class="ckeditor" cols="10" rows="5"></textarea>--}}
-{{--                                @error('ter_cond_en')--}}
-{{--                                <div class="alert alert-danger">{{ $message }}</div>--}}
-{{--                                @enderror--}}
-
-{{--                            </div>--}}
+{{--                        <div class="form-row mb-2"> --}}
 
 
-{{--                        </div>--}}
+{{--                            <div class="form-group type-col col-md-6"> --}}
 
-{{--                    </div>--}}
-{{--                    <div class="modal-footer">--}}
-{{--                        <button type="submit" class="btn btn-primary">{{__('dash.save')}}</button>--}}
-{{--                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> {{__('dash.close')}}</button>--}}
-{{--                    </div>--}}
-{{--                </form>--}}
-{{--            </div>--}}
+{{--                                <label for="inputEmail4">{{__('dash.type')}}</label> --}}
+{{--                                <select id="inputState" class="select2 type form-control" --}}
+{{--                                        name="type"> --}}
+{{--                                    <option value="{{\App\Enums\Core\ServiceType::fixed()->value}}">{{\App\Enums\Core\ServiceType::fixed()->value}}</option> --}}
+{{--                                    <option value="{{\App\Enums\Core\ServiceType::evaluative()->value}}">{{\App\Enums\Core\ServiceType::evaluative()->value}}</option> --}}
 
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
+{{--                                </select> --}}
+{{--                                @error('category_id') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+
+{{--                            </div> --}}
+
+{{--                                <div class="form-group price-col col-md-6"> --}}
+
+
+{{--                                    <label for="inputEmail4">{{__('dash.price')}}</label> --}}
+{{--                                    <input type="text" name="price" class="form-control" --}}
+{{--                                           id="inputEmail4" --}}
+{{--                                           placeholder="{{__('dash.price')}}" --}}
+{{--                                    > --}}
+{{--                                    @error('price') --}}
+{{--                                    <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                    @enderror --}}
+
+{{--                                </div> --}}
+
+{{--                                <div class="form-group start_from col-md-4" style="display: none;"> --}}
+
+{{--                                    <label for="inputEmail4">{{__('dash.start_from')}}</label> --}}
+{{--                                    <input type="text" name="start_from" class="form-control" --}}
+{{--                                           id="inputEmail4" --}}
+{{--                                           placeholder="{{__('dash.start_from')}}" --}}
+{{--                                    > --}}
+{{--                                    @error('start_from') --}}
+{{--                                    <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                    @enderror --}}
+{{--                                </div> --}}
+
+
+{{--                        </div> --}}
+
+{{--                        <div class="form-row mb-2"> --}}
+
+
+{{--                            <div class="form-group col-md-6"> --}}
+
+{{--                                <label for="inputEmail4">{{__('dash.term_cond_ar')}}</label> --}}
+{{--                                <textarea name="ter_cond_ar" class="ckeditor" cols="10" rows="5"></textarea> --}}
+{{--                                @error('ter_cond_ar') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+
+{{--                            </div> --}}
+
+{{--                            <div class="form-group col-md-6"> --}}
+
+{{--                                <label for="inputEmail4">{{__('dash.term_cond_en')}}</label> --}}
+{{--                                <textarea name="ter_cond_en" class="ckeditor" cols="10" rows="5"></textarea> --}}
+{{--                                @error('ter_cond_en') --}}
+{{--                                <div class="alert alert-danger">{{ $message }}</div> --}}
+{{--                                @enderror --}}
+
+{{--                            </div> --}}
+
+
+{{--                        </div> --}}
+
+{{--                    </div> --}}
+{{--                    <div class="modal-footer"> --}}
+{{--                        <button type="submit" class="btn btn-primary">{{__('dash.save')}}</button> --}}
+{{--                        <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> {{__('dash.close')}}</button> --}}
+{{--                    </div> --}}
+{{--                </form> --}}
+{{--            </div> --}}
+
+{{--        </div> --}}
+{{--    </div> --}}
+{{-- </div> --}}
 
 
 @push('script')
     <script>
-
-        $("body").on('change', '.type', function () {
+        $("body").on('change', '.type', function() {
             if ($(this).val() == 'evaluative') {
 
                 $('.type-col').removeClass('col-md-6');
@@ -544,19 +567,35 @@
             }
 
         })
-
     </script>
     <script>
-
         $('.select2').select2({
             tags: true,
-            dir: '{{app()->getLocale() == "ar"? "rtl" : "ltr"}}'
+            dir: '{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}'
         })
     </script>
 @endpush
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function() {
+        // Initially hide the service_services div if the select value is 0
+        if ($('#is_package').val() == '0') {
+            $('#service_services').hide();
+        }
+
+        // Listen to changes in the select element
+        $('#is_package').on('change', function() {
+            if ($(this).val() == '1') {
+                // If value is 1, show the service_services div
+                $('#service_services').show();
+            } else {
+                // If value is 0, hide the service_services div
+                $('#service_services').hide();
+            }
+        });
+    });
+
     $(document).ready(function() {
         // Get the initial group options
         var initialGroupOptions = $('#category_id option').clone();
@@ -570,11 +609,11 @@
 
             // Filter the groups based on the selected gender
             var filteredGroups = {!! $categories !!}.filter(function(group) {
-    
-          
+
+
                 return group.gender === selectedGender;
             });
-      
+
             // Add the filtered group options to the second select
             $.each(filteredGroups, function(index, group) {
                 console.log(group);
