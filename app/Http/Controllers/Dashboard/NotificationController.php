@@ -49,26 +49,26 @@ class NotificationController extends Controller
     {
 
         $request->validate([
-            'customer_id' => 'nullable',
+            'subject_id' => 'nullable',
             'technician_id' => 'nullable',
             'title' => 'required',
             'message' => 'required',
             'type' => 'required'
         ]);
         if ($request->type == 'customer') {
-            if ($request->customer_id == 'all') {
+            if ($request->subject_id == 'all') {
                 $FcmTokenArray = User::whereNotNull('fcm_token')->get()->pluck('fcm_token');
             } else {
-                $user = User::where('id', $request->customer_id)->first('fcm_token');
+                $user = User::where('id', $request->subject_id)->first('fcm_token');
                 $FcmToken = $user->fcm_token;
             }
 
             $type = 'customer';
         } else if ($request->type == 'customersWithNoOrders') {
-            if ($request->customer_id == 'all') {
+            if ($request->subject_id == 'all') {
                 $FcmTokenArray = User::whereNotNull('fcm_token')->doesntHave('orders')->get()->pluck('fcm_token');
             } else {
-                $FcmToken = User::where('id', $request->customer_id)->first('fcm_token');
+                $FcmToken = User::where('id', $request->subject_id)->first('fcm_token');
             }
             $type = 'customer';
         } else {
