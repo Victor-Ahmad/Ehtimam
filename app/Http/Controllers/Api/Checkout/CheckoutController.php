@@ -38,6 +38,35 @@ class CheckoutController extends Controller
         $this->middleware('localization');
     }
 
+
+    protected function checkTimeDate(Request $request)
+    {
+        $user = auth()->user('sanctum');
+        $carts = Cart::query()->where('user_id', $user->id)->get();
+        $regionId = UserAddresses::where('id', \request()->query('user_address_id'))->first()->region_id;
+        foreach ($carts as $cart) {
+            $groupIds = CategoryGroup::where('category_id', $cart->category_id)->pluck('group_id')->toArray();
+            $countGroup = Group::where('active', 1)->whereHas('regions', function ($qu) use ($regionId) {
+                $qu->where('region_id',  $regionId);
+            })->whereIn('id', $groupIds)->count();
+            $countInBooking = Booking::whereHas('visit', function ($q) {
+                $q->whereNotIn('visits_status_id', [5, 6]);
+            })->whereHas(
+                'address.region',
+                function ($q) use ($regionId) {
+
+                    $q->where('id',  $regionId);
+                }
+            )->where([['category_id', '=', $cart->category_id], ['date', '=',  $cart->date], ['time', '=', $cart->time]])
+                ->count();
+
+            if (($countInBooking ==  $countGroup)) {
+                return self::apiResponse(400, __('api.There is a category for which there are currently no technical groups available'), $this->body);
+            }
+        }
+        return self::apiResponse(200, __('api.order created successfully'), $this->body);
+    }
+
     protected function checkout(Request $request)
     {
         $rules = [
