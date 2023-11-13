@@ -90,7 +90,6 @@ class ServiceController extends Controller
 
     public function create()
     {
-
         $categories = category::whereNull('parent_id')->where('active', 1)->get();
         $groups = Group::query()->where('active', 1)->get();
         $icons = Icon::query()->get();
@@ -101,7 +100,7 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-
+       
         $request->validate([
             'title_ar' => 'required|String|min:3',
             'title_en' => 'required|String|min:3',

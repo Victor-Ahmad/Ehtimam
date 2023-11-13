@@ -134,7 +134,7 @@
                                 <div id="service_services" class="form-row mb-2">
                                     <div class="form-group col-md-4">
                                         <label for="service_ids">الخدمات</label>
-                                        <select multiple required class="select2 form-control pt-1" name="service_ids[]">
+                                        <select id="service_ids" multiple  class="select2 form-control pt-1" name="service_ids[]">
                                             <option disabled>{{ __('dash.choose') }}</option>
                                             @foreach ($services as $service)
                                                 <option value="{{ $service->id }}">{{ $service->title_ar }}</option>
