@@ -19,7 +19,7 @@ return [
     'success_reset_code' => 'اعادة ناجحه ',
     'color' => 'اللون',
     'size' => 'المقاس',
-
+    'bookings_today' => 'الحجوزات اليوم',
     // Dashboard
     'main' => 'رئيسى',
     'super_admin' => 'سوبر ادمن',
