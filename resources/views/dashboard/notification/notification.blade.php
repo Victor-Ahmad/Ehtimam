@@ -233,8 +233,14 @@
                     selectElement.empty();
                     selectElement.append('<option value="all" selected>الكل</option>');
                     subjects.forEach(function(subject) {
-                        selectElement.append('<option value="' + subject.id + '">' + subject
-                            .first_name + ' - ' + subject.phone + '</option>');
+                        if (selectedType == 'technician') {
+                            selectElement.append('<option value="' + subject.id + '">' + subject
+                                .user_name + ' - ' + subject.phone + '</option>');
+                        } else {
+                            selectElement.append('<option value="' + subject.id + '">' + subject
+                                .first_name + ' - ' + subject.phone + '</option>');
+                        }
+
                     });
 
                     // Update the label based on the selected type
