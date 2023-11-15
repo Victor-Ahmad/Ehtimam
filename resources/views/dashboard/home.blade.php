@@ -193,7 +193,7 @@
                             </div>
                         </a>
                     </div>
-                    
+
                     <div class="col-xl-3 col-lg-4 col-md-4 col-sm-4 col-12 layout-spacing">
                         <a href="{{ route('dashboard.order.ordersToday') }}" class="widget-link">
                             <div class="widget widget-one_hybrid widget-referral">
@@ -247,7 +247,35 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-6 col-lg-12 col-sm-12  layout-spacing">
 
+                <div class="widget-content widget-content-area br-6">
+                    <div class="col-md-12 text-left mb-3">
+
+
+                        <h5 class="">{{ __('dash.bookings_today') }}</h5>
+
+
+                    </div>
+                    <table id="html5-extension-bookings" class="table table-hover non-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>رقم الحجز</th>
+                                <th>اسم العميل</th>
+                                <th>هاتف العميل</th>
+                                <th>الخدمات</th>
+                                <th>التاريخ</th>
+                                <th>الوقت</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+
+            </div>
             <div class="col-xl-6 col-lg-12 col-sm-12  layout-spacing">
 
                 <div class="widget-content widget-content-area br-6">
@@ -337,12 +365,93 @@
         });
         $(document).ready(function() {
             var table;
+            table = $('#html5-extension-bookings').DataTable({
+                dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
+                    "<'table-responsive'tr>" +
+                    "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+                order: [
+                    [0, 'asc']
+                ],
+                "language": {
+                    "url": "{{ app()->getLocale() == 'ar' ? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json' }}"
+                },
+                buttons: {
+                    buttons: [{
+                            extend: 'copy',
+                            className: 'btn btn-sm',
+                            text: 'نسخ'
+                        },
+                        {
+                            extend: 'csv',
+                            className: 'btn btn-sm',
+                            text: 'تصدير إلى CSV'
+                        },
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-sm',
+                            text: 'تصدير إلى Excel'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'btn btn-sm',
+                            text: 'طباعة'
+                        }
+                    ]
+                },
+                processing: true,
+                responsive: true,
+                serverSide: false,
+                ajax: {
+                    url: '{{ url('admin/bookings?type=service') }}',
+                    data: function(d) {
+                        d.page = "home";
+                    }
+                },
+                columns: [{
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'customer',
+                        name: 'customer'
+                    },
+                    {
+                        data: 'customer_phone',
+                        name: 'customer_phone'
+                    },
+                    {
+                        data: 'service',
+                        name: 'service'
+                    },
+                    {
+                        data: 'date',
+                        name: 'date'
+                    },
+                    {
+                        data: 'time',
+                        name: 'time'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                ]
+            });
+
+        });
+        $(document).ready(function() {
+            var table;
             table = $('#html5-extension').DataTable({
                 dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                     "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
                 order: [
-                    [0, 'desc']
+                    [0, 'asc']
                 ],
                 "language": {
                     "url": "{{ app()->getLocale() == 'ar' ? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json' }}"
@@ -380,6 +489,11 @@
                     }
                 },
                 columns: [{
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
                         data: 'id',
                         name: 'id'
                     },
@@ -417,7 +531,7 @@
                     "<'table-responsive'tr>" +
                     "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
                 order: [
-                    [0, 'desc']
+                    [0, 'asc']
                 ],
                 "language": {
                     "url": "{{ app()->getLocale() == 'ar' ? '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json' : '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json' }}"
@@ -455,8 +569,14 @@
                     }
                 },
                 columns: [{
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
+
                     },
                     {
                         data: 'user',

@@ -168,7 +168,7 @@ class CheckoutController extends Controller
             'notes' => $request->notes,
             //     'car_user_id' => $request->car_user_id,
         ]);
-  
+
         foreach ($carts as $cart) {
             OrderService::create([
                 'order_id' => $order->id,
@@ -216,8 +216,9 @@ class CheckoutController extends Controller
                 ->orderBy('group_id', 'ASC');
 
             $assign_to_id = 0;
+            $groupIds = CategoryGroup::where('category_id', $category_id)->pluck('group_id')->toArray();
             if ($visit->get()->isEmpty()) {
-                $groupIds = CategoryGroup::where('category_id', $category_id)->pluck('group_id')->toArray();
+
                 $group = Group::where('active', 1)->whereHas('regions', function ($qu) use ($address) {
                     $qu->where('region_id', $address->region_id);
                 })->whereIn('id', $groupIds)->inRandomOrder()->first();
@@ -226,7 +227,7 @@ class CheckoutController extends Controller
                 }
                 $assign_to_id = $group->id;
             } else {
-                $groupIds = CategoryGroup::where('category_id', $category_id)->pluck('group_id')->toArray();
+
                 $group = Group::where('active', 1)->whereHas('regions', function ($qu) use ($address) {
                     $qu->where('region_id', $address->region_id);
                 })->whereIn('id', $groupIds);
@@ -236,7 +237,13 @@ class CheckoutController extends Controller
                 if (($visit->get()->count()) < ($group->get()->count())) {
                     $assign_to_id = $group->whereNotIn('id', $visit->pluck('assign_to_id')->toArray())->inRandomOrder()->first()->id;
                 } else {
-                    $assign_to_id = $visit->where('start_time', '!=', $cart->time)->inRandomOrder()->first()->assign_to_id;
+                    $alreadyTaken = Visit::where('start_time', $cart->time)->whereIn('booking_id', $booking_id)->whereIn('assign_to_id', $activeGroups)->get();
+                    if ($alreadyTaken->isNotEmpty()) {
+                        $ids = $alreadyTaken->pluck('assign_to_id')->toArray();
+                        $assign_to_id = $visit->whereNotIn('assign_to_id', $ids)->inRandomOrder()->first()->assign_to_id;
+                    } else {
+                        $assign_to_id = $visit->inRandomOrder()->first()->assign_to_id;
+                    }
                 }
             }
             $bookingInsert = Booking::query()->create([
@@ -399,15 +406,24 @@ class CheckoutController extends Controller
         $request->validate($rules, $request->all());
         $user = auth()->user('sanctum');
 
-        $request->validate($rules, $request->all());
-
-        Transaction::create([
-            'order_id' => $request->order_id,
-            'transaction_number' => $request->transaction_id,
-            'payment_result' => 'success',
-            'payment_method' => $request->payment_method,
-            //     'amount' => $request->amount,
-        ]);
+        $trans = Transaction::where('order_id', $request->order_id)->get();
+        if ($trans->isEmpty()) {
+            Transaction::create([
+                'order_id' => $request->order_id,
+                'transaction_number' => $request->transaction_id,
+                'payment_result' => 'success',
+                'payment_method' => $request->payment_method,
+                //     'amount' => $request->amount,
+            ]);
+        } else {
+            Transaction::where('order_id', $request->order_id)->update([
+                //   'order_id' => $request->order_id,
+                'transaction_number' => $request->transaction_id,
+                'payment_result' => 'success',
+                'payment_method' => $request->payment_method,
+                //     'amount' => $request->amount,
+            ]);
+        }
 
         $order = Order::where('id', $request->order_id)->first();
 

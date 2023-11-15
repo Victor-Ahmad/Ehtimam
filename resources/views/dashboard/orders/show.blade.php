@@ -96,6 +96,10 @@
                                     <td>{{$order->user?->first_name . '' .$order->user?->last_name}}</td>
                                 </tr>
                                 <tr>
+                                    <th>هاتف العميل</th>
+                                    <td>{{$userPhone}}</td>
+                                </tr>
+                                <tr>
                                     <th>حاله الطلب</th>
                                     <td>{{$order->status?->name}}</td>
                                 </tr>
@@ -112,7 +116,7 @@
                                     <td>{{$order->total}}</td>
                                 </tr>
 
-                                {{-- <tr>
+                                <tr>
                                     <th>نوع السياره</th>
                                     <td>{{$order->userCar?->type?->name}}</td>
                                 </tr>
@@ -127,7 +131,7 @@
                                 <tr>
                                     <th>رقم لوحة السياره</th>
                                     <td>{{$order->userCar?->Plate_number}}</td>
-                                </tr> --}}
+                                </tr>
                                 <tr>
                                         <th>اسماء الخدمات</th>
 
