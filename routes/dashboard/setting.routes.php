@@ -12,6 +12,7 @@ Route::group(['prefix' => 'settings'], function (){
     Route::get('city/change_status', 'Settings\CityController@change_status')->name('city.change_status');
     Route::resource('city', 'Settings\CityController');
 
+    Route::get('region/viewRegion/{id}', 'Settings\RegionController@viewRegion')->name('region.viewRegion');
     Route::get('region/change_status', 'Settings\RegionController@change_status')->name('region.change_status');
     Route::resource('region', 'Settings\RegionController');
 
