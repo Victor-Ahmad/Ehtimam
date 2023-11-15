@@ -39,7 +39,7 @@ class OrderController extends Controller
 
             if (request()->page) {
                 $now = Carbon::now('Asia/Riyadh')->toDateString();
-                $orders->whereDate('created_at', '=', $now);
+                $orders->where('status_id', '!=', 5)->whereDate('created_at', '=', $now);
             }
             if (request()->status) {
 
@@ -47,6 +47,7 @@ class OrderController extends Controller
             }
 
             $orders->where('is_active', 1)->get();
+
             return DataTables::of($orders)
                 ->addColumn('booking_id', function ($row) {
                     $booking = $row->bookings->first();
@@ -71,7 +72,17 @@ class OrderController extends Controller
 
                     return array_sum($qu);
                 })
+                ->addColumn('payment_method', function ($row) {
+                    $payment_method = $row->transaction?->payment_method;
+                    if ($payment_method == "cache" || $payment_method == "cash")
+                        return "شبكة";
+                    else if ($payment_method == "wallet")
+                        return "محفظة";
+                    else
+                        return "فيزا";
+                })
                 ->addColumn('status', function ($row) {
+
                     return $row->status?->name;
                 })
                 ->addColumn('created_at', function ($row) {
@@ -107,6 +118,7 @@ class OrderController extends Controller
                     'user',
                     'service',
                     'quantity',
+                    'payment_method',
                     'status',
                     'created_at',
                     'control',
@@ -156,6 +168,15 @@ class OrderController extends Controller
 
                     return array_sum($qu);
                 })
+                ->addColumn('payment_method', function ($row) {
+                    $payment_method = $row->transaction?->payment_method;
+                    if ($payment_method == "cache" || $payment_method == "cash")
+                        return "شبكة";
+                    else if ($payment_method == "wallet")
+                        return "محفظة";
+                    else
+                        return "فيزا";
+                })
                 ->addColumn('status', function ($row) {
 
                     return $row->status?->name;
@@ -193,6 +214,7 @@ class OrderController extends Controller
                     'user',
                     'service',
                     'quantity',
+                    'payment_method',
                     'status',
                     'created_at',
                     'control',
@@ -236,12 +258,26 @@ class OrderController extends Controller
 
                     return array_sum($qu);
                 })
+                ->addColumn('payment_method', function ($row) {
+                    $payment_method = $row->transaction?->payment_method;
+                    if ($payment_method == "cache" || $payment_method == "cash")
+                        return "شبكة";
+                    else if ($payment_method == "wallet")
+                        return "محفظة";
+                    else
+                        return "فيزا";
+                })
                 ->addColumn('status', function ($row) {
 
                     return $row->status?->name;
                 })
                 ->addColumn('created_at', function ($row) {
                     $date = Carbon::parse($row->created_at)->timezone('Asia/Riyadh');
+
+                    return $date->format("Y-m-d H:i:s");
+                })
+                ->addColumn('updated_at', function ($row) {
+                    $date = Carbon::parse($row->updated_at)->timezone('Asia/Riyadh');
 
                     return $date->format("Y-m-d H:i:s");
                 })
@@ -273,8 +309,10 @@ class OrderController extends Controller
                     'user',
                     'service',
                     'quantity',
+                    'payment_method',
                     'status',
                     'created_at',
+                    'updated_at',
                     'control',
                 ])
                 ->make(true);
@@ -282,7 +320,6 @@ class OrderController extends Controller
         $statuses = OrderStatus::all()->pluck('name', 'id');
         return view('dashboard.orders.canceled_orders_today', compact('statuses'));
     }
-
     public function canceledOrders()
     {
 
@@ -322,6 +359,11 @@ class OrderController extends Controller
 
                     return $date->format("Y-m-d H:i:s");
                 })
+                ->addColumn('updated_at', function ($row) {
+                    $date = Carbon::parse($row->updated_at)->timezone('Asia/Riyadh');
+
+                    return $date->format("Y-m-d H:i:s");
+                })
                 ->addColumn('control', function ($row) {
 
                     $html = '';
@@ -352,6 +394,7 @@ class OrderController extends Controller
                     'quantity',
                     'status',
                     'created_at',
+                    'updated_at',
                     'control',
                 ])
                 ->make(true);
@@ -392,7 +435,7 @@ class OrderController extends Controller
 
     public function create()
     {
-        $users = User::where('is_deleted',0)->get();
+        $users = User::where('is_deleted', 0)->get();
         $categories = Category::all();
         $services = Service::all();
 
@@ -488,7 +531,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::where('id', $id)->first();
-        $users = User::where('is_deleted',0)->get();
+        $users = User::where('is_deleted', 0)->get();
         $categories = Category::all();
         $services = Service::all();
         return view('dashboard.core.services.edit', compact('order', 'users', 'services', 'categories'));
@@ -668,9 +711,10 @@ class OrderController extends Controller
     protected function orderDetail()
     {
         $order = Order::with('bookings')->findOrFail(\request()->id);
+        $userPhone = User::where('id', $order->user_id)->first()->phone;
         $category_ids = $order->services->pluck('category_id')->toArray();
         $category_ids = array_unique($category_ids);
         $categories = Category::whereIn('id', $category_ids)->get();
-        return view('dashboard.orders.show', compact('order', 'categories'));
+        return view('dashboard.orders.show', compact('userPhone', 'order', 'categories'));
     }
 }

@@ -33,7 +33,9 @@ class VisitsController extends Controller
 
             if (request()->page) {
                 $now = Carbon::now('Asia/Riyadh')->toDateString();
-                $visit->whereDate('created_at', '=', $now);
+                $visit->where('visits_status_id', '!=', 6)->whereHas('booking', function ($qu) use ($now) {
+                    $qu->whereDate('date', '=', $now);
+                });
             }
             if (request()->status) {
 
@@ -41,6 +43,7 @@ class VisitsController extends Controller
             }
 
             $visit->where('is_active', 1)->get();
+
 
 
             return DataTables::of($visit)
@@ -103,7 +106,8 @@ class VisitsController extends Controller
 
 
             $now = Carbon::now('Asia/Riyadh')->toDateString();
-            $visit->whereDate('created_at', '=', $now);
+
+            $visit->whereDate('start_date', '=', $now);
 
             if (request()->status) {
 
@@ -269,8 +273,6 @@ class VisitsController extends Controller
         ];
     }
 
-
-
     protected function update(Request $request, $id)
     {
         $visit = Visit::query()->where('id', $id)->first();
@@ -295,7 +297,7 @@ class VisitsController extends Controller
             if (count($allTechn) > 0) {
 
                 $title = 'تغيير الفريق';
-                $message = 'سيتم تغيير الفريق بسبب الغاء الطلب لاسباب فنية';
+                $message = 'سيتم تغيير الفريق بسبب الغاء الطلب لاسباب فنيه';
 
                 foreach ($allTechn as $tech) {
                     Notification::send(
