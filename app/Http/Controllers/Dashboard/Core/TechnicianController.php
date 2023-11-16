@@ -141,7 +141,7 @@ class TechnicianController extends Controller
             'group_id' => 'nullable',
             'gender' => 'required',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
-            'active' => 'nullable|in:on,off',
+           
             'password' => ['nullable', 'confirmed', Password::min(4)],
         ];
         $validated = Validator::make($request->all(), $rules, ['user_name.regex' => 'يجب أن لا يحتوي اسم المستخدم على أي مسافات']);
@@ -149,12 +149,12 @@ class TechnicianController extends Controller
             return redirect()->to(route('dashboard.core.technician.index'))->withErrors($validated->errors());
         }
         $validated = $validated->validated();
-        dd($request->all());
-        if ($validated['active'] && $validated['active'] == 'on') {
-            $validated['active'] = 1;
-        } else {
-            $validated['active'] = 0;
-        }
+        // dd($request->all());
+        // if ($validated['active'] && $validated['active'] == 'on') {
+        //     $validated['active'] = 1;
+        // } else {
+        //     $validated['active'] = 0;
+        // }
         if ($request->hasFile('image')) {
             if (File::exists(public_path($tech->image))) {
                 File::delete(public_path($tech->image));
