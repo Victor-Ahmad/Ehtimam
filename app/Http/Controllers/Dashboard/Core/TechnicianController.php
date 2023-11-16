@@ -149,7 +149,7 @@ class TechnicianController extends Controller
             return redirect()->to(route('dashboard.core.technician.index'))->withErrors($validated->errors());
         }
         $validated = $validated->validated();
-      //  dd($request->all());
+        dd($request->all());
         if ($validated['active'] && $validated['active'] == 'on') {
             $validated['active'] = 1;
         } else {

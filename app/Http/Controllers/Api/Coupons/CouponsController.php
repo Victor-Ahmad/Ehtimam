@@ -26,12 +26,12 @@ class CouponsController extends Controller
 
     protected function allCoupons()
     {
-        $gender = \request()->query('gender') ?? 'male';
+        $gender ='';
         try {
             $user = auth()->user('sanctum');
             $gender = User::where('id', $user->id)->first()->gender;
         } catch (\Exception $e) {
-            $gender = 'male';
+            $gender = \request()->query('gender') ?? 'male';
         }
         $coupons = Coupon::query()->where('active', 1)
             ->where('start', '<=', Carbon::now('Asia/Riyadh'))->where('end', '>=', Carbon::now('Asia/Riyadh'))
