@@ -303,89 +303,129 @@
 
     </script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    var map, directionsService, directionsRenderer, currentZoomLevel, currentMapCenter;
+    var startMarker;
+    var endMarker;
 
-        var map, directionsService, directionsRenderer,currentZoomLevel,currentMapCenter;
+    function initMap() {
+        // Create a new map centered on the starting point
+        const locations = <?php echo json_encode($locations); ?>;
+        const myLatLng = {
+            lat: Number(locations[0].lat),
+            lng: Number(locations[0].lng)
+        };
+        console.log(myLatLng);
+        console.log({
+            lat: Number(locations[1].lat),
+            lng: Number(locations[1].lng)
+        });
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: myLatLng
+        });
+        startMarker = new google.maps.Marker({
+            position: {
+                lat: Number(locations[1].lat),
+                lng: Number(locations[1].lng)
+            },
 
-        function initMap() {
-            // Create a new map centered on the starting point
-            const locations = <?php echo json_encode($locations) ?>;
-            const myLatLng = { lat: Number(locations[0].lat) , lng: Number(locations[0].lng) };
-            console.log(myLatLng)
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 16,
-                center: myLatLng
+            icon: {
+                url: '{{ asset('storage/images/technicians/tech.png') }}',
+                scaledSize: new google.maps.Size(60, 60), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point(30, 30) // anchor
+            },
+
+            map: map
+        });
+        endMarker = new google.maps.Marker({
+            position: myLatLng,
+
+            map: map
+        });
+
+        // const marker = new google.maps.Marker({
+        //     position: myLatLng,
+        //     map,
+        // });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps
+            .DirectionsRenderer({
+                map: map,
+                suppressMarkers: true
             });
+        currentZoomLevel = map.getZoom();
+        currentMapCenter = map.getCenter();
 
-            const marker = new google.maps.Marker({
-                position: myLatLng,
-                map,
-            });
-
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map
-            });
-            currentZoomLevel = map.getZoom();
-            currentMapCenter = map.getCenter();
-
-            setInterval(getLocation,10000)
-        }
+        setInterval(getLocation, 10000);
+    };
 
 
-        function getLocation(){
-            var id = "{{$visits->id}}";
-            $.ajax({
-                url: '{{route('dashboard.visits.getLocation')}}',
-                type: 'post',
-                data: {id: id,_token: "{{csrf_token()}}"},
-                success: function (data) {
-                    if(data[1].lat != 0 && data[1].lng != 0 && data[0].lat != 0 && data[0].lng != 0) {
-                        updateRoute(data)
-                    }else{
-                        const myLatLng = { lat: data[0].lat , lng: data[0].lng };
-                        const marker = new google.maps.Marker({
-                            position: myLatLng,
-                            map,
-                        });
-                    }
+    function getLocation() {
+        var id = "{{ $visits->id }}";
+        $.ajax({
+            url: '{{ route('dashboard.visits.getLocation') }}',
+            type: 'post',
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(data) {
+                if (data[1].lat != 0 && data[1].lng != 0 && data[0].lat != 0 && data[0].lng != 0) {
+                    updateRoute(data);
+                    //  clearMarkers();
+                } else {
+                    const myLatLng = {
+                        lat: data[0].lat,
+                        lng: data[0].lng
+                    };
+                    const marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map,
+                    });
                 }
-            });
-        }
+            }
+        });
+    };
 
 
-        function updateRoute(locations) {
-            var startingPoint = new google.maps.LatLng(locations[0].lat, locations[0].lng);
-            var destination = new google.maps.LatLng(locations[1].lat, locations[1].lng);
+    function updateRoute(locations) {
+        var startingPoint = new google.maps.LatLng(locations[1].lat, locations[1].lng);
+        var destination = new google.maps.LatLng(locations[0].lat, locations[0].lng);
 
-            currentZoomLevel = map.getZoom();
-            currentMapCenter = map.getCenter();
-
-
-            var request = {
-                origin: startingPoint,
-                destination: destination,
-                travelMode: 'DRIVING'
-            };
-
-            directionsService.route(request, function(result, status) {
-                if (status == 'OK') {
-                    // Display the updated route on the map
-                    directionsRenderer.setDirections(result);
-                    map.setZoom(currentZoomLevel);
-                    map.setCenter(currentMapCenter);
-
-                }
-            });
-        }
+        currentZoomLevel = map.getZoom();
+        currentMapCenter = map.getCenter();
 
 
+        var request = {
+            origin: startingPoint,
+            destination: destination,
+            travelMode: 'DRIVING'
+        };
 
-        window.initMap = initMap;
+        directionsService.route(request, function(result, status) {
+            if (status == 'OK') {
+                // Display the updated route on the map
+                directionsRenderer.setDirections(result);
+                // Update the position of the start marker
+                startMarker.setPosition(result.routes[0].legs[0].start_location);
+                // Update the position of the end marker
+                endMarker.setPosition(result.routes[0].legs[0].end_location);
+                map.setZoom(currentZoomLevel);
+                map.setCenter(currentMapCenter);
 
-        setInterval(visitStatus,10000)
+            }
+        });
+    };
 
-    </script>
+
+
+    window.initMap = initMap;
+
+    setInterval(visitStatus, 10000);
+</script>
 
 
     <script type="text/javascript" async defer
