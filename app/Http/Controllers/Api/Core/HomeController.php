@@ -76,7 +76,7 @@ class HomeController extends Controller
 
         $this->body['services_most_wanted'] = ServiceResource::collection($mostSellingServices);
         $this->body['services'] = ServiceResource::collection(Service::query()->where('active', 1)->where('is_package', 0)->where('gender', $userGender)->take(9)->get()->shuffle());
-        $this->body['contracts'] = ServiceResource::collection(Service::query()->where('active', 1)->where('is_package', 1)->where('gender', $userGender)->take(9)->get()->shuffle());
+        $this->body['contracts'] = ServiceResource::collection(Service::query()->where('active', 1)->where('is_package', 1)->where('gender', $userGender)->take(9)->get());
         $this->body['total_items_in_cart'] = auth()->check() ? auth()->user()->carts->count() : 0;
         $servicesCategories = Category::query()->where('active', 1)->where('gender', $userGender)->get();
         $this->body['services_categories'] = ServiceCategoryResource::collection($servicesCategories);
