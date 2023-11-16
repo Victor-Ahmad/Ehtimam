@@ -69,18 +69,16 @@ class VisitsController extends Controller
     protected function myOrdersByDateNow()
     {
 
-        $groups=Group::where('technician_id',auth('sanctum')->user()->id)->first();
+        $groups = Group::where('technician_id', auth('sanctum')->user()->id)->first();
         $orders = Visit::whereHas('booking', function ($q) {
 
-            $q->where('date',Carbon::now('Asia/Riyadh')->format('Y-m-d'))->whereHas('customer')->whereHas('address');
-
+            $q->where('date', Carbon::now('Asia/Riyadh')->format('Y-m-d'))->whereHas('customer')->whereHas('address');
         })->with('booking', function ($q) {
             $q->with(['service' => function ($q) {
                 $q->with('category');
-            },'customer','address']);
-
+            }, 'customer', 'address']);
         })->with('status')->whereIn('visits_status_id', [1, 2, 3, 4])
-            ->where('assign_to_id',  $groups->id)->orderBy('created_at','desc')->get();
+            ->where('assign_to_id',  $groups->id)->orderBy('created_at', 'desc')->get();
         $this->body['visits'] = VisitsResource::collection($orders);
         return self::apiResponse(200, null, $this->body);
     }
