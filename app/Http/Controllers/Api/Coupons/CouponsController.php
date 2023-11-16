@@ -9,6 +9,7 @@ use App\Http\Resources\Coupons\CouponsResource;
 use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\CouponUser;
+use App\Models\User;
 use App\Models\UserAddresses;
 use App\Support\Api\ApiResponse;
 use Carbon\Carbon;
@@ -26,11 +27,17 @@ class CouponsController extends Controller
     protected function allCoupons()
     {
         $gender = \request()->query('gender') ?? 'male';
+        try {
+            $user = auth()->user('sanctum');
+            $gender = User::where('id', $user->id)->first()->gender;
+        } catch (\Exception $e) {
+            $gender = 'male';
+        }
         $coupons = Coupon::query()->where('active', 1)
             ->where('start', '<=', Carbon::now('Asia/Riyadh'))->where('end', '>=', Carbon::now('Asia/Riyadh'))
             ->where('gender', $gender)
             ->get();
-            
+
         $this->body['coupons'] = CouponsResource::collection($coupons);
         return self::apiResponse(200, null, $this->body);
     }

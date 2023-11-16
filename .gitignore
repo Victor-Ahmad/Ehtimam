@@ -5,7 +5,8 @@
 /storage/debugbar/
 /storage/framework/cache/
 /storage/framework/sessions/
-/stograge/logs/
+/storage/logs/
+/storage/logs/*.log
 /vendor
 .env
 .env.backup
