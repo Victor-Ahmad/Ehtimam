@@ -25,11 +25,12 @@ class CouponsController extends Controller
 
     protected function allCoupons()
     {
-        $gender = \request()->query('gender') ?? null;
+        $gender = \request()->query('gender') ?? 'male';
         $coupons = Coupon::query()->where('active', 1)
             ->where('start', '<=', Carbon::now('Asia/Riyadh'))->where('end', '>=', Carbon::now('Asia/Riyadh'))
             ->where('gender', $gender)
             ->get();
+            
         $this->body['coupons'] = CouponsResource::collection($coupons);
         return self::apiResponse(200, null, $this->body);
     }

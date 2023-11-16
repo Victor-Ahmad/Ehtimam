@@ -152,6 +152,7 @@
             }
             // $('.editImage .custom-file-container__image-preview').css('background-image', 'url(' + 'data:image/png;base64,' + img + ')');
             //
+            console.log("sdfsdf");
             let action = "{{route('dashboard.core.technician.update', 'id')}}";
             action = action.replace('id', id)
             $('#edit_tech_form').attr('action', action);
