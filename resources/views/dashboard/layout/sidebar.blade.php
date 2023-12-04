@@ -59,7 +59,7 @@
                     </ul>
                 </li>
             @endcan
-            @can('view_packages')
+            {{-- @can('view_packages')
                 <li class="menu">
                     <a href="#contract" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <div class="">
@@ -89,16 +89,12 @@
                             <a href="{{ route('dashboard.contract_packages.index') }}">{{ __('dash.packages') }}</a>
                         </li>
 
-                        {{--                    <li> --}}
-                        {{--                        <a href="{{route('dashboard.contracts.index')}}"> التقاول </a> --}}
-                        {{--                    </li> --}}
-
                         <li>
                             <a href="{{ route('dashboard.contract_order.index') }}">{{ __('dash.packages_orders') }}</a>
                         </li>
                     </ul>
                 </li>
-            @endcan
+            @endcan --}}
             @can('view_orders')
                 <li class="menu">
                     <a href="#orders" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
