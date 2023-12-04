@@ -134,7 +134,8 @@
                                 <div id="service_services" class="form-row mb-2">
                                     <div class="form-group col-md-4">
                                         <label for="service_ids">الخدمات</label>
-                                        <select id="service_ids" multiple  class="select2 form-control pt-1" name="service_ids[]">
+                                        <select id="service_ids" multiple class="select2 form-control pt-1"
+                                            name="service_ids[]">
                                             <option disabled>{{ __('dash.choose') }}</option>
                                             @foreach ($services as $service)
                                                 <option value="{{ $service->id }}">{{ $service->title_ar }}</option>
@@ -594,24 +595,33 @@
                 $('#service_services').hide();
             }
         });
-    });
 
-    $(document).ready(function() {
         // Get the initial group options
         var initialGroupOptions = $('#category_id option').clone();
-
+        changeBasedOnGender();
         // Handle the change event of the gender select
         $(document).on('change', '#gender', function() {
-            var selectedGender = $(this).val();
+            changeBasedOnGender();
+        });
+
+        function changeBasedOnGender() {
+            var selectedGender = $('#gender').val();
 
             // Clear the second select options
             $('#category_id').empty();
+            $('#service_ids').empty();
 
             // Filter the groups based on the selected gender
             var filteredGroups = {!! $categories !!}.filter(function(group) {
 
 
                 return group.gender === selectedGender;
+            });
+
+            var filteredServices = {!! $services !!}.filter(function(service) {
+
+
+                return service.gender === selectedGender;
             });
 
             // Add the filtered group options to the second select
@@ -622,7 +632,14 @@
                     text: group.title_ar
                 }));
             });
-        });
+            $.each(filteredServices, function(index, group) {
+                console.log(group);
+                $('#service_ids').append($('<option>', {
+                    value: group.id,
+                    text: group.title_ar
+                }));
+            });
+        }
 
     });
 </script>
