@@ -33,6 +33,13 @@ class ServiceController extends Controller
                     ->addColumn('title', function ($service) {
                         return $service->title;
                     })
+                    ->addColumn('service_type', function ($service) {
+                        if ($service->is_package == 1) {
+                            return __('dash.service_type_package');
+                        } else {
+                            return __('dash.service_type_service');
+                        }
+                    })
                     ->addColumn('gender', function ($service) {
                         if ($service->gender == 'male') {
                             return __('dash.males');
@@ -74,6 +81,7 @@ class ServiceController extends Controller
                     })
                     ->rawColumns([
                         'title',
+                        'service_type',
                         'gender',
                         'status',
                         'controll',
@@ -94,13 +102,13 @@ class ServiceController extends Controller
         $groups = Group::query()->where('active', 1)->get();
         $icons = Icon::query()->get();
         $measurements = Measurement::query()->get();
-        $services = Service::all();
+        $services = Service::where('is_package', 0)->get()();
         return view('dashboard.core.services.create', compact('services', 'categories', 'groups', 'measurements', 'icons'));
     }
 
     public function store(Request $request)
     {
-       
+
         $request->validate([
             'title_ar' => 'required|String|min:3',
             'title_en' => 'required|String|min:3',
@@ -197,8 +205,9 @@ class ServiceController extends Controller
             ->get();
         $measurements = Measurement::query()->get();
         $icons = Icon::query()->get();
-
-        return view('dashboard.core.services.edit', compact('service', 'categories', 'groups', 'measurements', 'icons'));
+        $services = Service::where('is_package', 0)->get();
+        $service_services = ServiceServices::where('package_service_id', $id)->pluck('id')->toArray();
+        return view('dashboard.core.services.edit', compact('service_services', 'services', 'service', 'categories', 'groups', 'measurements', 'icons'));
     }
 
     public function update(Request $request, $id)

@@ -46,7 +46,7 @@
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-6" style="min-height: 400px;">
                     <div class="col-md-12 text-left mb-3">
-                        <h3>إنشاء خدمه جديد</h3>
+                        <h3>تعديل خدمة</h3>
                     </div>
                     <div class="col-md-12">
                         <form action="{{ route('dashboard.core.service.update', $service->id) }}" method="post"
@@ -125,6 +125,24 @@
 
                                     </div>
                                 </div>
+                                @if ($service->is_package == 1)
+                                    <div id="service_services" class="form-row mb-2">
+                                        <div class="form-group col-md-6">
+                                            <label for="service_ids">الخدمات</label>
+                                            <select id="service_ids" multiple class="select2 form-control pt-1"
+                                                name="service_ids[]">
+                                                <option disabled>{{ __('dash.choose') }}</option>
+                                                @foreach ($services as $service)
+                                                    <option @if (in_array($service->id, $service_services)) selected @endif
+                                                        value="{{ $service->id }}">{{ $service->title_ar }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('service_ids')
+                                                <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endif
                                 {{-- <div class="form-row mb-3"> --}}
 
 
