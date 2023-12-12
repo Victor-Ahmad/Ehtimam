@@ -132,9 +132,9 @@
                                             <select id="service_ids" multiple class="select2 form-control pt-1"
                                                 name="service_ids[]">
                                                 <option disabled>{{ __('dash.choose') }}</option>
-                                                @foreach ($services as $service)
-                                                    <option @if (in_array($service->id, $service_services)) selected @endif
-                                                        value="{{ $service->id }}">{{ $service->title_ar }}</option>
+                                                @foreach ($services as $service2)
+                                                    <option @if (in_array($service2->id, $service_services)) selected @endif
+                                                        value="{{ $service2->id }}">{{ $service2->title_ar }}</option>
                                                 @endforeach
                                             </select>
                                             @error('service_ids')

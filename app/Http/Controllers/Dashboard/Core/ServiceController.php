@@ -206,7 +206,8 @@ class ServiceController extends Controller
         $measurements = Measurement::query()->get();
         $icons = Icon::query()->get();
         $services = Service::where('is_package', 0)->get();
-        $service_services = ServiceServices::where('package_service_id', $id)->pluck('id')->toArray();
+        $service_services = ServiceServices::where('package_service_id', $id)->pluck('service_id')->toArray();
+
         return view('dashboard.core.services.edit', compact('service_services', 'services', 'service', 'categories', 'groups', 'measurements', 'icons'));
     }
 
@@ -233,7 +234,7 @@ class ServiceController extends Controller
             'best_seller' => 'nullable|in:on,off',
 
         ]);
-        $data = $request->except(['_token', 'group_ids', 'is_quantity', 'best_seller', 'icon_ids']);
+        $data = $request->except(['service_ids','_token', 'group_ids', 'is_quantity', 'best_seller', 'icon_ids']);
 
         if ($request['is_quantity'] && $request['is_quantity'] == 'on') {
             $data['is_quantity'] = 1;
@@ -254,6 +255,19 @@ class ServiceController extends Controller
         $service = Service::find($id);
 
         $service->update($data);
+
+        if ($service->is_package == '1') {
+            $servicesIds = $request->service_ids??[];
+            ServiceServices::where('package_service_id', $service->id)->delete();
+            foreach ($servicesIds as $serviceId) {
+                error_log($serviceId);
+                ServiceServices::create([
+                    'package_service_id' => $service->id,
+                    'service_id' => $serviceId,
+                ]);
+            }
+
+        }
 
         $service->icons()->sync($request->icon_ids);
 
