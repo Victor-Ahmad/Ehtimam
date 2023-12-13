@@ -102,7 +102,7 @@ class ServiceController extends Controller
         $groups = Group::query()->where('active', 1)->get();
         $icons = Icon::query()->get();
         $measurements = Measurement::query()->get();
-        $services = Service::where('is_package', 0)->get()();
+        $services = Service::where('is_package', 0)->get();
         return view('dashboard.core.services.create', compact('services', 'categories', 'groups', 'measurements', 'icons'));
     }
 
