@@ -358,11 +358,20 @@ class CartController extends Controller
                     $dayName = Carbon::parse($day)->timezone('Asia/Riyadh')->locale('en')->dayName;
                     $get_time = $this->getTime($dayName, $bookSetting);
                     if ($get_time == true) {
-                        $times[$service_id][$day] = CarbonInterval::minutes($bookSetting->service_duration + $bookSetting->buffering_time)
-                            ->toPeriod(
-                                \Carbon\Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_start_time ?? Carbon::now('Asia/Riyadh')->startOfDay()),
-                                Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_end_time ?? Carbon::now('Asia/Riyadh')->endOfDay())
-                            );
+                        if (Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_start_time ?? Carbon::now('Asia/Riyadh')->startOfDay()) > Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_end_time ?? Carbon::now('Asia/Riyadh')->endOfDay())) {
+                            $times[$service_id][$day] = CarbonInterval::minutes($bookSetting->service_duration + $bookSetting->buffering_time)
+                                ->toPeriod(
+                                    Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_start_time ?? Carbon::now('Asia/Riyadh')->startOfDay()),
+                                    Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_end_time ?? Carbon::now('Asia/Riyadh')->endOfDay())
+                                );
+                        } else {
+                            $times[$service_id][$day] = CarbonInterval::minutes($bookSetting->service_duration + $bookSetting->buffering_time)
+                                ->toPeriod(
+
+                                    Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_end_time ?? Carbon::now('Asia/Riyadh')->endOfDay()),
+                                    Carbon::now('Asia/Riyadh')->setTimeFrom($bookSetting->service_start_time ?? Carbon::now('Asia/Riyadh')->startOfDay())
+                                );
+                        }
                     }
                 }
             }
@@ -471,10 +480,7 @@ class CartController extends Controller
                     if ($day == $dayNow && $converTimestamp < $convertNowTimestamp) {
 
                         // error_log("A");
-                    } else if ($setting->is_resting == 1 && $startDate > $endDate && $time->between($startDate, $endDate, true)) {
-                        //  error_log("B");
-
-                    } else if ($setting->is_resting == 1 && $startDate < $endDate && $time->between($endDate, $startDate, true)) {
+                    } else if ($setting->is_resting == 1 && $time->between($startDate, $endDate, true)) {
                         //  error_log("B");
 
                     } else if (in_array($day, $bookingDates) && in_array($converTimestamp, $bookingTimes) && ($countInBooking ==  $countGroup)) {
