@@ -471,7 +471,10 @@ class CartController extends Controller
                     if ($day == $dayNow && $converTimestamp < $convertNowTimestamp) {
 
                         // error_log("A");
-                    } else if ($setting->is_resting == 1 && $time->between($startDate, $endDate, true)) {
+                    } else if ($setting->is_resting == 1 && $startDate > $endDate && $time->between($startDate, $endDate, true)) {
+                        //  error_log("B");
+
+                    } else if ($setting->is_resting == 1 && $startDate < $endDate && $time->between($endDate, $startDate, true)) {
                         //  error_log("B");
 
                     } else if (in_array($day, $bookingDates) && in_array($converTimestamp, $bookingTimes) && ($countInBooking ==  $countGroup)) {
