@@ -167,7 +167,7 @@ class CartController extends Controller
                         ->where('category_id', $category_id)->update([
                             'date' => $request->date[$key],
                             'time' => Carbon::parse($request->time[$key])->timezone('Asia/Riyadh')->toTimeString(),
-                            'notes' => $request->notes ? array_key_exists($key, $request->notes) ? $request->notes[$key] : '' : ''
+                            'notes' => $request->notes ? (array_key_exists($key, $request->notes) ? $request->notes[$key] : '') : ''
                         ]);
                 }
                 return self::apiResponse(200, __('api.date and time for reservations updated successfully'), $this->body);
@@ -203,7 +203,7 @@ class CartController extends Controller
                     $cart->update([
                         'date' => $request->date[$key],
                         'time' => Carbon::parse($request->time[$key])->timezone('Asia/Riyadh')->toTimeString(),
-                        'notes' => $request->notes ? array_key_exists($key, $request->notes) ? $request->notes[$key] : '' : ''
+                        'notes' => $request->notes ? (array_key_exists($key, $request->notes) ? $request->notes[$key] : '') : ''
                     ]);
                 }
                 return self::apiResponse(200, __('api.date and time for reservations updated successfully'), $this->body);
