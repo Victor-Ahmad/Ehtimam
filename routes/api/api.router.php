@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::post('check_update',[VersionController::class,'checkUpdate'])->name('check_update');
 
 Route::post('/login', [AuthController::class, 'login']);
