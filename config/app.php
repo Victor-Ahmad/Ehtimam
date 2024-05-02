@@ -58,7 +58,7 @@ return [
 
     'firebase_credentials' => 'AAAAHtWPiKU:APA91bE58ZV6KtSvlXuHtuNPKtGgWlMyvjF_SL5tw7KbaxFLYE_ECrSYnRMewuRbJvS1RukU_is2neJPlh5DLOri6Pq2dh1khf5tooSrW_hVDtrG0x4MSadB7D35jvIxyfuDqkcQ4HCx',
 
-    'GOOGLE_MAP_KEY'=>'AIzaSyDR0MGyuJhRhzPTe65zy-WymhBirnmVTd4',
+    'GOOGLE_MAP_KEY' => 'AIzaSyAvr7wIEFHBYN28EFx17loERAPA8XTY5Ik',
 
     /*
     |--------------------------------------------------------------------------
