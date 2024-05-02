@@ -22,7 +22,7 @@ class RatesController extends Controller
     protected function rateTechnicians()
     {
         if (request()->ajax()) {
-            $visit = RateTechnician::where('is_deleted',0)->get();
+            $visit = RateTechnician::get();
             return DataTables::of($visit)
                 ->addColumn('user_phone', function ($row) {
                     return $row->user?->phone;
@@ -65,9 +65,8 @@ class RatesController extends Controller
 
     protected function showTechnicians($id)
     {
-        $tech = RateTechnician::where('id',$id)->first();
-        return view('dashboard.rate.showTechnicians',compact('tech'));
-
+        $tech = RateTechnician::where('id', $id)->first();
+        return view('dashboard.rate.showTechnicians', compact('tech'));
     }
 
 
@@ -123,10 +122,7 @@ class RatesController extends Controller
 
     protected function showServices($id)
     {
-        $serv = RateService::where('id',$id)->first();
-        return view('dashboard.rate.showServices',compact('serv'));
+        $serv = RateService::where('id', $id)->first();
+        return view('dashboard.rate.showServices', compact('serv'));
     }
-
-
-
 }
