@@ -9,26 +9,33 @@ class Group extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    public function getNameAttribute(){
-        if (app()->getLocale()=='ar'){
+    public function getNameAttribute()
+    {
+        if (app()->getLocale() == 'ar') {
             return $this->name_ar;
-        }else{
+        } else {
             return $this->name_en;
         }
     }
-    public function services(){
-        return $this->belongsToMany(Service::class,'service_groups');
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_groups');
     }
-    protected function leader(){
-        return $this->hasOne(Technician::class, 'id','technician_id');
+    protected function leader()
+    {
+        return $this->hasOne(Technician::class, 'id', 'technician_id');
     }
-    public function technicians(){
+    public function technicians()
+    {
         return $this->hasMany(Technician::class);
     }
-    public function technician_groups(){
+
+    public function technician_groups()
+    {
         return $this->hasMany(GroupTechnician::class);
     }
-    public function regions(){
+    public function regions()
+    {
         return $this->hasMany(GroupRegion::class);
     }
 }

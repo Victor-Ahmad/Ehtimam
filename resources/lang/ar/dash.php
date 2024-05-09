@@ -787,6 +787,7 @@ rejected_bills
     'amount or percentage' => 'المبلغ او النسبة',
     'percentage' => 'نسبة مئوية',
     'fixed' => 'ثابت',
+    'fixed_value' => 'قيمة ثابتة',
     'Calculation method' => 'طريقة الاحتساب',
     'System settings' => 'اعدادات النظام',
     'Countries' => 'الدول',

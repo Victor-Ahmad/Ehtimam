@@ -9,39 +9,48 @@ class Coupon extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    public function getTitleAttribute(){
-        if (app()->getLocale()=='ar'){
+    public function getTitleAttribute()
+    {
+        if (app()->getLocale() == 'ar') {
             return $this->title_ar;
-        }else{
+        } else {
             return $this->title_en;
         }
     }
-    public function getDescriptionAttribute(){
-        if (app()->getLocale()=='ar'){
+    public function getDescriptionAttribute()
+    {
+        if (app()->getLocale() == 'ar') {
             return $this->description_ar;
-        }else{
+        } else {
             return $this->description_en;
         }
     }
 
-    public function getavatarAttribute(){
+    public function getavatarAttribute()
+    {
 
-        if ($this->image == null || \File::exists(public_path($this->image)) == false){
+        if ($this->image == null || \File::exists(public_path($this->image)) == false) {
             return '';
         }
 
-        $image = explode('/',$this->image);
+        $image = explode('/', $this->image);
         $name = end($image);
 
-        $image = "data:image/png;base64,".base64_encode(file_get_contents(public_path("storage/images/coupons/".$name)));
+        $image = "data:image/png;base64," . base64_encode(file_get_contents(public_path("storage/images/coupons/" . $name)));
 
         return $image;
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
-    public function service(){
+    public function service()
+    {
         return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+    public function couponUsers()
+    {
+        return $this->hasMany(CouponUser::class, 'coupon_id');
     }
 }

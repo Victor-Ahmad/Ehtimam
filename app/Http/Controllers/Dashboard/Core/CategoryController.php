@@ -60,7 +60,7 @@ class CategoryController extends Controller
                                     data-parent_id="' . $category->parent_id . '"
                                     data-image="' . $category->image . '"
                                     data-group_id="' . $category->groups()->pluck('group_id') . '"
-                                    data-gender="'.$category->gender. '"
+                                    data-gender_id="' . $category->gender . '"
                                     data-toggle="modal" data-target="#editModel">
                             <i class="far fa-edit fa-2x"></i>
                        </button>
@@ -102,7 +102,7 @@ class CategoryController extends Controller
             'description_ar' => 'required',
             'description_en' => 'required',
             'parent_id' => 'nullable|exists:categories,id',
-            'gender'=> 'required',
+            'gender' => 'required',
             'group_ids' => 'required|array',
             'group_ids.*' => 'required|exists:groups,id',
         ]);

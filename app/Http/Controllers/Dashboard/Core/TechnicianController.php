@@ -57,7 +57,7 @@ class TechnicianController extends Controller
                 })
                 ->addColumn('control', function ($row) {
                     $html = '<button type="button" id="edit-tech" class="btn btn-primary btn-sm card-tools edit" data-id="' . $row->id . '"  data-name="' . $row->name . '" data-user_name="' . $row->user_name . '"
-                                 data-email="' . $row->email . '" data-phone="' . $row->phone . '" data-specialization="' . $row->spec_id . '"
+                                data-gender_id="' . $row->gender . '" data-email="' . $row->email . '" data-phone="' . $row->phone . '" data-specialization="' . $row->spec_id . '"
                                  data-active="' . $row->active . '" data-group_id="' . $row->group_id . '"
                                   data-country_id="' . $row->country_id . '" data-address="' . $row->address . '" data-wallet_id="' . $row->wallet_id . '"
                                   data-birth_date="' . $row->birth_date . '" data-identity_number="' . $row->identity_id . '" data-image="' . asset($row->image) . '"
@@ -77,8 +77,19 @@ class TechnicianController extends Controller
                 ])
                 ->make(true);
         }
+        $nationalities = [
+            "فلبين"  =>  "1",
+            "اندونيسيا" =>   "2",
+            "الهند"    =>   "3",
+            "تايلند"  =>   "4",
+            "ماليزيا"  =>   "5",
+            "باكستان"  =>   "6",
+            "مصر" =>   "7"
+        ];
 
-        return view('dashboard.core.technicians.index', compact('groups', 'specs'));
+
+
+        return view('dashboard.core.technicians.index', compact('groups', 'specs', 'nationalities'));
     }
 
     /**
@@ -139,7 +150,7 @@ class TechnicianController extends Controller
             'wallet_id' => 'required',
             'address' => 'required|String',
             'group_id' => 'nullable',
-            'gender' => 'required',
+            'gender_id' => 'required',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif',
            
             'password' => ['nullable', 'confirmed', Password::min(4)],
@@ -164,6 +175,8 @@ class TechnicianController extends Controller
             $request->image->move(storage_path('app/public/images/technicians/'), $filename);
             $validated['image'] = 'storage/images/technicians' . '/' . $filename;
         }
+        $validated['gender'] = $validated['gender_id'];
+        unset($validated['gender_id']);
         $tech->update($validated);
         session()->flash('success');
         return redirect()->back();

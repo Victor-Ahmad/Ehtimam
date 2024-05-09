@@ -60,10 +60,17 @@ class ReasonCancelController extends Controller
                 ])
                 ->make(true);
         }
-        $reasons=ReasonCancel::all();
-        return view('dashboard.reason_cancel.index',compact('reasons'));
+        $reasons[] = (object)[
+            'id' => 0,
+        ];
+        $reasons[] = (object)[
+            'id' => 1,
+        ];
+
+        return view('dashboard.reason_cancel.index', compact('reasons'));
     }
-    protected function store(Request $request){
+    protected function store(Request $request)
+    {
         $rules = [
             'reason_ar' => 'required|String|min:3|max:100',
             'reason_en' => 'required|String|min:3|max:100',
@@ -78,7 +85,8 @@ class ReasonCancelController extends Controller
         session()->flash('success');
         return redirect()->back();
     }
-    protected function update(Request $request, $id){
+    protected function update(Request $request, $id)
+    {
         $banner = ReasonCancel::query()->where('id', $id)->first();
         $rules = [
             'reason_ar' => 'required|String|min:3|max:100',
@@ -103,15 +111,15 @@ class ReasonCancelController extends Controller
             'msg' => __("dash.deleted_success")
         ];
     }
-    protected function change_status (Request $request){
+    protected function change_status(Request $request)
+    {
         $banner = ReasonCancel::query()->where('id', $request->id)->first();
-        if ($request->active == "false"){
+        if ($request->active == "false") {
             $banner->active = 0;
-        }else{
+        } else {
             $banner->active = 1;
         }
         $banner->save();
         return response('success');
     }
-
 }

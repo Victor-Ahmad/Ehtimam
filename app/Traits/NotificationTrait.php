@@ -129,9 +129,9 @@ trait NotificationTrait
             ];
         } else {
             $statusList = [
-                'طلبك باقي نرسلك افضل الفنيين عندنا',
+                'طلبك باقي نرسلك افضل الأخصائيين عندنا',
                 ' فريقنا جايين لعندك ياريت تجهز مكان العمل',
-                ' فريق الترا بدأ بالخدمة هالحين',
+                ' فريق اهتمام بدأ بالخدمة هالحين',
                 'ارسلنا لك طلب تسليم اذا شغلنا زين وافق عليها',
                 'حبينا نشكرك على انتظارك طلبك مكتمل الحين',
                 'تم إلغاء الطلب للأسباب التالية: ',
@@ -139,19 +139,18 @@ trait NotificationTrait
             ];
             $title = $notification['data']['order_details']['group']['name'] . $statusList[6] . $notification['data']['order_details']['id'];
             $body = '';
-            $notification=json_decode(json_encode($notification));
-           
+            $notification = json_decode(json_encode($notification));
+
             $booking_details = $notification->data->order_details->booking_details;
             if (!(is_null($booking_details->status))) {
-                
+
                 if ($booking_details->status->id == 6) {
                     $body = $statusList[$booking_details->status->id - 1] . $notification->data->order_details->cancel_reason->reason;
                 } else {
                     $body = $statusList[$booking_details->status->id - 1];
                 }
-          
             } else {
-              
+
                 $body = $statusList[0];
             }
 

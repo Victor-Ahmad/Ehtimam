@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens,WithBoot,HasPassword, HasFactory,HasRoles, Notifiable;
+    use HasApiTokens, WithBoot, HasPassword, HasFactory, HasRoles, Notifiable;
     protected $guard = 'user';
     protected $guarded = [];
 
@@ -26,22 +26,30 @@ class User extends Authenticatable
         'phone_verified_at' => 'datetime',
     ];
 
-    public function city(){
+    public function city()
+    {
         return $this->hasOne(City::class, 'id', 'city_id');
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class, 'user_id');
     }
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Booking::class, 'user_id');
     }
-    public function carts(){
+    public function carts()
+    {
         return $this->hasMany(Cart::class, 'user_id');
     }
 
-    public function address(){
-        return $this->hasMany(UserAddresses::class, 'user_id')->where('is_default',1);
+    public function address()
+    {
+        return $this->hasMany(UserAddresses::class, 'user_id')->where('is_default', 1);
     }
-
+    public function couponUsers()
+    {
+        return $this->hasMany(CouponUser::class, 'user_id');
+    }
 }

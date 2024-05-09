@@ -208,7 +208,7 @@ class CouponsController extends Controller
         $id = request()->query('id');
 
         $usage_filter = request()->query('usage');
-        $gender = Coupon::where('id', $id)->first()->gender;
+        $gender = Coupon::where('id', $id)->first()?->gender ?? '';
 
         if (request()->ajax()) {
             $users = User::where('gender', $gender)->with(['couponUsers', 'couponUsers.coupon'])->select(['id', 'first_name', 'last_name', 'phone'])->withCount('couponUsers as usage')->orderBy('usage', 'desc');
