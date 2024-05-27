@@ -359,7 +359,7 @@ class CheckoutController extends Controller
             Transaction::create([
                 //    'order_id' => $order->id,
                 'contract_packages_users_id' => $contractPackageUser->id,
-                'transaction_number' => $request->transaction_id,
+                'transaction_number' => $request->transaction_id ?? 'cache/' . rand(1111111111, 9999999999),
                 'payment_result' => 'success',
                 'payment_method' => $request->payment_method,
                 //  'amount' => $total,
