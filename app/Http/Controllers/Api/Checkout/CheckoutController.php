@@ -72,7 +72,7 @@ class CheckoutController extends Controller
         $rules = [
             'user_address_id' => 'required|exists:user_addresses,id',
             //   'car_user_id' => 'required|exists:car_clients,id',
-            'payment_method' => 'required|in:visa,wallet,cahce',
+            'payment_method' => 'required|in:visa,wallet,cache',
 
             'coupon' => 'nullable|numeric',
             'transaction_id' => 'nullable',
