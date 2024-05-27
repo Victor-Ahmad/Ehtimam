@@ -72,7 +72,7 @@ class CheckoutController extends Controller
         $rules = [
             'user_address_id' => 'required|exists:user_addresses,id',
             //   'car_user_id' => 'required|exists:car_clients,id',
-            'payment_method' => 'required|in:visa,wallet',
+            'payment_method' => 'required|in:visa,wallet,cahce',
 
             'coupon' => 'nullable|numeric',
             'transaction_id' => 'nullable',
@@ -310,10 +310,18 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method,
             ]);
             Order::where('id', $order->id)->update(array('partial_amount' => 0));
+        } elseif ($request->payment_method  == 'cache') {
+            $transaction = Transaction::create([
+                'order_id' => $order->id,
+                'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
+                'payment_result' => 'success',
+                'payment_method' => $request->payment_method,
+            ]);
+            Order::where('id', $order->id)->update(array('partial_amount' => $totalAfterDiscount));
         } else {
             Transaction::create([
                 'order_id' => $order->id,
-                'transaction_number' => $request->transaction_id ?? 'cache/' . rand(1111111111, 9999999999),
+                'transaction_number' => $request->transaction_id,
                 'payment_result' => 'success',
                 'payment_method' => $request->payment_method,
                 // 'amount' => $request->amount,
@@ -355,11 +363,20 @@ class CheckoutController extends Controller
             ]);
             //     Order::where('id', $order->id)->update(array('partial_amount' => 0));
             //dd(Order::where('id', $order->id)->first());
+        } elseif ($request->payment_method == 'cache') {
+            $transaction = Transaction::create([
+                //      'order_id' => $order->id,
+                'contract_packages_users_id' => $contractPackageUser->id,
+                'transaction_number' => 'cache/' . rand(1111111111, 9999999999),
+                'payment_result' => 'success',
+                'payment_method' => $request->payment_method,
+            ]);
+            //   Order::where('id', $order->id)->update(array('partial_amount' => ($total )));
         } else {
             Transaction::create([
                 //    'order_id' => $order->id,
                 'contract_packages_users_id' => $contractPackageUser->id,
-                'transaction_number' => $request->transaction_id ?? 'cache/' . rand(1111111111, 9999999999),
+                'transaction_number' => $request->transaction_id,
                 'payment_result' => 'success',
                 'payment_method' => $request->payment_method,
                 //  'amount' => $total,
