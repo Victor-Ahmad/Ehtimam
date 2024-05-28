@@ -294,6 +294,7 @@ class VisitsController extends Controller
             $visit->update([
                 'assign_to_id' => $request->assign_to_id
             ]);
+            $this->store($request);
         } else if ($visit->visits_status_id == 6) {
             $allTechn = Technician::where('group_id', $visit->assign_to_id)->whereNotNull('fcm_token')->get();
 
@@ -316,7 +317,7 @@ class VisitsController extends Controller
                     'title' => $title,
                     'message' => $message,
                     'type' => 'technician',
-                    'code' => 1,
+                    'code' => 2,
                 ];
 
                 $this->pushNotification($notification);
