@@ -121,11 +121,11 @@ class CustomerController extends Controller
     {
         $user = User::find($id);
 
-
+        $uniqueSuffix = uniqid();
         $user->update([
             'is_deleted' => 1,
-            'phone' => $user->phone . '-deleted',
-            'email' => $user->email . '-deleted',
+            'phone' => $user->phone . '-deleted-' . $uniqueSuffix,
+            'email' => $user->email . '-deleted-' . $uniqueSuffix,
         ]);
 
 
