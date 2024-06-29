@@ -58,6 +58,11 @@ class CouponsController extends Controller
             $coupon_user = CouponUser::query()->where('coupon_id', $coupon->id)
                 ->where('user_id', auth()->user()->id)->get();
             $check = new CouponCheck();
+            $match_response = $check->check_coupon_services_match($coupon, $total, $carts);
+            if($match_response['error']){
+                return self::apiResponse(400, __('api.This coupon con not be used to any of these services !'), $this->body);
+            }
+            $discount = $match_response['discount'];
             $res = $check->check_avail($coupon, $coupon_user, $total);
             if (key_exists('success', $res)) {
                 CouponUser::query()->create([
@@ -71,9 +76,8 @@ class CouponsController extends Controller
                 }
                 $coupon->times_used++;
                 $coupon->save();
-                $coupon_value = $coupon->type == 'percentage' ? ($coupon->value / 100) * $total : $coupon->value;
-                $sub_total = $total - $coupon_value;
-                $this->body['coupon_value'] = $coupon_value;
+                $sub_total = $total - $discount;
+                $this->body['coupon_value'] = $discount;
                 $this->body['total'] = $total;
                 $this->body['sub_total'] = $sub_total;
                 return self::apiResponse(200, $res['success'], $this->body);
